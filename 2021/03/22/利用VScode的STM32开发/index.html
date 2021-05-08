@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="第一部分   配置VScode的C&#x2F;C++环境前言本部分文档为网上教程改编，可参考原文： VSCode配置C&#x2F;C++环境  VScode的安装VScode官网中下载对应系统版本的安装包即可。 安装具体过程不再赘述，需要注意的是记得更改安装路径到C盘以外的盘符。 设置中文环境 VSCode  本身只是一款文本编辑器 ，其所有的功能都是以插件的形式存在的，语言也不例外。 首先在左侧拓展栏  上方的搜索">
+  <meta name="description" content="第一部分   配置VScode的C&#x2F;C++环境前言本部分文档为网上教程改编，可参考原文： VSCode配置C&#x2F;C++环境">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用VScode的STM32开发">
 <meta property="og:url" content="http://example.com/2021/03/22/%E5%88%A9%E7%94%A8VScode%E7%9A%84STM32%E5%BC%80%E5%8F%91/index.html">
 <meta property="og:site_name" content="ZheWana">
-<meta property="og:description" content="第一部分   配置VScode的C&#x2F;C++环境前言本部分文档为网上教程改编，可参考原文： VSCode配置C&#x2F;C++环境  VScode的安装VScode官网中下载对应系统版本的安装包即可。 安装具体过程不再赘述，需要注意的是记得更改安装路径到C盘以外的盘符。 设置中文环境 VSCode  本身只是一款文本编辑器 ，其所有的功能都是以插件的形式存在的，语言也不例外。 首先在左侧拓展栏  上方的搜索">
+<meta property="og:description" content="第一部分   配置VScode的C&#x2F;C++环境前言本部分文档为网上教程改编，可参考原文： VSCode配置C&#x2F;C++环境">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/%E5%88%A9%E7%94%A8VScode%E7%9A%84STM32%E5%BC%80%E5%8F%91/1616341142247.png">
 <meta property="og:image" content="http://example.com/images/%E5%88%A9%E7%94%A8VScode%E7%9A%84STM32%E5%BC%80%E5%8F%91/1616341205671.png">
@@ -52,7 +52,7 @@
 <meta property="og:image" content="http://example.com/images/%E5%88%A9%E7%94%A8VScode%E7%9A%84STM32%E5%BC%80%E5%8F%91/1620477308271.png">
 <meta property="og:image" content="http://example.com/images/%E5%88%A9%E7%94%A8VScode%E7%9A%84STM32%E5%BC%80%E5%8F%91/1620477348618.png">
 <meta property="article:published_time" content="2021-03-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-05-08T12:36:39.985Z">
+<meta property="article:modified_time" content="2021-05-08T14:24:24.164Z">
 <meta property="article:author" content="ZheWana">
 <meta property="article:tag" content="单片机">
 <meta name="twitter:card" content="summary">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-08 20:36:39" itemprop="dateModified" datetime="2021-05-08T20:36:39+08:00">2021-05-08</time>
+                <time title="修改时间：2021-05-08 22:24:24" itemprop="dateModified" datetime="2021-05-08T22:24:24+08:00">2021-05-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,6 +255,8 @@
       
         <h2 id="第一部分-配置VScode的C-C-环境"><a href="#第一部分-配置VScode的C-C-环境" class="headerlink" title="第一部分   配置VScode的C/C++环境"></a>第一部分   配置VScode的C/C++环境</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本部分文档为网上教程改编，可参考原文：</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/87864677">VSCode配置C/C++环境</a></p>
+<span id="more"></span>
+
 <hr>
 <h2 id="VScode的安装"><a href="#VScode的安装" class="headerlink" title="VScode的安装"></a>VScode的安装</h2><p><a target="_blank" rel="noopener" href="https://code.visualstudio.com/">VScode官网</a>中下载对应系统版本的安装包即可。</p>
 <p>安装具体过程不再赘述，需要注意的是记得更改安装路径到C盘以外的盘符。</p>
@@ -378,7 +380,10 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/22/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/" rel="prev" title="记编码器的学习历程">
+      <i class="fa fa-chevron-left"></i> 记编码器的学习历程
+    </a></div>
       <div class="post-nav-item">
     <a href="/2021/04/05/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/" rel="next" title="记MPU6050模块的学习过程">
       记MPU6050模块的学习过程 <i class="fa fa-chevron-right"></i>
@@ -468,7 +473,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -511,7 +516,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共11.1k字</span>
+  <span class="post-count">博客全站共16k字</span>
 </div>
         
 
