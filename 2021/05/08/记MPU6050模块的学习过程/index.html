@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-bounce.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言本文为我自己学习MPU6050的过程以及其过程中遇到的问题，将其记录下来以方便自己以后再次使用，同时也是为了防止遗忘。 学习过程中用到的资料整理了下存了起来： 12https:&#x2F;&#x2F;wws.lanzous.com&#x2F;iROIKnjuo6h密码:gzai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记MPU6050模块的学习过程">
+<meta property="og:url" content="http://example.com/2021/05/08/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/index.html">
+<meta property="og:site_name" content="ZheWana">
+<meta property="og:description" content="前言本文为我自己学习MPU6050的过程以及其过程中遇到的问题，将其记录下来以方便自己以后再次使用，同时也是为了防止遗忘。 学习过程中用到的资料整理了下存了起来： 12https:&#x2F;&#x2F;wws.lanzous.com&#x2F;iROIKnjuo6h密码:gzai">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031200192.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031379242.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031435930.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031496511.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031878416.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031692618.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031935975.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032006471.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032031176.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032142421.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032758704.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280360231.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280418367.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280458545.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617349496815.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280616125.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280733301.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352471139.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352556822.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352641220.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352677192.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352990063.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353030848.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353398948.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353709603.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353777911.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353828850.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617354000906.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617354101759.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617357292231.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617357328178.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617354938152.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355462081.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355116084.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355183949.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355311309.png">
+<meta property="og:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617357509432.png">
+<meta property="article:published_time" content="2021-05-08T09:32:28.000Z">
+<meta property="article:modified_time" content="2021-05-08T10:03:40.081Z">
+<meta property="article:author" content="ZheWana">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="MPU6050">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/05/08/images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031200192.png">
+
+<link rel="canonical" href="http://example.com/2021/05/08/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>记MPU6050模块的学习过程 | ZheWana</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ZheWana</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">初心未泯</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/08/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZheWana">
+      <meta itemprop="description" content="我们选择死亡还是努力活着呢？">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZheWana">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记MPU6050模块的学习过程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-08 17:32:28 / 修改时间：18:03:40" itemprop="dateCreated datePublished" datetime="2021-05-08T17:32:28+08:00">2021-05-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6/%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">模块</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文为我自己学习MPU6050的过程以及其过程中遇到的问题，将其记录下来以方便自己以后再次使用，同时也是为了防止遗忘。</p>
+<p>学习过程中用到的资料整理了下存了起来：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://wws.lanzous.com/iROIKnjuo6h</span><br><span class="line">密码:gzai</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<hr>
+<h2 id="模块组成："><a href="#模块组成：" class="headerlink" title="模块组成："></a>模块组成：</h2><p> MPU6050+HMC5883L+MS5611 </p>
+<h3 id="MPU6050：加速度计-陀螺仪"><a href="#MPU6050：加速度计-陀螺仪" class="headerlink" title="MPU6050：加速度计+陀螺仪"></a>MPU6050：加速度计+陀螺仪</h3><h3 id="HMC5883L：-3轴数字罗盘"><a href="#HMC5883L：-3轴数字罗盘" class="headerlink" title="HMC5883L：  3轴数字罗盘"></a>HMC5883L：  3轴数字罗盘</h3><h3 id="MS5611-：气压传感器"><a href="#MS5611-：气压传感器" class="headerlink" title="MS5611 ：气压传感器"></a>MS5611 ：气压传感器</h3><hr>
+<h2 id="模块引脚定义："><a href="#模块引脚定义：" class="headerlink" title="模块引脚定义："></a>模块引脚定义：</h2><p>以下引脚用途以及配置为个人对与数据手册内容的理解，可能有误。</p>
+<h3 id="VCC-IN-5V电源输入"><a href="#VCC-IN-5V电源输入" class="headerlink" title="VCC_IN:5V电源输入"></a>VCC_IN:5V电源输入</h3><h3 id="3-3V：3-3V电源输入"><a href="#3-3V：3-3V电源输入" class="headerlink" title="3.3V：3.3V电源输入"></a>3.3V：3.3V电源输入</h3><h3 id="GND：接地"><a href="#GND：接地" class="headerlink" title="GND：接地"></a>GND：接地</h3><h3 id="SCL：IIC总线时钟"><a href="#SCL：IIC总线时钟" class="headerlink" title="SCL：IIC总线时钟"></a>SCL：IIC总线时钟</h3><h3 id="SDA：IIC总线数据输入"><a href="#SDA：IIC总线数据输入" class="headerlink" title="SDA：IIC总线数据输入"></a>SDA：IIC总线数据输入</h3><h3 id="FSYNC：（MPU6050）"><a href="#FSYNC：（MPU6050）" class="headerlink" title="FSYNC：（MPU6050）"></a>FSYNC：（MPU6050）</h3><p>​    Frame synchronization digital input. Connect to GND if unused</p>
+<p>​    帧同步数字输入。 如果未使用，则连接到GND</p>
+<h3 id="（GND）"><a href="#（GND）" class="headerlink" title="（GND）"></a>（GND）</h3><h3 id="INTA：（MPU6050）"><a href="#INTA：（MPU6050）" class="headerlink" title="INTA：（MPU6050）"></a>INTA：（MPU6050）</h3><p>​    Interrupt digital output (totem pole or open-drain)</p>
+<p>​    中断数字输出（图腾柱或漏极开路）</p>
+<p>​     Interrupt functionality is configured via the Interrupt Configuration register. Items that are configurable include the INT pin configuration, the interrupt latching and clearing method, and triggers for the interrupt. Items that can trigger an interrupt are </p>
+<p>(1) Clock generator locked to new reference oscillator (used when switching clock sources); </p>
+<p>(2) new data is available to be read (from the FIFO and Data registers); </p>
+<p>(3) accelerometer event interrupts; </p>
+<p>(4) the MPU-60X0 did not receive an knowledge from an auxiliary sensor on the secondary I2C bus. The interrupt status can be read from the Interrupt Status register.  </p>
+<h3 id="（配置为外部中断）"><a href="#（配置为外部中断）" class="headerlink" title="（配置为外部中断）"></a>（配置为外部中断）</h3><h3 id="DRDY：（HMC5883L）"><a href="#DRDY：（HMC5883L）" class="headerlink" title="DRDY：（HMC5883L）"></a>DRDY：（HMC5883L）</h3><p>​    Data Ready, Interrupt Pin. Internally pulled high. Optional connection. Low for 250 µsec when data is placed in the data output registers.</p>
+<p>​    数据准备，中断引脚。内部被拉高。可选连接，当数据位于输出寄存器 上时会在低电位上停250μs。（理解为数据传输完成标志引脚）</p>
+<h3 id="（配置为外部中断）-1"><a href="#（配置为外部中断）-1" class="headerlink" title="（配置为外部中断）"></a>（配置为外部中断）</h3><hr>
+<h2 id="模块使用："><a href="#模块使用：" class="headerlink" title="模块使用："></a>模块使用：</h2><h3 id="伪前言："><a href="#伪前言：" class="headerlink" title="伪前言："></a>伪前言：</h3><p>使用分为两部分，首先是为了<strong>熟悉IIC使用以及对数据手册的阅读</strong>而存在的<strong>原始数据打印</strong>部分，接下来是为了真正应用而存在的<strong>DMP库移植</strong>部分。</p>
+<p>第一次进行库的移植的确会出现很多奇怪的问题，请细心细心加耐心。</p>
+<p>官方的手册是好东西，请多阅读。</p>
+<p><em><strong>如果只是需要使用欧拉角数据，则不需要参考第一部分内容，直接进行第二部分即可</strong></em></p>
+<p><em><strong>如果只是需要使用欧拉角数据，则不需要参考第一部分内容，直接进行第二部分即可</strong></em></p>
+<p><em><strong>如果只是需要使用欧拉角数据，则不需要参考第一部分内容，直接进行第二部分即可</strong></em></p>
+<hr>
+<h3 id="原始数据的打印："><a href="#原始数据的打印：" class="headerlink" title="原始数据的打印："></a>原始数据的打印：</h3><p>首先新建一个F401工程，在新工程里面完成IIC和UART的配置。</p>
+<p>其中IIC选择IIC1，下拉栏选择IIC，配置默认即可。</p>
+<p>生成工程并打开。</p>
+<p>在工程文件夹中新建一个mpu6050.h文件。</p>
+<p>（PS：如果是自己添加的文件需要添加包含路径，方法参考u8g2屏幕的配置文档）</p>
+<p>为了方便使用，首先把要用到的寄存器在mpu6050.h中进行宏定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************************************************************</span></span><br><span class="line"><span class="comment"> *设备地址  </span></span><br><span class="line"><span class="comment"> *PS：在数据手册里面的七位地址是0x68，但是HAL库中函数前面的注释有说明如下：</span></span><br><span class="line"><span class="comment"> *DevAddress Target device address: The device 7 bits address value</span></span><br><span class="line"><span class="comment"> *in datasheet must be shifted to the left before calling the interface</span></span><br><span class="line"><span class="comment"> *也就是说我们在使用时要将设备地址左移一位，而0x68左移一位是0xD0。</span></span><br><span class="line"><span class="comment"> **********************************************************************************/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MPU6050_ADDR 0xD0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//采样频率分频器寄存器</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SMPRT_DIV_REG 0x19</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//陀螺仪配置寄存器</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GYRO_CONFIG_REG 0x1B</span></span><br><span class="line"><span class="comment">//角速度量程</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR1_GYRO 0   <span class="comment">//+-250°/s</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR2_GYRO 1   <span class="comment">//+-500°/s</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR3_GYRO 2   <span class="comment">//+-1000°/s</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR4_GYRO 3   <span class="comment">//+-2000°/s</span></span></span><br><span class="line"><span class="comment">//角速度最低分辨率</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB1_GYRO 16384.0   <span class="comment">//+-250°/s</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB2_GYRO 8192.0   <span class="comment">//+-500°/s</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB3_GYRO 4096.0   <span class="comment">//+-1000°/s</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB4_GYRO 2048.0   <span class="comment">//+-2000°/s</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//加速度配置寄存器</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ACCEL_CONFIG_REG 0x1c</span></span><br><span class="line"><span class="comment">//加速度量程</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR1_ACCEL 0  <span class="comment">//+-2g</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR2_ACCEL 1  <span class="comment">//+-4g</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR3_ACCEL 2  <span class="comment">//+-8g</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FSR4_ACCEL 3  <span class="comment">//+-16g</span></span></span><br><span class="line"><span class="comment">//加速度最低分辨率</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB1_ACCEL 131.0   <span class="comment">//+-2g</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB2_ACCEL 65.5   <span class="comment">//+-4g</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB3_ACCEL 32.8   <span class="comment">//+-8g</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LSB4_ACCEL 16.4   <span class="comment">//+-16g</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//加速度测量值</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ACCEL_XOUT_H_REG 0x3B</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//温度测量值</span></span><br><span class="line"><span class="comment">//温度计算公式:摄氏度=(int16_t)REG/340+36.53</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TEMP_OUT_H_REG 0x41</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//陀螺仪测量值</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GYRO_XOUT_H_REG 0x43</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//电源管理寄存器</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PWR_MGMT_1_REG 0x6B</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//设备身份标识寄存器</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WHO_AM_I_REG 0x75</span></span><br></pre></td></tr></table></figure>
+
+<p>定义几个变量：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int16_t</span> Axo = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int16_t</span> Ayo = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int16_t</span> Azo = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int16_t</span> Gxo = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int16_t</span> Gyo = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int16_t</span> Gzo = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int16_t</span> Temp_RAW = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">float</span> Ax,Ay,Az,Gx,Gy,Gz,Temp;</span><br></pre></td></tr></table></figure>
+
+<p>首先对模块进行初始化设置：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MPU6050_Init</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> check,Data;</span><br><span class="line">	<span class="comment">//检查设备身份标识(WHO_AM_I)</span></span><br><span class="line">	HAL_I2C_Mem_Read (&amp;hi2c1 ,MPU6050_ADDR,WHO_AM_I_REG,<span class="number">1</span>,&amp;check ,<span class="number">1</span>,<span class="number">1000</span>);</span><br><span class="line">	<span class="keyword">if</span>(check == <span class="number">104</span>)		<span class="comment">//验证设备地址</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//在电源管理寄存器中写入0来使能传感器</span></span><br><span class="line">		Data = <span class="number">0</span>;</span><br><span class="line">		HAL_I2C_Mem_Write (&amp;hi2c1 ,MPU6050_ADDR ,PWR_MGMT_1_REG ,<span class="number">1</span>,&amp;Data ,<span class="number">1</span>,<span class="number">1000</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//设置采样频率</span></span><br><span class="line">		Data = <span class="number">0x07</span>;</span><br><span class="line">		HAL_I2C_Mem_Write (&amp;hi2c1 ,MPU6050_ADDR ,SMPRT_DIV_REG ,<span class="number">1</span> ,&amp;Data,<span class="number">1</span>,<span class="number">1000</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//设置加速度量程</span></span><br><span class="line">		Data = FSR1_ACCEL;</span><br><span class="line">		HAL_I2C_Mem_Write (&amp;hi2c1 ,MPU6050_ADDR, ACCEL_CONFIG_REG, <span class="number">1</span>, &amp;Data, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//设置陀螺仪量程</span></span><br><span class="line">		Data = FSR1_GYRO;</span><br><span class="line">		HAL_I2C_Mem_Write (&amp;hi2c1 ,MPU6050_ADDR, GYRO_CONFIG_REG, <span class="number">1</span>, &amp;Data, <span class="number">1</span>, <span class="number">1000</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里对几个重要寄存器做一些说明：</p>
+<p><strong>1.采样频率分频器：</strong></p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031200192.png" alt="1617031200192"></p>
+<p>采样频率的计算公式为：</p>
+<p>​    <strong>采样频率=陀螺仪输出频率/（ 1+SMPLRT_DIV  ）</strong></p>
+<p>而陀螺仪的输出频率是受到DLPF（数字低通滤波器）的配置影响的，具体影响如下图：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031379242.png" alt="1617031379242"></p>
+<p>而上述滤波器在配置寄存器中进行设置：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031435930.png" alt="1617031435930"></p>
+<p><strong>2.陀螺仪配置寄存器</strong></p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031496511.png" alt="1617031496511"></p>
+<p>主要功能为触发陀螺仪自检以及陀螺仪最大量程配置，我们主要用到第二个功能。</p>
+<p>自检功能：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031878416.png" alt="1617031878416"></p>
+<p>具体量程配置参考下表：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031692618.png" alt="1617031692618"></p>
+<p><strong>3.加速度配置寄存器</strong></p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617031935975.png" alt="1617031935975"></p>
+<p>主要功能和陀螺仪配置寄存器一致，我们还是用第二个功能。</p>
+<p>自检功能：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032006471.png" alt="1617032006471"></p>
+<p>具体量程配置参考下表：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032031176.png" alt="1617032031176"></p>
+<p><strong>4.测量值寄存器</strong></p>
+<p>要用到的测量值寄存器有三个：加速度、陀螺仪和温度。</p>
+<p>首先是加速度计：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032142421.png" alt="1617032142421"></p>
+<p>不难看出，数据的存储方式是用了六个字节来存储三个坐标轴的数据，其中相邻两个数据分别表示同一坐标轴数据的高八位和低八位，因此我们可以对数据如此处理：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义六位数组来存放寄存器值</span></span><br><span class="line"><span class="keyword">int8_t</span> Mesurment[<span class="number">6</span>];</span><br><span class="line"><span class="comment">//将寄存器值读取出来存入数组中方便后续操作</span></span><br><span class="line">HAL_I2C_Mem_Read (&amp;hi2c1 ,MPU6050_ADDR ,ACCEL_XOUT_H_REG ,<span class="number">1</span>,Mesurment ,<span class="number">6</span>,<span class="number">1000</span>);</span><br><span class="line"><span class="comment">//以x轴数据为例，应做如下处理：</span></span><br><span class="line">Ax=(<span class="keyword">int16_t</span>)(Mesurment[<span class="number">0</span>]&lt;&lt;<span class="number">8</span>)|Mesurment[<span class="number">1</span>];</span><br><span class="line"><span class="comment">//处理后的数据除以LSB（灵敏度最低分辨率）即可得到加速度值</span></span><br><span class="line">Accel=Ax*<span class="number">1.0</span>/<span class="number">16384</span>;</span><br></pre></td></tr></table></figure>
+
+<p>最小分辨率取值参考下表：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617032758704.png" alt="1617032758704"></p>
+<p>接下来是陀螺仪：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280360231.png" alt="1617280360231"></p>
+<p>处理方式与加速度相同，最小分辨率参考下表：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280418367.png" alt="1617280418367"></p>
+<p>最后是温度：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280458545.png" alt="1617280458545"></p>
+<p>读出数据需要按照下述公式进行处理：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617349496815.png" alt="1617349496815"></p>
+<p><strong>5.电源管理寄存器</strong></p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280616125.png" alt="1617280616125"></p>
+<p>具体各位功能参考数据手册，这里我们想让他正常工作，需要将所有位置0.</p>
+<p><strong>6.设备身份标识寄存器</strong></p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617280733301.png" alt="1617280733301"></p>
+<p>说明设备地址的寄存器，若AD0接地，则最低位位0，设备地址为0x68;</p>
+<p>若AD0置高，则最低位为1，设备地址为0x69.</p>
+<p>配置完模块后，只要自己写出函数将数据读出打印出来即可。</p>
+<p>以下读取函数仅作参考：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//陀螺仪数据读取</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GYRO_READ</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> Mesurment[<span class="number">6</span>];</span><br><span class="line"></span><br><span class="line">  HAL_I2C_Mem_Read(&amp;hi2c1,MPU6050_ADDR,GYRO_XOUT_H_REG,<span class="number">1</span>,Mesurment,<span class="number">6</span>,<span class="number">1000</span>);</span><br><span class="line">  	Gxo = (<span class="keyword">int16_t</span> )(Mesurment [<span class="number">0</span>] &lt;&lt; <span class="number">8</span> | Mesurment [<span class="number">1</span>]);</span><br><span class="line">	Gyo = (<span class="keyword">int16_t</span> )(Mesurment [<span class="number">2</span>] &lt;&lt; <span class="number">8</span> | Mesurment [<span class="number">3</span>]);</span><br><span class="line">	Gzo = (<span class="keyword">int16_t</span> )(Mesurment [<span class="number">4</span>] &lt;&lt; <span class="number">8</span> | Mesurment [<span class="number">5</span>]);</span><br><span class="line"></span><br><span class="line">  	Gx = (<span class="keyword">double</span>)Gxo/LSB1_GYRO;</span><br><span class="line">	Gy = (<span class="keyword">double</span>)Gyo/LSB1_GYRO;</span><br><span class="line">	Gz = (<span class="keyword">double</span>)Gzo/LSB1_GYRO;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//加速度数据读取</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ACCEL_READ</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> Mesurment[<span class="number">6</span>];</span><br><span class="line">	</span><br><span class="line">	HAL_I2C_Mem_Read (&amp;hi2c1 ,MPU6050_ADDR ,ACCEL_XOUT_H_REG ,<span class="number">1</span>,Mesurment ,<span class="number">6</span>,<span class="number">1000</span>);</span><br><span class="line">	</span><br><span class="line">	Axo = (<span class="keyword">int16_t</span> )(Mesurment [<span class="number">0</span>] &lt;&lt;<span class="number">8</span> | Mesurment [<span class="number">1</span>]);</span><br><span class="line">	Ayo = (<span class="keyword">int16_t</span> )(Mesurment [<span class="number">2</span>] &lt;&lt;<span class="number">8</span> | Mesurment [<span class="number">3</span>]);</span><br><span class="line">	Azo = (<span class="keyword">int16_t</span> )(Mesurment [<span class="number">4</span>] &lt;&lt;<span class="number">8</span> | Mesurment [<span class="number">5</span>]);</span><br><span class="line">	</span><br><span class="line">	Ax = (<span class="keyword">double</span>) Axo / LSB1_ACCEL;</span><br><span class="line">	Ay = (<span class="keyword">double</span>) Ayo / LSB1_ACCEL;</span><br><span class="line">	Az = (<span class="keyword">double</span>) Azo / LSB1_ACCEL;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//温度数据读取</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TEMP_READ</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">  <span class="keyword">uint8_t</span> Mesurment[<span class="number">2</span>];</span><br><span class="line">	</span><br><span class="line">	HAL_I2C_Mem_Read (&amp;hi2c1 ,MPU6050_ADDR ,TEMP_OUT_H_REG ,<span class="number">1</span> ,Mesurment  ,<span class="number">2</span> ,<span class="number">1000</span>);</span><br><span class="line">	</span><br><span class="line">	Tempo = (<span class="keyword">int16_t</span> )(Mesurment [<span class="number">0</span>]&lt;&lt;<span class="number">8</span>)|Mesurment [<span class="number">1</span>];</span><br><span class="line">	Temp = <span class="number">36.53</span> + Tempo * <span class="number">1.0</span> / <span class="number">340</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>至此，第一部分结束。</p>
+<hr>
+<h3 id="DMP库移植"><a href="#DMP库移植" class="headerlink" title="DMP库移植"></a>DMP库移植</h3><p>首先新建一个F401工程，在新工程里面完成IIC和UART的配置。</p>
+<p>其中IIC选择IIC1，下拉栏选择IIC，配置默认即可。</p>
+<p>生成工程并打开。</p>
+<p>先把我们要移植的库文件复制到工程文件夹中：</p>
+<p>下载并解压“MPU6050资料”这一文件，文件内容以及具体文件路径在README中有说明。</p>
+<p>解压官方库文件“motion_driver_6.12.7z”</p>
+<p>复制库文件和包含文件所在的两个文件夹，粘贴到工程文件夹。<img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352471139.png" alt="1617352471139"></p>
+<p>回到keil中，新建文件夹命名为DMP</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352556822.png" alt="1617352556822"></p>
+<p>双击文件夹为其中添加库文件：</p>
+<p>记得将文件类型的筛选改成所有文件<img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352641220.png" alt="1617352641220"></p>
+<p>全选eMPL中的6个文件点击添加：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352677192.png" alt="1617352677192"></p>
+<p>接下来添加所需的包含路径：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617352990063.png" alt="1617352990063"></p>
+<p>添加这两个文件：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353030848.png" alt="1617353030848"></p>
+<p>接下来添加我们要用到的包含文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;inv_mpu.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;inv_mpu_dmp_motion_driver.h&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这时编译一下<del>应该是0 errors</del></p>
+<p>咳咳  应该是</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353398948.png" alt="1617353398948"></p>
+<p>那么接下来我们来修改库文件。</p>
+<p>打开inv_mpu.c</p>
+<p>可以看到这里官方已经为我们写好了F4的接口，只需要我们定义一个宏即可。复制一下宏的内容，打开选项界面选择C/C++，在上面的define中添加预编译的内容，即刚刚复制的宏，顺手把优化改到最低（方便后面出问题调试）：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353709603.png" alt="1617353709603"></p>
+<p>编译：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353777911.png" alt="1617353777911"></p>
+<p>我们来看看这两个错误：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617353828850.png" alt="1617353828850"></p>
+<p>都是”board-st_discovery.h”没有找到导致的，这个文件是官方的测试工程中用到的文件，所以直接删除对于我们没有影响。</p>
+<p>双击对应的错误传送带对应位置删除宏定义代码，</p>
+<p>编译：<del>0 errors！！！</del></p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617354000906.png" alt="1617354000906"></p>
+<p>缓缓的打出一堆问号？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+<p>别急，我们慢慢解决。</p>
+<p>首先让我们好好读一下官方的说明：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617354101759.png" alt="1617354101759"></p>
+<p>明确的说明了我们需要定义这四个函数来使库正常工作。而下面的宏定义就是留给我们的函数接口，于是我们开始写一下这几个函数。</p>
+<p>首先根据网上资料，get_ms函数没什么用，所以下一个空函数防止报错;</p>
+<p>delay_ms函数直接调用HAL库的延时函数；</p>
+<p>而i2c_read和i2c_write我们通过调用HAL库的IIC函数来实现，需要注意的是HAL库函数与需要的函数参数个数和顺序都不一样。</p>
+<p>参考代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//空函数防止报错</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mget_ms</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> *time)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//调用HAL库函数</span></span><br><span class="line"><span class="function"><span class="keyword">uint8_t</span> <span class="title">i2c_write</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> slave_addr, <span class="keyword">unsigned</span> <span class="keyword">char</span> reg_addr,<span class="keyword">unsigned</span> <span class="keyword">char</span> length, <span class="keyword">unsigned</span> <span class="keyword">char</span> <span class="keyword">const</span> *data)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res;</span><br><span class="line">	res=HAL_I2C_Mem_Write(&amp;hi2c1,slave_addr,reg_addr,<span class="number">1</span>,(<span class="keyword">uint8_t</span> *)data,length,<span class="number">1000</span>);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">uint8_t</span> <span class="title">i2c_read</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> slave_addr, <span class="keyword">unsigned</span> <span class="keyword">char</span> reg_addr,<span class="keyword">unsigned</span> <span class="keyword">char</span> length, <span class="keyword">unsigned</span> <span class="keyword">char</span> *data)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> res;</span><br><span class="line">    res=HAL_I2C_Mem_Read(&amp;hi2c1,slave_addr,reg_addr,<span class="number">1</span>,(<span class="keyword">uint8_t</span> *)data,length,<span class="number">1000</span>);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于之前提到的HAL库IIC地址偏移特性，我们需要把库里面的设备地址改为0xD0:</p>
+<p>在inv_mpu.c中搜索0x68:</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617357292231.png" alt="1617357292231"></p>
+<p>改为0xD0:</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617357328178.png" alt="1617357328178"></p>
+<p>把函数接口改成我们的函数名：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617354938152.png" alt="1617354938152"></p>
+<p>记得inv_mpu_dmp_motion_driver.c中的接口也要改：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355462081.png" alt="1617355462081"></p>
+<p>编译，会看到一堆错误中有这样一个画风清奇：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355116084.png" alt="1617355116084"></p>
+<p>这是在提醒我们要定义我们的模块型号，于是在预编译中添加MPU6050：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355183949.png" alt="1617355183949"></p>
+<p>编译：2 errors</p>
+<p>我们来看看是什么错误：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617355311309.png" alt="1617355311309"></p>
+<p>到inv_mpu_dmp_motion_driver.c中搜索operation看到</p>
+<p>__no_operation();</p>
+<p>看函数名就知道啥都没做，注释掉。</p>
+<p>更改inv_mpu.c中log的宏，用空语句替换：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> log_i(...)     do &#123;&#125; while (0)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> log_e(...)     do &#123;&#125; while (0)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>编译，0 errors！！！</p>
+<p>接下来我们来调用库里面的函数进行模块的初始化以及数据的输出。</p>
+<p>添加我们需要的宏定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN PD */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> q30  1073741824.0f</span></span><br><span class="line"><span class="comment">/* USER CODE END PD */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>定义我们需要的变量：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN PV */</span></span><br><span class="line"><span class="keyword">float</span> pitch=<span class="number">0</span>,roll=<span class="number">0</span>,yaw=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">signed</span> <span class="keyword">char</span> gyro_orientation[<span class="number">9</span>] = &#123; <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">                                           <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>,</span><br><span class="line">                                           <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;;</span><br><span class="line"><span class="comment">/* USER CODE END PV */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>定义我们需要的函数（网上抄的）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN PFP */</span></span><br><span class="line"><span class="comment">//得到dmp处理后的数据(注意,本函数需要比较多堆栈,局部变量有点多)</span></span><br><span class="line"><span class="comment">//pitch:俯仰角 精度:0.1°   范围:-90.0° &lt;---&gt; +90.0°</span></span><br><span class="line"><span class="comment">//roll:横滚角  精度:0.1°   范围:-180.0°&lt;---&gt; +180.0°</span></span><br><span class="line"><span class="comment">//yaw:航向角   精度:0.1°   范围:-180.0°&lt;---&gt; +180.0°</span></span><br><span class="line"><span class="comment">//返回值:0,正常</span></span><br><span class="line"><span class="comment">//    其他,失败</span></span><br><span class="line"><span class="function"><span class="keyword">uint8_t</span> <span class="title">mpu_dmp_get_data</span><span class="params">(<span class="keyword">float</span> *pitch,<span class="keyword">float</span> *roll,<span class="keyword">float</span> *yaw)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">float</span> q0=<span class="number">1.0f</span>,q1=<span class="number">0.0f</span>,q2=<span class="number">0.0f</span>,q3=<span class="number">0.0f</span>;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> sensor_timestamp;</span><br><span class="line">	<span class="keyword">short</span> gyro[<span class="number">3</span>], accel[<span class="number">3</span>], sensors;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> more;</span><br><span class="line">	<span class="keyword">long</span> quat[<span class="number">4</span>]; </span><br><span class="line">	<span class="keyword">if</span>(dmp_read_fifo(gyro, accel, quat, &amp;sensor_timestamp, &amp;sensors,&amp;more))<span class="keyword">return</span> <span class="number">1</span>;	 </span><br><span class="line">	<span class="comment">/* Gyro and accel data are written to the FIFO by the DMP in chip frame and hardware units.</span></span><br><span class="line"><span class="comment">	 * This behavior is convenient because it keeps the gyro and accel outputs of dmp_read_fifo and mpu_read_fifo consistent.</span></span><br><span class="line"><span class="comment">	**/</span></span><br><span class="line">	<span class="comment">/*if (sensors &amp; INV_XYZ_GYRO )</span></span><br><span class="line"><span class="comment">	send_packet(PACKET_TYPE_GYRO, gyro);</span></span><br><span class="line"><span class="comment">	if (sensors &amp; INV_XYZ_ACCEL)</span></span><br><span class="line"><span class="comment">	send_packet(PACKET_TYPE_ACCEL, accel); */</span></span><br><span class="line">	<span class="comment">/* Unlike gyro and accel, quaternions are written to the FIFO in the body frame, q30.</span></span><br><span class="line"><span class="comment">	 * The orientation is set by the scalar passed to dmp_set_orientation during initialization. </span></span><br><span class="line"><span class="comment">	**/</span></span><br><span class="line">	<span class="keyword">if</span>(sensors&amp;INV_WXYZ_QUAT) </span><br><span class="line">	&#123;</span><br><span class="line">		q0 = quat[<span class="number">0</span>] / q30;	<span class="comment">//q30格式转换为浮点数</span></span><br><span class="line">		q1 = quat[<span class="number">1</span>] / q30;</span><br><span class="line">		q2 = quat[<span class="number">2</span>] / q30;</span><br><span class="line">		q3 = quat[<span class="number">3</span>] / q30; </span><br><span class="line">		<span class="comment">//计算得到俯仰角/横滚角/航向角</span></span><br><span class="line">		*pitch = <span class="built_in">asin</span>(<span class="number">-2</span> * q1 * q3 + <span class="number">2</span> * q0* q2)* <span class="number">57.3</span>;	<span class="comment">// pitch</span></span><br><span class="line">		*roll  = <span class="built_in">atan2</span>(<span class="number">2</span> * q2 * q3 + <span class="number">2</span> * q0 * q1, <span class="number">-2</span> * q1 * q1 - <span class="number">2</span> * q2* q2 + <span class="number">1</span>)* <span class="number">57.3</span>;	<span class="comment">// roll</span></span><br><span class="line">		*yaw   = <span class="built_in">atan2</span>(<span class="number">2</span>*(q1*q2 + q0*q3),q0*q0+q1*q1-q2*q2-q3*q3) * <span class="number">57.3</span>;	<span class="comment">//yaw</span></span><br><span class="line">	&#125;<span class="keyword">else</span> <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">run_self_test</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> result;</span><br><span class="line">	<span class="keyword">char</span> test_packet[<span class="number">4</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="keyword">long</span> gyro[<span class="number">3</span>], accel[<span class="number">3</span>]; </span><br><span class="line">	result = mpu_run_self_test(gyro, accel);</span><br><span class="line">	<span class="keyword">if</span> (result == <span class="number">0x7</span>) </span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">/* Test passed. We can trust the gyro data here, so let&#x27;s push it down</span></span><br><span class="line"><span class="comment">		* to the DMP.</span></span><br><span class="line"><span class="comment">		*/</span></span><br><span class="line">		<span class="keyword">float</span> sens;</span><br><span class="line">		<span class="keyword">unsigned</span> <span class="keyword">short</span> accel_sens;</span><br><span class="line">		mpu_get_gyro_sens(&amp;sens);</span><br><span class="line">		gyro[<span class="number">0</span>] = (<span class="keyword">long</span>)(gyro[<span class="number">0</span>] * sens);</span><br><span class="line">		gyro[<span class="number">1</span>] = (<span class="keyword">long</span>)(gyro[<span class="number">1</span>] * sens);</span><br><span class="line">		gyro[<span class="number">2</span>] = (<span class="keyword">long</span>)(gyro[<span class="number">2</span>] * sens);</span><br><span class="line">		dmp_set_gyro_bias(gyro);</span><br><span class="line">		mpu_get_accel_sens(&amp;accel_sens);</span><br><span class="line">		accel[<span class="number">0</span>] *= accel_sens;</span><br><span class="line">		accel[<span class="number">1</span>] *= accel_sens;</span><br><span class="line">		accel[<span class="number">2</span>] *= accel_sens;</span><br><span class="line">		dmp_set_accel_bias(accel);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;<span class="keyword">else</span> <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//DMP初始化函数</span></span><br><span class="line"><span class="function"><span class="keyword">uint8_t</span> <span class="title">mpu_dmp_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> res=<span class="number">0</span>;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">int_param_s</span> <span class="title">int_param</span>;</span><span class="comment">//这个没什么用，就是为了能给他实参调用起来</span></span><br><span class="line">	<span class="keyword">if</span>(mpu_init(&amp;int_param)==<span class="number">0</span>)	<span class="comment">//初始化MPU6050</span></span><br><span class="line">	&#123;	 </span><br><span class="line">		res=mpu_set_sensors(INV_XYZ_GYRO|INV_XYZ_ACCEL);<span class="comment">//设置所需要的传感器</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">1</span>; </span><br><span class="line">		res=mpu_configure_fifo(INV_XYZ_GYRO | INV_XYZ_ACCEL);<span class="comment">//设置FIFO</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">2</span>; </span><br><span class="line">		res=mpu_set_sample_rate(<span class="number">100</span>);	<span class="comment">//设置采样率</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">3</span>; </span><br><span class="line">		res=dmp_load_motion_driver_firmware();		<span class="comment">//加载dmp固件</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">4</span>; </span><br><span class="line">		<span class="comment">//res=dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation));//设置陀螺仪方向</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">5</span>; </span><br><span class="line">		res=dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT|DMP_FEATURE_TAP|	<span class="comment">//设置dmp功能</span></span><br><span class="line">		    DMP_FEATURE_ANDROID_ORIENT|DMP_FEATURE_SEND_RAW_ACCEL|DMP_FEATURE_SEND_CAL_GYRO|</span><br><span class="line">		    DMP_FEATURE_GYRO_CAL);</span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">6</span>; </span><br><span class="line">		res=dmp_set_fifo_rate(<span class="number">100</span>);	<span class="comment">//设置DMP输出速率(最大不超过200Hz)</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">7</span>;   </span><br><span class="line">		res=run_self_test();		<span class="comment">//自检</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">8</span>;    </span><br><span class="line">		res=mpu_set_dmp_state(<span class="number">1</span>);	<span class="comment">//使能DMP</span></span><br><span class="line">		<span class="keyword">if</span>(res)<span class="keyword">return</span> <span class="number">9</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在循环前面调用初始化函数，在循环中调用数据处理函数，并打印出欧拉角的值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">uint8_t</span> res;</span><br><span class="line">res = mpu_dmp_init();</span><br><span class="line"></span><br><span class="line"> <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line"> &#123;</span><br><span class="line">	res=mpu_dmp_get_data(&amp;pitch,&amp;roll,&amp;yaw);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%.2f,%.2f,%.2f\n&quot;</span>,pitch,roll,yaw);</span><br><span class="line">   <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>串口重定向：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN 4 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputc</span><span class="params">(<span class="keyword">int</span> ch,FILE *f)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HAL_UART_Transmit (&amp;huart1 ,(<span class="keyword">uint8_t</span> *)&amp;ch,<span class="number">1</span>,HAL_MAX_DELAY );</span><br><span class="line">	<span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 4 */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>编译烧录，就可以在串口调试助手上看到欧拉角了：</p>
+<p><img src="../images/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/1617357509432.png" alt="1617357509432"></p>
+<p>如果出现了三个角度全为0的情况，必然是某一环出现的问题，我会将我遇到的问题在之后列举一下，可以自己使用打印对应返回值以及单步调试的方法逐步排查。</p>
+<h4 id="问题汇总"><a href="#问题汇总" class="headerlink" title="问题汇总"></a>问题汇总</h4><p>PS：“/”表示不易出现问题，如出现问题可能是硬件问题，检查是否是未供电以及供电电压是否正确，或者可能你的模块坏掉了。</p>
+<table>
+<thead>
+<tr>
+<th align="center">函数返回值</th>
+<th align="center">mpu_dmp_init函数</th>
+<th align="center">mpu_dmp_get_data函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">/</td>
+<td align="center">dmp_read_fifo函数出现问题</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">说明run_self_test函数出现问题</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">/</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">说明mpu_init函数出现问题</td>
+<td align="center">/</td>
+</tr>
+</tbody></table>
+<h5 id="run-self-test问题"><a href="#run-self-test问题" class="headerlink" title="run_self_test问题"></a>run_self_test问题</h5><p>进入run_self_test函数内部有一个</p>
+<p>mpu_run_self_test函数，将它的result打印出来。</p>
+<table>
+<thead>
+<tr>
+<th align="center">result</th>
+<th align="center">mpu_run_self_test内部</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0x4</td>
+<td align="center">加速度计和陀螺仪自检均未通过，考虑为模块损坏</td>
+</tr>
+<tr>
+<td align="center">0x5</td>
+<td align="center">加速度计自检未通过，未知原因</td>
+</tr>
+<tr>
+<td align="center">0x6</td>
+<td align="center">陀螺仪自检未通过，未知原因</td>
+</tr>
+</tbody></table>
+<p>如果重新连线、改变防止方向（芯片平放）无法解决你的问题，可以试试将后面的条件判断修改为你的值，看看是否可以出数据，但是如果出了数据，对数据的准确性无法做以保证。</p>
+<h5 id="mpu-init问题"><a href="#mpu-init问题" class="headerlink" title="mpu_init问题"></a>mpu_init问题</h5><p>这里的问题一般是由于IIC配置错误导致的。</p>
+<p>进入函数内不出意外的话程序会在i2c_write返回-1，此时进入函数内部查看返回值：</p>
+<p>**HAL_ERROR:**请检查之前的0x68改为0xD0是否有更改。如果更改了，则可能是其他的地方地址出现问题。（检查AD0引脚是否被拉高，若拉高则地址应为0xD1）。</p>
+<p>**HAL_BUSY:**硬件IIC会出现的busy锁死问题，这是ST硬件上的一点小问题，可能已经在后续的产品中修复。临时解决办法是把设备完全断电，在不上IIC的情况下上电，清除BUSY位后断电重新插线即可解决问题。</p>
+<h5 id="dmp-read-fifo问题"><a href="#dmp-read-fifo问题" class="headerlink" title="dmp_read_fifo问题"></a>dmp_read_fifo问题</h5><p>进入函数内部，不出意外是mpu_read_fifo_stream这个函数处返回了-1，这说明我们读取速度太慢了导致了FIFO溢出，只需要在读取语句之后加上一行代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(mpu_dmp_get_data)mpu_dmp_get_data(&amp;pitch,&amp;roll,&amp;yaw);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在FIFO下次溢出前再次读取即可。</p>
+
+    </div>
+
+    
+    
+    
+    
+      <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;">-------------EOF-------------</div>
+    
+</div>
+      </div>
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ZheWana
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2021/05/08/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/" title="记MPU6050模块的学习过程">http://example.com/2021/05/08/记MPU6050模块的学习过程/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STM32/" rel="tag"># STM32</a>
+              <a href="/tags/MPU6050/" rel="tag"># MPU6050</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/08/%E8%AE%B0%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/" rel="prev" title="记超声波模块的学习过程">
+      <i class="fa fa-chevron-left"></i> 记超声波模块的学习过程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/08/%E5%88%A9%E7%94%A8VScode%E7%9A%84STM32%E5%BC%80%E5%8F%91/" rel="next" title="利用VScode的STM32开发">
+      利用VScode的STM32开发 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E7%BB%84%E6%88%90%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">模块组成：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MPU6050%EF%BC%9A%E5%8A%A0%E9%80%9F%E5%BA%A6%E8%AE%A1-%E9%99%80%E8%9E%BA%E4%BB%AA"><span class="nav-number">2.1.</span> <span class="nav-text">MPU6050：加速度计+陀螺仪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HMC5883L%EF%BC%9A-3%E8%BD%B4%E6%95%B0%E5%AD%97%E7%BD%97%E7%9B%98"><span class="nav-number">2.2.</span> <span class="nav-text">HMC5883L：  3轴数字罗盘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MS5611-%EF%BC%9A%E6%B0%94%E5%8E%8B%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="nav-number">2.3.</span> <span class="nav-text">MS5611 ：气压传感器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%BC%95%E8%84%9A%E5%AE%9A%E4%B9%89%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">模块引脚定义：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VCC-IN-5V%E7%94%B5%E6%BA%90%E8%BE%93%E5%85%A5"><span class="nav-number">3.1.</span> <span class="nav-text">VCC_IN:5V电源输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3V%EF%BC%9A3-3V%E7%94%B5%E6%BA%90%E8%BE%93%E5%85%A5"><span class="nav-number">3.2.</span> <span class="nav-text">3.3V：3.3V电源输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GND%EF%BC%9A%E6%8E%A5%E5%9C%B0"><span class="nav-number">3.3.</span> <span class="nav-text">GND：接地</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SCL%EF%BC%9AIIC%E6%80%BB%E7%BA%BF%E6%97%B6%E9%92%9F"><span class="nav-number">3.4.</span> <span class="nav-text">SCL：IIC总线时钟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SDA%EF%BC%9AIIC%E6%80%BB%E7%BA%BF%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5"><span class="nav-number">3.5.</span> <span class="nav-text">SDA：IIC总线数据输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FSYNC%EF%BC%9A%EF%BC%88MPU6050%EF%BC%89"><span class="nav-number">3.6.</span> <span class="nav-text">FSYNC：（MPU6050）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88GND%EF%BC%89"><span class="nav-number">3.7.</span> <span class="nav-text">（GND）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTA%EF%BC%9A%EF%BC%88MPU6050%EF%BC%89"><span class="nav-number">3.8.</span> <span class="nav-text">INTA：（MPU6050）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E9%85%8D%E7%BD%AE%E4%B8%BA%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%EF%BC%89"><span class="nav-number">3.9.</span> <span class="nav-text">（配置为外部中断）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DRDY%EF%BC%9A%EF%BC%88HMC5883L%EF%BC%89"><span class="nav-number">3.10.</span> <span class="nav-text">DRDY：（HMC5883L）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E9%85%8D%E7%BD%AE%E4%B8%BA%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%EF%BC%89-1"><span class="nav-number">3.11.</span> <span class="nav-text">（配置为外部中断）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">模块使用：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="nav-number">4.1.</span> <span class="nav-text">伪前言：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%89%93%E5%8D%B0%EF%BC%9A"><span class="nav-number">4.2.</span> <span class="nav-text">原始数据的打印：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DMP%E5%BA%93%E7%A7%BB%E6%A4%8D"><span class="nav-number">4.3.</span> <span class="nav-text">DMP库移植</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB"><span class="nav-number">4.3.1.</span> <span class="nav-text">问题汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#run-self-test%E9%97%AE%E9%A2%98"><span class="nav-number">4.3.1.1.</span> <span class="nav-text">run_self_test问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mpu-init%E9%97%AE%E9%A2%98"><span class="nav-number">4.3.1.2.</span> <span class="nav-text">mpu_init问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#dmp-read-fifo%E9%97%AE%E9%A2%98"><span class="nav-number">4.3.1.3.</span> <span class="nav-text">dmp_read_fifo问题</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZheWana</p>
+  <div class="site-description" itemprop="description">我们选择死亡还是努力活着呢？</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="/1312560006" title="QQ → 1312560006"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021-05 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZheWana</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共9.6k字</span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
