@@ -116,13 +116,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/%E5%87%BD%E6%95%B0%E5%BA%93/</loc>
-    <lastmod>2021-05-30</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/MSP432/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
@@ -131,6 +124,13 @@
   
   <url>
     <loc>http://example.com/tags/%E5%8D%95%E7%89%87%E6%9C%BA/</loc>
+    <lastmod>2021-05-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/%E5%87%BD%E6%95%B0%E5%BA%93/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -158,14 +158,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</loc>
+    <loc>http://example.com/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <loc>http://example.com/tags/%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -216,7 +216,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/</loc>
+    <loc>http://example.com/categories/%E5%8D%95%E7%89%87%E6%9C%BA/MSP432/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -230,7 +230,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E5%8D%95%E7%89%87%E6%9C%BA/MSP432/</loc>
+    <loc>http://example.com/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -244,14 +244,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/%E5%87%BD%E6%95%B0%E5%BA%93/</loc>
+    <loc>http://example.com/categories/%E7%A1%AC%E4%BB%B6/%E6%A8%A1%E5%9D%97/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E7%A1%AC%E4%BB%B6/%E6%A8%A1%E5%9D%97/</loc>
+    <loc>http://example.com/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/%E5%87%BD%E6%95%B0%E5%BA%93/</loc>
     <lastmod>2021-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
