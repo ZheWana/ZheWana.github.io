@@ -137,13 +137,6 @@
   </url>
   
   <url>
-    <loc>http://zhewana.cn/tags/%E6%9D%82%E8%B0%88/</loc>
-    <lastmod>2021-06-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://zhewana.cn/tags/%E5%8D%95%E7%89%87%E6%9C%BA/</loc>
     <lastmod>2021-06-19</lastmod>
     <changefreq>daily</changefreq>
@@ -151,14 +144,14 @@
   </url>
   
   <url>
-    <loc>http://zhewana.cn/tags/DIY/</loc>
+    <loc>http://zhewana.cn/tags/%E6%9D%82%E8%B0%88/</loc>
     <lastmod>2021-06-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://zhewana.cn/tags/%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</loc>
+    <loc>http://zhewana.cn/tags/DIY/</loc>
     <lastmod>2021-06-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -173,6 +166,13 @@
   
   <url>
     <loc>http://zhewana.cn/tags/STM32/</loc>
+    <lastmod>2021-06-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://zhewana.cn/tags/%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</loc>
     <lastmod>2021-06-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -223,6 +223,13 @@
   </url>
   
   <url>
+    <loc>http://zhewana.cn/categories/%E6%9D%82%E8%B0%88/%E5%BA%9F%E8%AF%9D/</loc>
+    <lastmod>2021-06-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://zhewana.cn/categories/%E6%9D%82%E8%B0%88/%E5%8A%A8%E6%BC%AB/</loc>
     <lastmod>2021-06-19</lastmod>
     <changefreq>daily</changefreq>
@@ -245,13 +252,6 @@
   
   <url>
     <loc>http://zhewana.cn/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/</loc>
-    <lastmod>2021-06-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://zhewana.cn/categories/%E6%9D%82%E8%B0%88/%E5%BA%9F%E8%AF%9D/</loc>
     <lastmod>2021-06-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
