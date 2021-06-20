@@ -6,25 +6,6 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>HAL库基本函数</title>
-    <url>/2021/05/17/HAL%E5%BA%93%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不知道写啥了，但还是要有一个前言的。</p>
-<p><del>摸鱼的时候不知道该干点啥，那就写一篇博客吧！</del></p>
-<p>大概就是记录一下自己用的时候遇到的坑吧（正经脸）？</p>
-<span id="more"></span>
-
-<p>坑已留，摸鱼时填。</p>
-<h2 id="GPIO函数"><a href="#GPIO函数" class="headerlink" title="GPIO函数"></a>GPIO函数</h2><h2 id="定时器函数"><a href="#定时器函数" class="headerlink" title="定时器函数"></a>定时器函数</h2><h2 id="UART函数"><a href="#UART函数" class="headerlink" title="UART函数"></a>UART函数</h2><h2 id="IIC函数"><a href="#IIC函数" class="headerlink" title="IIC函数"></a>IIC函数</h2><h2 id="SPI函数"><a href="#SPI函数" class="headerlink" title="SPI函数"></a>SPI函数</h2>]]></content>
-      <categories>
-        <category>单片机</category>
-        <category>STM32</category>
-        <category>函数库</category>
-      </categories>
-      <tags>
-        <tag>函数库</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Everybody loves Somebody</title>
     <url>/2021/05/09/Everybody-lvoes-Somebody/</url>
     <content><![CDATA[<p>《玉子市场》看完啦！</p>
@@ -55,6 +36,25 @@
       </categories>
       <tags>
         <tag>生活</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HAL库基本函数</title>
+    <url>/2021/05/17/HAL%E5%BA%93%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不知道写啥了，但还是要有一个前言的。</p>
+<p><del>摸鱼的时候不知道该干点啥，那就写一篇博客吧！</del></p>
+<p>大概就是记录一下自己用的时候遇到的坑吧（正经脸）？</p>
+<span id="more"></span>
+
+<p>坑已留，摸鱼时填。</p>
+<h2 id="GPIO函数"><a href="#GPIO函数" class="headerlink" title="GPIO函数"></a>GPIO函数</h2><h2 id="定时器函数"><a href="#定时器函数" class="headerlink" title="定时器函数"></a>定时器函数</h2><h2 id="UART函数"><a href="#UART函数" class="headerlink" title="UART函数"></a>UART函数</h2><h2 id="IIC函数"><a href="#IIC函数" class="headerlink" title="IIC函数"></a>IIC函数</h2><h2 id="SPI函数"><a href="#SPI函数" class="headerlink" title="SPI函数"></a>SPI函数</h2>]]></content>
+      <categories>
+        <category>单片机</category>
+        <category>STM32</category>
+        <category>函数库</category>
+      </categories>
+      <tags>
+        <tag>函数库</tag>
       </tags>
   </entry>
   <entry>
