@@ -178,161 +178,6 @@
       </tags>
   </entry>
   <entry>
-    <title>记我与机械键盘的一次斗争</title>
-    <url>/2021/06/16/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>参加了一个DIY机械键盘的活动，虽然很想自己做一个机械键盘，但是奈何我已经有了一把键盘，再加上经费有限，最终还是没有做。不过我看上凯华的BOX白好久了，于是便借着这次机会换一波轴体。</p>
-<span id="more"></span>
-
-<h2 id="一个有趣的小故事"><a href="#一个有趣的小故事" class="headerlink" title="一个有趣的小故事"></a>一个有趣的小故事</h2><p>首先有了换轴的想法之后当然是首先关心一下自己的轴能不能热插拔，于是到当初买轴的地方看了看：</p>
-<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/Screenshot_2021-06-16-18-04-46-628_com.taobao.tao-1623901120401.jpg" alt="Screenshot_2021-06-16-18-04-46-628_com.taobao.tao"></p>
-<p>好家伙！我直接狂喜！</p>
-<p>于是了解了一下拔轴的方法之后就开始自己操作了。</p>
-<p>首先是<strong>拔下键帽</strong>：</p>
-<p>我使出上古洪荒之力，终于在不借助任何工具的情况下拔下了所有键帽：</p>
-<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/1623837920254-1623901133530.jpg" alt="1623837920254"></p>
-<p>接着开始拔轴：</p>
-<p><strong>用拔轴器分别对准轴体上面和下面的两个卡口，将卡口按下后用力即可将轴体拔出。</strong></p>
-<p>念叨着拔轴的诀窍，我拔下了一个又一个轴。</p>
-<p>看这拔完轴后剩下的“轴座”，果然是极致的省钱了啊：</p>
-<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/65a29b1cacae971c.-1623901149985.jpg" alt="65a29b1cacae971c."></p>
-<blockquote>
-<ul>
-<li>1mm的鸡铜眼作为轴座，可谓是将可拓展空间降低到了极致，这种方案也算是热插拔方案里面最不能热插拔了。</li>
-<li>灯用的就是最普通的反贴白色二极管，也是省钱首选。</li>
-<li>没有做任何的其他轴体的适应孔位，真就铁了心用这个省钱的方案。</li>
-</ul>
-</blockquote>
-<p>后来拔着拔着发现：<strong>居然有的轴是拔不下来的！！！</strong></p>
-<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/Cache_-1eec80bc2896130a.-1623901159717.jpg" alt="Cache_-1eec80bc2896130a."></p>
-<p>开始我天真的以为是因为轴体卡的太紧导致无法拔出。</p>
-<p>于是我开始期待大力出奇迹，可是无论我如何大力都没有奇迹出现。</p>
-<p>后来我就抱着破罐子破摔的心态直接用钳子对其中的一个轴体做了毁灭性的拔除，结果发现了个惊天大秘密！</p>
-<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/Cache_-65a29b1cacae971c.-1623901168601.jpg" alt="Cache_-65a29b1cacae971c."></p>
-<p>轴下面的电路板上面根本就连鸡铜眼都没有，轴上面断掉的引脚还在焊盘上留着。当然我也考虑过会不会是鸡铜眼被我带掉了的情况，因此抱着严谨的态度我拆掉了键盘，打算看一下背面PCB的焊点。</p>
-<p>结果果然和我想得一模一样：这把键盘不但轴座上采用了最省钱的鸡铜眼方案，而且<strong>甚至连鸡铜眼都没有完全的采用</strong>，而是反人类的“半热插拔”（就是<strong>一半轴下面有鸡铜眼，另一半轴下方则是将引脚直接焊接上去的</strong>）</p>
-<p>只需要看一下焊盘就可以看得出来：</p>
-<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/1623837911991-1623901177190.jpg" alt="1623837911991"></p>
-<p>鸡铜眼下方的<strong>焊点头部圆润饱满</strong>，这是由于鸡铜眼本身比较粗的缘故，但是引脚焊接是绝对焊不出这种头部的。</p>
-<p>下面我们来看看拔不下来的轴下面的焊点：</p>
-<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/1623837905852-1623901184851.jpg" alt="1623837905852"></p>
-<p>焊点头部明显是<strong>尖的</strong>，仔细看还能看出引脚的形状。后续用烙铁融化焊盘上的锡浆之后用吸锡器将它吸干净，<strong>可以清楚的看到轴体引脚上面的锡浆。</strong></p>
-<p>好了无良商家实锤了。</p>
-<p>但是该换的轴还是要换的，最后我还是花了半个下午的时间将原本的轴体拆焊了下来并且将原本的鸡铜眼拆焊下来（主要是由于原本1mm的鸡铜眼小于凯华的轴座引脚直径，导致凯华轴座没法完美的插进去，想着反正都要焊接的，就直接一次性全部解决了吧。），最后将轴体焊接上去，最终完成了轴体的更换。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>机械键盘这东西和很多东西一样，一分钱一分货。大家一定不要像我一样图便宜最终买到了虚假宣传的产品，虽然问题的解决很简单，但是其中浪费的时间成本终究还是得不偿失的。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-        <category>DIY</category>
-      </categories>
-      <tags>
-        <tag>DIY</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记编码器的学习历程</title>
-    <url>/2021/01/22/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>出于积分赛要求最近在学电机控制，其中包括PID算法，当然就少不了用编码器来监测电机当前运动状态了，为防止遗忘，特将编码器的学习过程记录如下。</p>
-<span id="more"></span>
-
-<h2 id="编码器以及其原理"><a href="#编码器以及其原理" class="headerlink" title="编码器以及其原理"></a>编码器以及其原理</h2><p>首先关于编码器概述不用说太多，网上一搜一大把（以下介绍为复制内容）：</p>
-<p>编码器分为光电和霍尔编码器是一种将角位移或者角速度转换成一连串电数字脉冲的旋转式传感器，我们可以通过编码器测量到位移或者速度信息。编码器从输出数据类型上分，可以分为增量式编码器和绝对式编码器。</p>
-<p>从编码器检测原理上来分，还可以分为光学式、磁式、感应式、电容式。常见的是光电编码器（光学式）和霍尔编码器（磁式）。两种（以下介绍为复制内容）：</p>
-<p>光电编码器是一种通过光电转换将输出轴上的机械几何位移量转换成脉冲或数字量的传感器。光电编码器是由光码盘和光电检测装置组成。光码盘是在一 定直径的圆板上等分地开通若干个长方形孔。由于光电码盘与电动机同轴，电动机旋转时，检测装置检测输出若干脉冲信号，为判断转向，一般输出两组存在一 定相位差的方波信号。</p>
-<p>霍尔编码器是一种通过磁电转换将输出轴上的机械几何位移量转换成脉冲或数字量的传感器。霍尔编码器是由霍尔码盘和霍尔元件组成。霍尔码盘是在一 定直径的圆板上等分地布置有不同的磁极。霍尔码盘与电动机同轴，电动机旋转时，霍尔元件检测输出若干脉冲信号，为判断转向，一般输出两组存在一定相位差的方波信号。</p>
-<p>下图为正交编码器的输出波形图：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478338406.png" alt="1620478338406"></p>
-<p>除了这些还有一个参数对我们很有用，那就是编码器的线数。  </p>
-<p>线数是什么呢？  </p>
-<p>我们可以简单的理解为线数是多少，那么编码器每转动一圈就会产生多少个脉冲信号。  </p>
-<hr>
-<h2 id="程序实现（废话不说纯享版）"><a href="#程序实现（废话不说纯享版）" class="headerlink" title="程序实现（废话不说纯享版）"></a>程序实现（废话不说纯享版）</h2><p>实例环境：<strong>STM32F401CCU6+CubeMX+HAL库</strong></p>
-<p>首先随便打开一个定时器，打开编码器模式：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478445392.png" alt="1620478445392"></p>
-<p>  设置为TI1和TI2共同触发：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478459280.png" alt="1620478459280"></p>
-<p>打开串口一以便接收数据<del>（真的不是懒得配置屏幕显示）</del></p>
-<p>接下来我们需要额外打开一个定时器来测出单位时间产生了多少脉冲,我用了TIM4来进行定时:  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478474987.png" alt="1620478474987"></p>
-<p>  并且打开定时器中断：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478513729.png" alt="1620478513729"></p>
-<p>  再打开一个定时器用于产生PWM波（20kHz占空比50%）进而控制电机转动。  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478530063.png" alt="1620478530063"></p>
-<p>电机驱动为TB6612，使用并不麻烦，此处不再赘述。</p>
-<p>为了方便调试，我们再打开两个连接着开关的IO口用于控制PWM的输出（一个用于控制电机转动与停止，另一个调节占空比），接着生成工程。</p>
-<p>敲代码：  </p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//变量定义</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PV */</span></span><br><span class="line"><span class="keyword">float</span> freq=<span class="number">0</span>，CNT_prevalue=<span class="number">0</span>，period=<span class="number">0</span>，velocity=<span class="number">0</span>，position=<span class="number">0</span>；</span><br><span class="line"><span class="comment">/* USER CODE END PV */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line"><span class="comment">//包含头文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;stdio.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;math.h&quot;</span></span></span><br><span class="line"><span class="comment">//串口重定向</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __GNUC__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PUTCHAR_PROTOTYPE int __io_putchar(int ch)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">PUTCHAR_PROTOTYPE&#123;</span><br><span class="line">    HAL_UART_Transmit(&amp;huart1, (<span class="keyword">uint8_t</span> *)&amp;ch, <span class="number">1</span> , <span class="number">0xffff</span>);</span><br><span class="line">    <span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定时器中断回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span></span>&#123;</span><br><span class="line">	velocity=(TIM1-&gt;CNT*<span class="number">1.0f</span>-CNT_prevalue)*<span class="number">1.0f</span>*<span class="number">1000</span>/(<span class="number">13</span>*<span class="number">4</span>);</span><br><span class="line">    <span class="comment">//公式应该是：</span></span><br><span class="line">    <span class="comment">// （CNT2-CNT1）*计数器溢出频率/（编码器线数*采集边沿数）</span></span><br><span class="line">    <span class="comment">//PS：因为设置了TI1和TI2共同采样，所以采集边沿为4个。</span></span><br><span class="line">    period = <span class="built_in">fabs</span>( velocity * <span class="number">360</span> );</span><br><span class="line">    position = (<span class="keyword">int</span>)period % <span class="number">360</span>;</span><br><span class="line">    value = TIM1 -&gt; CNT;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//循环前后</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line">    HAL_TIM_Base_Start_IT(&amp;htim4);<span class="comment">//开启定时器4中断</span></span><br><span class="line">    HAL_TIM_PWM_Start(&amp;htim3,TIM_CHANNEL_1);<span class="comment">//开启PWM通道</span></span><br><span class="line">    HAL_TIM_Encoder_Start(&amp;htim1,TIM_CHANNEL_2);<span class="comment">//开启定编码器接口通道</span></span><br><span class="line">    HAL_TIM_Encoder_Start(&amp;htim1,TIM_CHANNEL_1);<span class="comment">//同上</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//控制电机</span></span><br><span class="line">    <span class="keyword">if</span>(!HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_1))</span><br><span class="line">    	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_2,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_2,<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//输出计算结果</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot; v=%.1f r/s\n period=%.1f degrees/s\n position=%.0f degrees\n&quot;</span>,velocity,period,position);</span><br><span class="line">    <span class="comment">//调节方波占空比</span></span><br><span class="line">    <span class="keyword">if</span>(!HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0))</span><br><span class="line">    &#123;</span><br><span class="line">    	TIM3-&gt;CCR1+<span class="number">210</span>&gt;<span class="number">4200</span>?TIM3-&gt;CCR1=<span class="number">0</span>:TIM3-&gt;CCR1+=<span class="number">210</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    HAL_Delay(<span class="number">200</span>);</span><br><span class="line"><span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 3 */</span></span><br></pre></td></tr></table></figure>
-
-<p>  烧录，测试，结果如图：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478729839.png" alt="1620478729839"></p>
-<p>  教程结束。  </p>
-<hr>
-<h2 id="程序实现（墨迹墨迹解读版）"><a href="#程序实现（墨迹墨迹解读版）" class="headerlink" title="程序实现（墨迹墨迹解读版）"></a>程序实现（墨迹墨迹解读版）</h2><p>方法其实很好理解，只要测量单位时间内输出的脉冲个数即可间接得知转速。</p>
-<p>那么如果想测得脉冲个数，相信大家一定会很容易想到输入捕获。</p>
-<p><del>输入捕获大家应该都会，好的教程结束，大家加油！</del></p>
-<p>我也是第一个想到了输入捕获，不过出现这个想法的时候就有一个问题一直难以解决：</p>
-<p>如何判断电机的转向呢？这是个值得思考的问题，因为我们后面想要实现很多功能都需要知道电机的转向，然而仅仅使用输入捕获只能测出脉冲的个数进而测出速度，确实没办法知道电机的转向。此路不通的情况下，就要开始思考其他的方法了。</p>
-<p>好在经过好心人的提醒我得知：STM32具有专门的硬件编码器接口，于是立刻跑去翻手册。那么让我们先来看看STM32的硬件编码器接口是怎么回事：</p>
-<p>（PS：如果其他的单片机没有如果没有编码器外设的话，我们可以使用GPIO中断进行，在中断里面判断另一相的电平来判断方向，该方法感兴趣的读者可以自己尝试  ）</p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478834327.png" alt="1620478834327"></p>
-<p>好家伙，选择接口模式之后直接就选择计数边沿，<del>有输入捕获内味了嗷</del>（可是为什么只选择TI1和TI2的边沿却不是选择TI3、TI4呢？）。</p>
-<p>我们打开CubeMX试着配置一下：  </p>
-<p>首先随便打开一个定时器（此处其实建议使用片内32位定时器），打开编码器模式：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478949658.png" alt="1620478949658"></p>
-<p>可以看到选下编码器模式之后上面五个配置选项就锁定了。也就是说编码器模式的设置以及频道的使用其实是早就内定好的，并不像其他的模式一样可以自己选择通道。</p>
-<p>这件事情其实在参考手册的通用定时器框图里面也得到了验证：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479003499.png" alt="1620479003499">至于手册说的边沿选择这句话  ：</p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479026932.png" alt="1620479026932"></p>
-<p>  是在这里设置的：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479037219.png" alt="1620479037219"></p>
-<p>正如手册所说，可以选择仅TI1、仅TI2和TI与TI2共同使用三种方式。</p>
-<p>继续阅读手册：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479059771.png" alt="1620479059771"></p>
-<p>极性？我们回忆一下PWM波中的极性，表示的是OCxREF和实际输出OCx之间的关系（即极性相同或相反）。好的，此处拓展想一下，这里的极性应该也是选择一个二值的量，很明显就是检测边沿。  </p>
-<p>对应到CubeMX里面：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479200390.png" alt="1620479200390"></p>
-<p>CubeMX里面接下来的IC Selection选项里面只有直接选项，从图里面就可以明确的看出来。继续看手册：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479223708.png" alt="1620479223708"></p>
-<p>输入滤波器的编程对应的应该就是这里：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479251663.png" alt="1620479251663"></p>
-<p>  至此，CubeMX里面的可设置项就看完了，我们继续看看手册里面还说了什么：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479273239.png" alt="1620479273239"></p>
-<p>上面的内容挺让人头大的，不过好在重点就两句。第一句的意思其实就是说<strong>只有当编码器产生脉冲的时候，CNT的值才会改变</strong>。第二句的意思就是说输入改变的时候会更改计数器的计数方向。  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479305031.png" alt="1620479305031"></p>
-<p>看到这里我们就懂了，这模式不但能计数，还能辨别转动方向。</p>
-<p>后面给出了一个实例我们来看一下：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479327782.png" alt="1620479327782"></p>
-<p>上面给出的波形就是编码器的波形，很容易看出编码器正转时CNT递增，反之递减。</p>
-<p>因此，我们只需要在中断里面连续进行两次采样，对两次采样的CNT值做差，如果结果为正说明CNT正向计数，即电机正向旋转，反之反向。除此之外，我们还可以通过读取TIMx_CR1寄存器的DIR位来获得计数方向进而得知电机转向：  </p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479372193.png" alt="1620479372193"></p>
-<p>  实现代码前面给过了，就不赘述了。  </p>
-<hr>
-<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><p>2021.5.17补充：</p>
-<p>关于利用GPIO中断写出软件编码器的实现方法：</p>
-<p>由于最近在学MSP432，其上并没有硬件编码器接口，因此只能自己写软件编码器，实现了一下发现其实并不难，写在此作为之前内容的补充。</p>
-<p>PS：以下实现代码为使用MSP432的函数实现的，STM32版本如果有机会写的话<del>其实就是没机会了</del>会写的。</p>
-<p>首先是分析：</p>
-<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1621253575694.png" alt="1621253575694"></p>
-<p>观察编码器AB相的输出不难看出，当电机正向旋转时，下方相位领先上方90°，反转反之。</p>
-<p>因此，要判断旋转方向其实就是判断两侧输入的相位差，但是单片机并不是示波器，它没法看出两个波形的全貌，只能看到某一瞬间两个波形的高低电平状况。那么有没有好的方法可以<strong>利用瞬间的电平状态</strong>判断出两个波形的相位差呢？答案是有的。</p>
-<p>其实很简单，我们观察下<strong>当上方波形出现上升沿的时候，对应下方波形的电平</strong>就会发现：</p>
-<p><strong>正向旋转的时候对应为低电平；</strong></p>
-<p><strong>反向旋转的时候对应位高电平。</strong></p>
-<p>如此我们便实现了对方向的判断。</p>
-<p>与此同时，上升沿的个数其实也对应着波形中出现的高电平个数，因此可以利用计数上升沿个数的方法来实现对速度的测量。</p>
-<p>MSP432实现代码如下(IDE:Clion):</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Created by ZheWana on 2021/5/17.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ti/devices/msp432p4xx/driverlib/driverlib.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;UARTRetarget.h&quot;</span></span></span><br><span class="line"><span class="comment">/* Standard Includes */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//定义技术脉冲个数的计数变量CNT</span></span><br><span class="line"><span class="keyword">int32_t</span> CNT;</span><br><span class="line"></span><br><span class="line"><span class="comment">//GPIO中断处理函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GPIO_IRQHandler</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> temp = GPIO_getInputPinValue(GPIO_PORT_P3, GPIO_PIN2);</span><br><span class="line">    <span class="keyword">uint32_t</span> status;</span><br><span class="line">    status = MAP_GPIO_getEnabledInterruptStatus(GPIO_PORT_P3);</span><br><span class="line">    MAP_GPIO_clearInterruptFlag(GPIO_PORT_P3, status);</span><br><span class="line">    <span class="keyword">if</span> (status &amp; GPIO_PIN3) &#123;</span><br><span class="line">        MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);</span><br><span class="line">        <span class="keyword">if</span> (temp == GPIO_INPUT_PIN_HIGH) &#123;</span><br><span class="line">            CNT++;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (temp == GPIO_INPUT_PIN_LOW) &#123;</span><br><span class="line">            CNT--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    WDT_A_holdTimer();</span><br><span class="line"></span><br><span class="line">    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用P3.3和P3.2作为AB相输入</span></span><br><span class="line">    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P3, GPIO_PIN3);</span><br><span class="line">    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P3, GPIO_PIN2);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//将P3.3作为中断引脚</span></span><br><span class="line">    GPIO_clearInterruptFlag(GPIO_PORT_P3, GPIO_PIN3);</span><br><span class="line">    GPIO_enableInterrupt(GPIO_PORT_P3, GPIO_PIN3);</span><br><span class="line">    GPIO_interruptEdgeSelect(GPIO_PORT_P3, GPIO_PIN3, GPIO_LOW_TO_HIGH_TRANSITION);</span><br><span class="line"></span><br><span class="line">    Interrupt_enableInterrupt(INT_PORT3);</span><br><span class="line">    Interrupt_enableMaster();</span><br><span class="line">    Interrupt_registerInterrupt(INT_PORT3, GPIO_IRQHandler);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>硬件</category>
-        <category>模块</category>
-      </categories>
-      <tags>
-        <tag>编码器</tag>
-        <tag>STM32</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>记超声波模块的学习过程</title>
     <url>/2020/12/01/%E8%AE%B0%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前几天<del>亲身尝试了可怜的打工生活</del>帮助同学搞了一辆智能车，看着上面要求的指标，我意识到似乎我该学一学超声波模块了。  </p>
@@ -461,6 +306,110 @@
       </tags>
   </entry>
   <entry>
+    <title>记编码器的学习历程</title>
+    <url>/2021/01/22/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>出于积分赛要求最近在学电机控制，其中包括PID算法，当然就少不了用编码器来监测电机当前运动状态了，为防止遗忘，特将编码器的学习过程记录如下。</p>
+<span id="more"></span>
+
+<h2 id="编码器以及其原理"><a href="#编码器以及其原理" class="headerlink" title="编码器以及其原理"></a>编码器以及其原理</h2><p>首先关于编码器概述不用说太多，网上一搜一大把（以下介绍为复制内容）：</p>
+<p>编码器分为光电和霍尔编码器是一种将角位移或者角速度转换成一连串电数字脉冲的旋转式传感器，我们可以通过编码器测量到位移或者速度信息。编码器从输出数据类型上分，可以分为增量式编码器和绝对式编码器。</p>
+<p>从编码器检测原理上来分，还可以分为光学式、磁式、感应式、电容式。常见的是光电编码器（光学式）和霍尔编码器（磁式）。两种（以下介绍为复制内容）：</p>
+<p>光电编码器是一种通过光电转换将输出轴上的机械几何位移量转换成脉冲或数字量的传感器。光电编码器是由光码盘和光电检测装置组成。光码盘是在一 定直径的圆板上等分地开通若干个长方形孔。由于光电码盘与电动机同轴，电动机旋转时，检测装置检测输出若干脉冲信号，为判断转向，一般输出两组存在一 定相位差的方波信号。</p>
+<p>霍尔编码器是一种通过磁电转换将输出轴上的机械几何位移量转换成脉冲或数字量的传感器。霍尔编码器是由霍尔码盘和霍尔元件组成。霍尔码盘是在一 定直径的圆板上等分地布置有不同的磁极。霍尔码盘与电动机同轴，电动机旋转时，霍尔元件检测输出若干脉冲信号，为判断转向，一般输出两组存在一定相位差的方波信号。</p>
+<p>下图为正交编码器的输出波形图：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478338406.png" alt="1620478338406"></p>
+<p>除了这些还有一个参数对我们很有用，那就是编码器的线数。  </p>
+<p>线数是什么呢？  </p>
+<p>我们可以简单的理解为线数是多少，那么编码器每转动一圈就会产生多少个脉冲信号。  </p>
+<hr>
+<h2 id="程序实现（废话不说纯享版）"><a href="#程序实现（废话不说纯享版）" class="headerlink" title="程序实现（废话不说纯享版）"></a>程序实现（废话不说纯享版）</h2><p>实例环境：<strong>STM32F401CCU6+CubeMX+HAL库</strong></p>
+<p>首先随便打开一个定时器，打开编码器模式：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478445392.png" alt="1620478445392"></p>
+<p>  设置为TI1和TI2共同触发：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478459280.png" alt="1620478459280"></p>
+<p>打开串口一以便接收数据<del>（真的不是懒得配置屏幕显示）</del></p>
+<p>接下来我们需要额外打开一个定时器来测出单位时间产生了多少脉冲,我用了TIM4来进行定时:  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478474987.png" alt="1620478474987"></p>
+<p>  并且打开定时器中断：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478513729.png" alt="1620478513729"></p>
+<p>  再打开一个定时器用于产生PWM波（20kHz占空比50%）进而控制电机转动。  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478530063.png" alt="1620478530063"></p>
+<p>电机驱动为TB6612，使用并不麻烦，此处不再赘述。</p>
+<p>为了方便调试，我们再打开两个连接着开关的IO口用于控制PWM的输出（一个用于控制电机转动与停止，另一个调节占空比），接着生成工程。</p>
+<p>敲代码：  </p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//变量定义</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PV */</span></span><br><span class="line"><span class="keyword">float</span> freq=<span class="number">0</span>，CNT_prevalue=<span class="number">0</span>，period=<span class="number">0</span>，velocity=<span class="number">0</span>，position=<span class="number">0</span>；</span><br><span class="line"><span class="comment">/* USER CODE END PV */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line"><span class="comment">//包含头文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;stdio.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;math.h&quot;</span></span></span><br><span class="line"><span class="comment">//串口重定向</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __GNUC__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PUTCHAR_PROTOTYPE int __io_putchar(int ch)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">PUTCHAR_PROTOTYPE&#123;</span><br><span class="line">    HAL_UART_Transmit(&amp;huart1, (<span class="keyword">uint8_t</span> *)&amp;ch, <span class="number">1</span> , <span class="number">0xffff</span>);</span><br><span class="line">    <span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定时器中断回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span></span>&#123;</span><br><span class="line">	velocity=(TIM1-&gt;CNT*<span class="number">1.0f</span>-CNT_prevalue)*<span class="number">1.0f</span>*<span class="number">1000</span>/(<span class="number">13</span>*<span class="number">4</span>);</span><br><span class="line">    <span class="comment">//公式应该是：</span></span><br><span class="line">    <span class="comment">// （CNT2-CNT1）*计数器溢出频率/（编码器线数*采集边沿数）</span></span><br><span class="line">    <span class="comment">//PS：因为设置了TI1和TI2共同采样，所以采集边沿为4个。</span></span><br><span class="line">    period = <span class="built_in">fabs</span>( velocity * <span class="number">360</span> );</span><br><span class="line">    position = (<span class="keyword">int</span>)period % <span class="number">360</span>;</span><br><span class="line">    value = TIM1 -&gt; CNT;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//循环前后</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line">    HAL_TIM_Base_Start_IT(&amp;htim4);<span class="comment">//开启定时器4中断</span></span><br><span class="line">    HAL_TIM_PWM_Start(&amp;htim3,TIM_CHANNEL_1);<span class="comment">//开启PWM通道</span></span><br><span class="line">    HAL_TIM_Encoder_Start(&amp;htim1,TIM_CHANNEL_2);<span class="comment">//开启定编码器接口通道</span></span><br><span class="line">    HAL_TIM_Encoder_Start(&amp;htim1,TIM_CHANNEL_1);<span class="comment">//同上</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//控制电机</span></span><br><span class="line">    <span class="keyword">if</span>(!HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_1))</span><br><span class="line">    	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_2,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_2,<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//输出计算结果</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot; v=%.1f r/s\n period=%.1f degrees/s\n position=%.0f degrees\n&quot;</span>,velocity,period,position);</span><br><span class="line">    <span class="comment">//调节方波占空比</span></span><br><span class="line">    <span class="keyword">if</span>(!HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0))</span><br><span class="line">    &#123;</span><br><span class="line">    	TIM3-&gt;CCR1+<span class="number">210</span>&gt;<span class="number">4200</span>?TIM3-&gt;CCR1=<span class="number">0</span>:TIM3-&gt;CCR1+=<span class="number">210</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    HAL_Delay(<span class="number">200</span>);</span><br><span class="line"><span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 3 */</span></span><br></pre></td></tr></table></figure>
+
+<p>  烧录，测试，结果如图：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478729839.png" alt="1620478729839"></p>
+<p>  教程结束。  </p>
+<hr>
+<h2 id="程序实现（墨迹墨迹解读版）"><a href="#程序实现（墨迹墨迹解读版）" class="headerlink" title="程序实现（墨迹墨迹解读版）"></a>程序实现（墨迹墨迹解读版）</h2><p>方法其实很好理解，只要测量单位时间内输出的脉冲个数即可间接得知转速。</p>
+<p>那么如果想测得脉冲个数，相信大家一定会很容易想到输入捕获。</p>
+<p><del>输入捕获大家应该都会，好的教程结束，大家加油！</del></p>
+<p>我也是第一个想到了输入捕获，不过出现这个想法的时候就有一个问题一直难以解决：</p>
+<p>如何判断电机的转向呢？这是个值得思考的问题，因为我们后面想要实现很多功能都需要知道电机的转向，然而仅仅使用输入捕获只能测出脉冲的个数进而测出速度，确实没办法知道电机的转向。此路不通的情况下，就要开始思考其他的方法了。</p>
+<p>好在经过好心人的提醒我得知：STM32具有专门的硬件编码器接口，于是立刻跑去翻手册。那么让我们先来看看STM32的硬件编码器接口是怎么回事：</p>
+<p>（PS：如果其他的单片机没有如果没有编码器外设的话，我们可以使用GPIO中断进行，在中断里面判断另一相的电平来判断方向，该方法感兴趣的读者可以自己尝试  ）</p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478834327.png" alt="1620478834327"></p>
+<p>好家伙，选择接口模式之后直接就选择计数边沿，<del>有输入捕获内味了嗷</del>（可是为什么只选择TI1和TI2的边沿却不是选择TI3、TI4呢？）。</p>
+<p>我们打开CubeMX试着配置一下：  </p>
+<p>首先随便打开一个定时器（此处其实建议使用片内32位定时器），打开编码器模式：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620478949658.png" alt="1620478949658"></p>
+<p>可以看到选下编码器模式之后上面五个配置选项就锁定了。也就是说编码器模式的设置以及频道的使用其实是早就内定好的，并不像其他的模式一样可以自己选择通道。</p>
+<p>这件事情其实在参考手册的通用定时器框图里面也得到了验证：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479003499.png" alt="1620479003499">至于手册说的边沿选择这句话  ：</p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479026932.png" alt="1620479026932"></p>
+<p>  是在这里设置的：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479037219.png" alt="1620479037219"></p>
+<p>正如手册所说，可以选择仅TI1、仅TI2和TI与TI2共同使用三种方式。</p>
+<p>继续阅读手册：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479059771.png" alt="1620479059771"></p>
+<p>极性？我们回忆一下PWM波中的极性，表示的是OCxREF和实际输出OCx之间的关系（即极性相同或相反）。好的，此处拓展想一下，这里的极性应该也是选择一个二值的量，很明显就是检测边沿。  </p>
+<p>对应到CubeMX里面：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479200390.png" alt="1620479200390"></p>
+<p>CubeMX里面接下来的IC Selection选项里面只有直接选项，从图里面就可以明确的看出来。继续看手册：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479223708.png" alt="1620479223708"></p>
+<p>输入滤波器的编程对应的应该就是这里：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479251663.png" alt="1620479251663"></p>
+<p>  至此，CubeMX里面的可设置项就看完了，我们继续看看手册里面还说了什么：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479273239.png" alt="1620479273239"></p>
+<p>上面的内容挺让人头大的，不过好在重点就两句。第一句的意思其实就是说<strong>只有当编码器产生脉冲的时候，CNT的值才会改变</strong>。第二句的意思就是说输入改变的时候会更改计数器的计数方向。  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479305031.png" alt="1620479305031"></p>
+<p>看到这里我们就懂了，这模式不但能计数，还能辨别转动方向。</p>
+<p>后面给出了一个实例我们来看一下：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479327782.png" alt="1620479327782"></p>
+<p>上面给出的波形就是编码器的波形，很容易看出编码器正转时CNT递增，反之递减。</p>
+<p>因此，我们只需要在中断里面连续进行两次采样，对两次采样的CNT值做差，如果结果为正说明CNT正向计数，即电机正向旋转，反之反向。除此之外，我们还可以通过读取TIMx_CR1寄存器的DIR位来获得计数方向进而得知电机转向：  </p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1620479372193.png" alt="1620479372193"></p>
+<p>  实现代码前面给过了，就不赘述了。  </p>
+<hr>
+<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><p>2021.5.17补充：</p>
+<p>关于利用GPIO中断写出软件编码器的实现方法：</p>
+<p>由于最近在学MSP432，其上并没有硬件编码器接口，因此只能自己写软件编码器，实现了一下发现其实并不难，写在此作为之前内容的补充。</p>
+<p>PS：以下实现代码为使用MSP432的函数实现的，STM32版本如果有机会写的话<del>其实就是没机会了</del>会写的。</p>
+<p>首先是分析：</p>
+<p><img src="/images/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/1621253575694.png" alt="1621253575694"></p>
+<p>观察编码器AB相的输出不难看出，当电机正向旋转时，下方相位领先上方90°，反转反之。</p>
+<p>因此，要判断旋转方向其实就是判断两侧输入的相位差，但是单片机并不是示波器，它没法看出两个波形的全貌，只能看到某一瞬间两个波形的高低电平状况。那么有没有好的方法可以<strong>利用瞬间的电平状态</strong>判断出两个波形的相位差呢？答案是有的。</p>
+<p>其实很简单，我们观察下<strong>当上方波形出现上升沿的时候，对应下方波形的电平</strong>就会发现：</p>
+<p><strong>正向旋转的时候对应为低电平；</strong></p>
+<p><strong>反向旋转的时候对应位高电平。</strong></p>
+<p>如此我们便实现了对方向的判断。</p>
+<p>与此同时，上升沿的个数其实也对应着波形中出现的高电平个数，因此可以利用计数上升沿个数的方法来实现对速度的测量。</p>
+<p>MSP432实现代码如下(IDE:Clion):</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Created by ZheWana on 2021/5/17.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ti/devices/msp432p4xx/driverlib/driverlib.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;UARTRetarget.h&quot;</span></span></span><br><span class="line"><span class="comment">/* Standard Includes */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//定义技术脉冲个数的计数变量CNT</span></span><br><span class="line"><span class="keyword">int32_t</span> CNT;</span><br><span class="line"></span><br><span class="line"><span class="comment">//GPIO中断处理函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GPIO_IRQHandler</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> temp = GPIO_getInputPinValue(GPIO_PORT_P3, GPIO_PIN2);</span><br><span class="line">    <span class="keyword">uint32_t</span> status;</span><br><span class="line">    status = MAP_GPIO_getEnabledInterruptStatus(GPIO_PORT_P3);</span><br><span class="line">    MAP_GPIO_clearInterruptFlag(GPIO_PORT_P3, status);</span><br><span class="line">    <span class="keyword">if</span> (status &amp; GPIO_PIN3) &#123;</span><br><span class="line">        MAP_GPIO_toggleOutputOnPin(GPIO_PORT_P1, GPIO_PIN0);</span><br><span class="line">        <span class="keyword">if</span> (temp == GPIO_INPUT_PIN_HIGH) &#123;</span><br><span class="line">            CNT++;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (temp == GPIO_INPUT_PIN_LOW) &#123;</span><br><span class="line">            CNT--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    WDT_A_holdTimer();</span><br><span class="line"></span><br><span class="line">    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用P3.3和P3.2作为AB相输入</span></span><br><span class="line">    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P3, GPIO_PIN3);</span><br><span class="line">    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P3, GPIO_PIN2);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//将P3.3作为中断引脚</span></span><br><span class="line">    GPIO_clearInterruptFlag(GPIO_PORT_P3, GPIO_PIN3);</span><br><span class="line">    GPIO_enableInterrupt(GPIO_PORT_P3, GPIO_PIN3);</span><br><span class="line">    GPIO_interruptEdgeSelect(GPIO_PORT_P3, GPIO_PIN3, GPIO_LOW_TO_HIGH_TRANSITION);</span><br><span class="line"></span><br><span class="line">    Interrupt_enableInterrupt(INT_PORT3);</span><br><span class="line">    Interrupt_enableMaster();</span><br><span class="line">    Interrupt_registerInterrupt(INT_PORT3, GPIO_IRQHandler);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>硬件</category>
+        <category>模块</category>
+      </categories>
+      <tags>
+        <tag>编码器</tag>
+        <tag>STM32</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>通过串口空闲中断结合DMA的方式实现不定长数据的接受</title>
     <url>/2021/05/08/%E9%80%9A%E8%BF%87%E4%B8%B2%E5%8F%A3%E7%A9%BA%E9%97%B2%E4%B8%AD%E6%96%AD%E7%BB%93%E5%90%88DMA%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8E%A5%E5%8F%97/</url>
     <content><![CDATA[<p>本文为我自己写的串口收发函数的使用说明，采用了串口空闲中断+DMA的方式来实现不定长数据的接收。</p>
@@ -485,6 +434,57 @@
       </categories>
       <tags>
         <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记我与机械键盘的一次斗争</title>
+    <url>/2021/06/16/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>参加了一个DIY机械键盘的活动，虽然很想自己做一个机械键盘，但是奈何我已经有了一把键盘，再加上经费有限，最终还是没有做。不过我看上凯华的BOX白好久了，于是便借着这次机会换一波轴体。</p>
+<span id="more"></span>
+
+<h2 id="一个有趣的小故事"><a href="#一个有趣的小故事" class="headerlink" title="一个有趣的小故事"></a>一个有趣的小故事</h2><p>首先有了换轴的想法之后当然是首先关心一下自己的轴能不能热插拔，于是到当初买轴的地方看了看：</p>
+<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/Screenshot_2021-06-16-18-04-46-628_com.taobao.tao-1623901120401.jpg" alt="Screenshot_2021-06-16-18-04-46-628_com.taobao.tao"></p>
+<p>好家伙！我直接狂喜！</p>
+<p>于是了解了一下拔轴的方法之后就开始自己操作了。</p>
+<p>首先是<strong>拔下键帽</strong>：</p>
+<p>我使出上古洪荒之力，终于在不借助任何工具的情况下拔下了所有键帽：</p>
+<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/1623837920254-1623901133530.jpg" alt="1623837920254"></p>
+<p>接着开始拔轴：</p>
+<p><strong>用拔轴器分别对准轴体上面和下面的两个卡口，将卡口按下后用力即可将轴体拔出。</strong></p>
+<p>念叨着拔轴的诀窍，我拔下了一个又一个轴。</p>
+<p>看这拔完轴后剩下的“轴座”，果然是极致的省钱了啊：</p>
+<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/65a29b1cacae971c.-1623901149985.jpg" alt="65a29b1cacae971c."></p>
+<blockquote>
+<ul>
+<li>1mm的鸡铜眼作为轴座，可谓是将可拓展空间降低到了极致，这种方案也算是热插拔方案里面最不能热插拔了。</li>
+<li>灯用的就是最普通的反贴白色二极管，也是省钱首选。</li>
+<li>没有做任何的其他轴体的适应孔位，真就铁了心用这个省钱的方案。</li>
+</ul>
+</blockquote>
+<p>后来拔着拔着发现：<strong>居然有的轴是拔不下来的！！！</strong></p>
+<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/Cache_-1eec80bc2896130a.-1623901159717.jpg" alt="Cache_-1eec80bc2896130a."></p>
+<p>开始我天真的以为是因为轴体卡的太紧导致无法拔出。</p>
+<p>于是我开始期待大力出奇迹，可是无论我如何大力都没有奇迹出现。</p>
+<p>后来我就抱着破罐子破摔的心态直接用钳子对其中的一个轴体做了毁灭性的拔除，结果发现了个惊天大秘密！</p>
+<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/Cache_-65a29b1cacae971c.-1623901168601.jpg" alt="Cache_-65a29b1cacae971c."></p>
+<p>轴下面的电路板上面根本就连鸡铜眼都没有，轴上面断掉的引脚还在焊盘上留着。当然我也考虑过会不会是鸡铜眼被我带掉了的情况，因此抱着严谨的态度我拆掉了键盘，打算看一下背面PCB的焊点。</p>
+<p>结果果然和我想得一模一样：这把键盘不但轴座上采用了最省钱的鸡铜眼方案，而且<strong>甚至连鸡铜眼都没有完全的采用</strong>，而是反人类的“半热插拔”（就是<strong>一半轴下面有鸡铜眼，另一半轴下方则是将引脚直接焊接上去的</strong>）</p>
+<p>只需要看一下焊盘就可以看得出来：</p>
+<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/1623837911991-1623901177190.jpg" alt="1623837911991"></p>
+<p>鸡铜眼下方的<strong>焊点头部圆润饱满</strong>，这是由于鸡铜眼本身比较粗的缘故，但是引脚焊接是绝对焊不出这种头部的。</p>
+<p>下面我们来看看拔不下来的轴下面的焊点：</p>
+<p><img src="/images/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/1623837905852-1623901184851.jpg" alt="1623837905852"></p>
+<p>焊点头部明显是<strong>尖的</strong>，仔细看还能看出引脚的形状。后续用烙铁融化焊盘上的锡浆之后用吸锡器将它吸干净，<strong>可以清楚的看到轴体引脚上面的锡浆。</strong></p>
+<p>好了无良商家实锤了。</p>
+<p>但是该换的轴还是要换的，最后我还是花了半个下午的时间将原本的轴体拆焊了下来并且将原本的鸡铜眼拆焊下来（主要是由于原本1mm的鸡铜眼小于凯华的轴座引脚直径，导致凯华轴座没法完美的插进去，想着反正都要焊接的，就直接一次性全部解决了吧。），最后将轴体焊接上去，最终完成了轴体的更换。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>机械键盘这东西和很多东西一样，一分钱一分货。大家一定不要像我一样图便宜最终买到了虚假宣传的产品，虽然问题的解决很简单，但是其中浪费的时间成本终究还是得不偿失的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+        <category>DIY</category>
+      </categories>
+      <tags>
+        <tag>DIY</tag>
       </tags>
   </entry>
   <entry>
