@@ -251,13 +251,6 @@
   </url>
   
   <url>
-    <loc>http://zhewana.cn/categories/%E7%A1%AC%E4%BB%B6/</loc>
-    <lastmod>2021-06-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://zhewana.cn/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/</loc>
     <lastmod>2021-06-21</lastmod>
     <changefreq>daily</changefreq>
@@ -272,14 +265,21 @@
   </url>
   
   <url>
-    <loc>http://zhewana.cn/categories/%E7%A1%AC%E4%BB%B6/%E6%A8%A1%E5%9D%97/</loc>
+    <loc>http://zhewana.cn/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/%E5%87%BD%E6%95%B0%E5%BA%93/</loc>
     <lastmod>2021-06-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://zhewana.cn/categories/%E5%8D%95%E7%89%87%E6%9C%BA/STM32/%E5%87%BD%E6%95%B0%E5%BA%93/</loc>
+    <loc>http://zhewana.cn/categories/%E7%A1%AC%E4%BB%B6/</loc>
+    <lastmod>2021-06-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://zhewana.cn/categories/%E7%A1%AC%E4%BB%B6/%E6%A8%A1%E5%9D%97/</loc>
     <lastmod>2021-06-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
