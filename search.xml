@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>我的第一篇文章</title>
-    <url>/2021/05/08/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</url>
+    <url>/2021/701f437b7fd9/</url>
     <content><![CDATA[<p>这是我的第一篇文章。</p>
 <span id="more"></span>
 
@@ -26,7 +26,7 @@
   </entry>
   <entry>
     <title>VL53L0X模块笔记</title>
-    <url>/2021/07/22/VL53L0X%E6%A8%A1%E5%9D%97%E7%AC%94%E8%AE%B0/</url>
+    <url>/2021/54da72d34b59/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近几天学习了激光测距模块，现将过程记录下来以便以后浏览。</p>
 <span id="more"></span>
 
@@ -179,7 +179,7 @@
   </entry>
   <entry>
     <title>记我与机械键盘的一次斗争</title>
-    <url>/2021/06/16/%E8%AE%B0%E6%88%91%E4%B8%8E%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98%E7%9A%84%E4%B8%80%E6%AC%A1%E6%96%97%E4%BA%89/</url>
+    <url>/2021/5291dda0b599/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>参加了一个DIY机械键盘的活动，虽然很想自己做一个机械键盘，但是奈何我已经有了一把键盘，再加上经费有限，最终还是没有做。不过我看上凯华的BOX白好久了，于是便借着这次机会换一波轴体。</p>
 <span id="more"></span>
 
@@ -230,13 +230,37 @@
   </entry>
   <entry>
     <title>HAL库基本函数</title>
-    <url>/2021/05/17/HAL%E5%BA%93%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/</url>
+    <url>/2021/8e2b5d35a586/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不知道写啥了，但还是要有一个前言的。</p>
 <p><del>摸鱼的时候不知道该干点啥，那就写一篇博客吧！</del></p>
-<p>大概就是记录一下自己用的时候遇到的坑吧（正经脸）？</p>
 <span id="more"></span>
 
-<p>坑已留，摸鱼时填。</p>
+<p><del>坑已留，摸鱼时填。</del></p>
+<p>摸鱼啦，想必今天会是开心的一天~</p>
+<p>既然没什么事情做，那就总结一下HAL库常用的基本函数吧！</p>
+<blockquote>
+<p>本文可能含有一些读者未曾掌握的知识点在内，其存在只是为了让笔者能够正常进行讲述，而不至于一直用类似于“什么什么之类的”这种无用的废话来浪费读者的时间。</p>
+<p>所以如果有的名词读者看不懂，别担心，随便看看也好嘛</p>
+</blockquote>
+<h2 id="我该去哪里找到这些函数？"><a href="#我该去哪里找到这些函数？" class="headerlink" title="我该去哪里找到这些函数？"></a>我该去哪里找到这些函数？</h2><p>首先最直观的当然就是ST的<a href="https://www.st.com/resource/en/user_manual/dm00105879-description-of-stm32f4-hal-and-ll-drivers-stmicroelectronics.pdf">HAL库官方手册</a>啦。</p>
+<p>不过这本手册的内容只是<strong>函数声明的简单堆叠</strong>，因此建议去看看HAL库的函数<strong>源码中的注释</strong>。我们来举个简单的小例子：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment">  * @file    stm32f4xx_hal_gpio.c</span></span><br><span class="line"><span class="comment">  * @author  MCD Application Team</span></span><br><span class="line"><span class="comment">  * @brief   GPIO HAL module driver.</span></span><br><span class="line"><span class="comment">  *          This file provides firmware functions to manage the following </span></span><br><span class="line"><span class="comment">  *          functionalities of the General Purpose Input/Output (GPIO) peripheral:</span></span><br><span class="line"><span class="comment">  *           + Initialization and de-initialization functions</span></span><br><span class="line"><span class="comment">  *           + IO operation functions</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  @verbatim</span></span><br><span class="line"><span class="comment">  ==============================================================================</span></span><br><span class="line"><span class="comment">                    ##### GPIO Peripheral features #####</span></span><br><span class="line"><span class="comment">  ==============================================================================</span></span><br><span class="line"><span class="comment">  [..] </span></span><br><span class="line"><span class="comment">  Subject to the specific hardware characteristics of each I/O port listed in the datasheet, each port bit of the General Purpose IO (GPIO) Ports, can be individually configured by software in several modes:</span></span><br><span class="line"><span class="comment">  (+) Input mode </span></span><br><span class="line"><span class="comment">  (+) Analog mode</span></span><br><span class="line"><span class="comment">  (+) Output mode</span></span><br><span class="line"><span class="comment">  (+) Alternate function mode</span></span><br><span class="line"><span class="comment">  (+) External interrupt/event lines</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  [..]  </span></span><br><span class="line"><span class="comment">  During and just after reset, the alternate functions and external interrupt lines are not active and the I/O ports are configured in input floating mode.</span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">  [..]   </span></span><br><span class="line"><span class="comment">  All GPIO pins have weak internal pull-up and pull-down resistors, which can be activated or not.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  [..]</span></span><br><span class="line"><span class="comment">  In Output or Alternate mode, each IO can be configured on open-drain or push-pull type and the IO speed can be selected depending on the VDD value.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  [..]  </span></span><br><span class="line"><span class="comment">  All ports have external interrupt/event capability. To use external interrupt lines, the port must be configured in input mode. All available GPIO pins are connected to the 16 external interrupt/event lines from EXTI0 to EXTI15.</span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">  [..]</span></span><br><span class="line"><span class="comment">  The external interrupt/event controller consists of up to 23 edge detectors(16 lines are connected to GPIO) for generating event/interrupt requests (each input line can be independently configured to select the type (interrupt or event)and the corresponding trigger event (rising or falling or both). Each line can also be masked independently. </span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">                     ##### How to use this driver #####</span></span><br><span class="line"><span class="comment">  ==============================================================================  </span></span><br><span class="line"><span class="comment">  [..]</span></span><br><span class="line"><span class="comment">    (#) Enable the GPIO AHB clock using the following function: __HAL_RCC_GPIOx_CLK_ENABLE(). </span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    (#) Configure the GPIO pin(s) using HAL_GPIO_Init().</span></span><br><span class="line"><span class="comment">        (++) Configure the IO mode using &quot;Mode&quot; member from GPIO_InitTypeDef structure</span></span><br><span class="line"><span class="comment">        (++) Activate Pull-up, Pull-down resistor using &quot;Pull&quot; member from GPIO_InitTypeDef structure.</span></span><br><span class="line"><span class="comment">        (++) In case of Output or alternate function mode selection: the speed is configured through &quot;Speed&quot; member from GPIO_InitTypeDef structure.</span></span><br><span class="line"><span class="comment">        (++) In alternate mode is selection, the alternate function connected to the IO is configured through &quot;Alternate&quot; member from GPIO_InitTypeDef structure.</span></span><br><span class="line"><span class="comment">        (++) Analog mode is required when a pin is to be used as ADC channel or DAC output.</span></span><br><span class="line"><span class="comment">        (++) In case of external interrupt/event selection the &quot;Mode&quot; member from GPIO_InitTypeDef structure select the type (interrupt or event) and the corresponding trigger event (rising or falling or both).</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    (#) In case of external interrupt/event mode selection, configure NVIC IRQ priority mapped to the EXTI line using HAL_NVIC_SetPriority() and enable it using HAL_NVIC_EnableIRQ().</span></span><br><span class="line"><span class="comment">         </span></span><br><span class="line"><span class="comment">    (#) To get the level of a pin configured in input mode use HAL_GPIO_ReadPin().</span></span><br><span class="line"><span class="comment">            </span></span><br><span class="line"><span class="comment">    (#) To set/reset the level of a pin configured in output mode use HAL_GPIO_WritePin()/HAL_GPIO_TogglePin().</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    (#) To lock pin configuration until next reset use HAL_GPIO_LockPin().</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">                 </span></span><br><span class="line"><span class="comment">    (#) During and just after reset, the alternate functions are not active and the GPIO pins are configured in input floating mode (except JTAG pins).</span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">    (#) The LSE oscillator pins OSC32_IN and OSC32_OUT can be used as general purpose (PC14 and PC15, respectively) when the LSE oscillator is off. The LSE has priority over the GPIO function.</span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">    (#) The HSE oscillator pins OSC_IN/OSC_OUT can be used as general purpose PH0 and PH1, respectively, when the HSE oscillator is off. The HSE has priority over the GPIO function.</span></span><br><span class="line"><span class="comment">  </span></span><br><span class="line"><span class="comment">  @endverbatim</span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment">  * @attention</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * &lt;h2&gt;&lt;center&gt;&amp;copy; Copyright (c) 2017 STMicroelectronics.</span></span><br><span class="line"><span class="comment">  * All rights reserved.&lt;/center&gt;&lt;/h2&gt;</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * This software component is licensed by ST under BSD 3-Clause license,</span></span><br><span class="line"><span class="comment">  * the &quot;License&quot;; You may not use this file except in compliance with the</span></span><br><span class="line"><span class="comment">  * License. You may obtain a copy of the License at:</span></span><br><span class="line"><span class="comment">  *                        opensource.org/licenses/BSD-3-Clause</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment">  */</span> </span><br></pre></td></tr></table></figure>
+
+<p>这大段的注释出现在stm32f4xx_hal_gpio.c中，整体上先是介绍了GPIO的外设特点（模式、内部上下拉、中断等），接着介绍了如何使用GPIO的驱动(驱动GPIO的流程)：</p>
+<p>使能总线时钟→引脚初始化→（配置中断→设置优先级→）获取/配置引脚状态</p>
+<p>以上内容可以说是相当的详细了，在使用的过程中会对我们有很大的帮助。</p>
+<p>同时不只是对于整个模块有详细的介绍，对于每个函数也都有注释做详细的介绍，例如对于HAL_GPIO_WritePin函数就有如下的详细介绍：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief  Sets or clears the selected data port bit.</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * @note   This function uses GPIOx_BSRR register to allow atomic read/modify</span></span><br><span class="line"><span class="comment">  *         accesses. In this way, there is no risk of an IRQ occurring between</span></span><br><span class="line"><span class="comment">  *         the read and the modify access.</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * @param  GPIOx where x can be (A..K) to select the GPIO peripheral for STM32F429X device or</span></span><br><span class="line"><span class="comment">  *                      x can be (A..I) to select the GPIO peripheral for STM32F40XX and STM32F427X devices.</span></span><br><span class="line"><span class="comment">  * @param  GPIO_Pin specifies the port bit to be written.</span></span><br><span class="line"><span class="comment">  *          This parameter can be one of GPIO_PIN_x where x can be (0..15).</span></span><br><span class="line"><span class="comment">  * @param  PinState specifies the value to be written to the selected bit.</span></span><br><span class="line"><span class="comment">  *          This parameter can be one of the GPIO_PinState enum values:</span></span><br><span class="line"><span class="comment">  *            @arg GPIO_PIN_RESET: to clear the port pin</span></span><br><span class="line"><span class="comment">  *            @arg GPIO_PIN_SET: to set the port pin</span></span><br><span class="line"><span class="comment">  * @retval None</span></span><br><span class="line"><span class="comment">  */</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>关于注释的内容：</p>
+<p>详细内容可以参考<a href="https://blog.csdn.net/wenrenhua08/article/details/39591239">这篇文章</a>，这里简单介绍下：</p>
+<p>brief：函数功能简介</p>
+<p>note：函数使用过程中需要注意的事项</p>
+<p>param：即parameter，函数中的参数相关说明</p>
+<p>retval：即return value，函数返回值</p>
+</blockquote>
+<p>大致看了看注释，是不是对于函数有更深的了解了呢？现在我们可以开始真正的主题了。</p>
 <h2 id="GPIO函数"><a href="#GPIO函数" class="headerlink" title="GPIO函数"></a>GPIO函数</h2><h2 id="定时器函数"><a href="#定时器函数" class="headerlink" title="定时器函数"></a>定时器函数</h2><h2 id="UART函数"><a href="#UART函数" class="headerlink" title="UART函数"></a>UART函数</h2><h2 id="IIC函数"><a href="#IIC函数" class="headerlink" title="IIC函数"></a>IIC函数</h2><h2 id="SPI函数"><a href="#SPI函数" class="headerlink" title="SPI函数"></a>SPI函数</h2>]]></content>
       <categories>
         <category>单片机</category>
@@ -249,7 +273,7 @@
   </entry>
   <entry>
     <title>MSP432学习笔记</title>
-    <url>/2021/05/13/MSP432%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <url>/2021/a441f005e981/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>由于积分赛限制了控制器，因此不能使用我们熟悉的STM32来进行开发，所以选择了MSP432作为控制器，并且也将从头学习一下MSP432。</p>
 <blockquote>
 <p>附完成的工程地址：</p>
@@ -508,7 +532,7 @@
   </entry>
   <entry>
     <title>Everybody loves Somebody</title>
-    <url>/2021/05/09/Everybody-lvoes-Somebody/</url>
+    <url>/2021/bed4a5279825/</url>
     <content><![CDATA[<p>《玉子市场》看完啦！</p>
 <p><del>什么？你说你发现了我摸鱼？哪有</del></p>
 <span id="more"></span>
@@ -541,7 +565,7 @@
   </entry>
   <entry>
     <title>利用Clion的STM32开发</title>
-    <url>/2021/05/08/%E5%88%A9%E7%94%A8Clion%E7%9A%84STM32%E5%BC%80%E5%8F%91/</url>
+    <url>/2021/c69c321f18aa/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
 <p>前段时间刚刚从keil转到了VScode，正当我享受着VScode爽快的代码编辑的时候，被学长安利了Clion。</p>
 <p>VScode的代码补全是很舒服的<del>（主要是keil衬托得好啊）</del>，但是真要调试、查看寄存器之类的功能却还是要打开keil，这导致我在搞工程的时候经常要打开VScode、打开CubeMX、打开Keil，这样的话反而背离了我们使用方便的初心，变得更麻烦了，而且VScode无法与CubeMX联动也是件让人伤心的事。</p>
@@ -832,7 +856,7 @@
   </entry>
   <entry>
     <title>通过串口空闲中断结合DMA的方式实现不定长数据的接受</title>
-    <url>/2021/05/08/%E9%80%9A%E8%BF%87%E4%B8%B2%E5%8F%A3%E7%A9%BA%E9%97%B2%E4%B8%AD%E6%96%AD%E7%BB%93%E5%90%88DMA%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8E%A5%E5%8F%97/</url>
+    <url>/2021/2ec127a02bc8/</url>
     <content><![CDATA[<p>本文为我自己写的串口收发函数的使用说明，采用了串口空闲中断+DMA的方式来实现不定长数据的接收。</p>
 <p>环境：<strong>STM32F401CCU6+CubeMX+HAL库</strong></p>
 <span id="more"></span>
@@ -859,7 +883,7 @@
   </entry>
   <entry>
     <title>逐飞常用库函数列举</title>
-    <url>/2021/04/10/%E9%80%90%E9%A3%9E%E5%B8%B8%E7%94%A8%E5%BA%93%E5%87%BD%E6%95%B0%E5%88%97%E4%B8%BE/</url>
+    <url>/2021/255becb857b2/</url>
     <content><![CDATA[<h2 id="常用用户函数列举"><a href="#常用用户函数列举" class="headerlink" title="常用用户函数列举"></a>常用用户函数列举</h2><p>学习英飞凌TC-264单片机时采用了逐飞的开源库，现将常用库函数总结如下：</p>
 <span id="more"></span>
 
@@ -877,7 +901,7 @@
   </entry>
   <entry>
     <title>记MPU6050模块的学习过程</title>
-    <url>/2021/04/05/%E8%AE%B0MPU6050%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/</url>
+    <url>/2021/9fca8038048c/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文为我自己学习MPU6050的过程以及其过程中遇到的问题，将其记录下来以方便自己以后再次使用，同时也是为了防止遗忘。</p>
 <p>学习过程中用到的资料整理了下存了起来：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.lanzous.com/iROIKnjuo6h</span><br><span class="line">密码:gzai</span><br></pre></td></tr></table></figure>
@@ -1166,7 +1190,7 @@
   </entry>
   <entry>
     <title>利用VScode的STM32开发</title>
-    <url>/2021/03/22/%E5%88%A9%E7%94%A8VScode%E7%9A%84STM32%E5%BC%80%E5%8F%91/</url>
+    <url>/2021/2e4af69907ea/</url>
     <content><![CDATA[<h2 id="第一部分-配置VScode的C-C-环境"><a href="#第一部分-配置VScode的C-C-环境" class="headerlink" title="第一部分   配置VScode的C/C++环境"></a>第一部分   配置VScode的C/C++环境</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本部分文档为网上教程改编，可参考原文：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/87864677">VSCode配置C/C++环境</a></p>
 <span id="more"></span>
@@ -1262,7 +1286,7 @@
   </entry>
   <entry>
     <title>记编码器的学习历程</title>
-    <url>/2021/01/22/%E8%AE%B0%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/</url>
+    <url>/2021/3bf5a8363ca6/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>出于积分赛要求最近在学电机控制，其中包括PID算法，当然就少不了用编码器来监测电机当前运动状态了，为防止遗忘，特将编码器的学习过程记录如下。</p>
 <span id="more"></span>
 
@@ -1366,7 +1390,7 @@
   </entry>
   <entry>
     <title>记超声波模块的学习过程</title>
-    <url>/2020/12/01/%E8%AE%B0%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0%E8%BF%87%E7%A8%8B/</url>
+    <url>/2020/726d60366c9d/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前几天<del>亲身尝试了可怜的打工生活</del>帮助同学搞了一辆智能车，看着上面要求的指标，我意识到似乎我该学一学超声波模块了。  </p>
 <span id="more"></span>
 

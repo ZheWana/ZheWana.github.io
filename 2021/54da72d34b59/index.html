@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/bitbug_favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/bitbug_favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-bounce.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zhewana.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"似乎没有你想要的东西呢: ${query}","hits_stats":"找到${hits}条结果（用时${time}ms）"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言近几天学习了激光测距模块，现将过程记录下来以便以后浏览。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL53L0X模块笔记">
+<meta property="og:url" content="http://zhewana.cn/2021/54da72d34b59/">
+<meta property="og:site_name" content="ZheWana">
+<meta property="og:description" content="前言近几天学习了激光测距模块，现将过程记录下来以便以后浏览。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhewana.cn/images/53l0x_SCH-1626938571782.jpg">
+<meta property="og:image" content="http://zhewana.cn/images/image-20210722112409582.png">
+<meta property="og:image" content="http://zhewana.cn/images/%E6%BF%80%E5%85%89%E6%B5%8B%E8%B7%9D%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B-1626938862721.png">
+<meta property="og:image" content="http://zhewana.cn/images/%E6%BF%80%E5%85%89%E6%B5%8B%E8%B7%9D%E6%B5%8B%E9%87%8F%E6%B5%81%E7%A8%8B-1626938867288.png">
+<meta property="article:published_time" content="2021-07-22T07:13:30.000Z">
+<meta property="article:modified_time" content="2021-07-30T04:16:19.103Z">
+<meta property="article:author" content="ZheWana">
+<meta property="article:tag" content="VL53L0X">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zhewana.cn/images/53l0x_SCH-1626938571782.jpg">
+
+<link rel="canonical" href="http://zhewana.cn/2021/54da72d34b59/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VL53L0X模块笔记 | ZheWana</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ZheWana</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">初心未泯</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-reference">
+
+    <a href="/reference/" rel="section"><i class="fas fa-book fa-fw"></i>参考资料</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://zhewana.cn/2021/54da72d34b59/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="ZheWana">
+      <meta itemprop="description" content="我们选择死亡还是努力活着呢？">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZheWana">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VL53L0X模块笔记
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-22 15:13:30" itemprop="dateCreated datePublished" datetime="2021-07-22T15:13:30+08:00">2021-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-30 12:16:19" itemprop="dateModified" datetime="2021-07-30T12:16:19+08:00">2021-07-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6/%E6%A8%A1%E5%9D%97/" itemprop="url" rel="index"><span itemprop="name">模块</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/54da72d34b59/" class="post-meta-item leancloud_visitors" data-flag-title="VL53L0X模块笔记" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/54da72d34b59/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/54da72d34b59/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>近几天学习了激光测距模块，现将过程记录下来以便以后浏览。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>有关模块学习的资料已经整理后上传了：</p>
+<p><a target="_blank" rel="noopener" href="https://wws.lanzoui.com/izIHArp85pa">https://wws.lanzoui.com/izIHArp85pa</a></p>
+<p>密码:ayr4</p>
+</blockquote>
+<h2 id="模块介绍"><a href="#模块介绍" class="headerlink" title="模块介绍"></a>模块介绍</h2><p><del>VL53L0是一款意法半导体推出的激光测距模块</del></p>
+<p>果然还是复制官方的说法比较靠谱：</p>
+<blockquote>
+<p>以下内容来自数据手册“Description”和某翻译</p>
+<p>The VL53L0X is a new generation Time-of-Flight (ToF) laser-ranging module housed in the smallest package on the market today, providing accurate distance measurement whatever the target reflectances unlike conventional technologies. It can measure absolute distances up to 2m, setting a new benchmark in ranging performance levels, opening the door to various new applications.</p>
+<p>VL53L0X是新一代的飞行时间（ToF）激光测距模块，采用当今市场上最小的封装，与传统技术不同，无论目标反射如何，都能提供精确的距离测量。它可以测量高达2米的绝对距离，为性能水平的范围设定了新的基准，为各种新的应用打开了大门。</p>
+<p>The VL53L0X integrates a leading-edge SPAD array (Single Photon Avalanche Diodes) and embeds ST’s second generation FlightSenseTM patented technology.</p>
+<p>VL53L0X集成了先进的SPAD阵列（单光子雪崩二极管），并嵌入ST的第二代FlightSenseTM专利技术。</p>
+<p>The VL53L0X’s 940nm VCSEL emitter (Vertical Cavity Surface-Emitting Laser), is totally invisible to the human eye, coupled with internal physical infrared filters, it enables longer ranging distance, higher immunity to ambient light and better robustness to cover-glass optical cross-talk.  </p>
+<p>VL53L0X的940nm VCSEL发射器（垂直腔面发射激光器）对人眼完全不可见，再加上内部物理红外滤光片，它可以实现更长的测距距离、更高的环境光免疫力和更好的鲁棒性，以覆盖玻璃光学串扰。</p>
+</blockquote>
+<p>附模块原理图如下：</p>
+<p><img src="/images/53l0x_SCH-1626938571782.jpg" alt="53l0x_SCH"></p>
+<h3 id="通信接口及引脚定义"><a href="#通信接口及引脚定义" class="headerlink" title="通信接口及引脚定义"></a>通信接口及引脚定义</h3><p>模块采用IIC通信，故：</p>
+<p><strong>SCL：IIC时钟线</strong></p>
+<p><strong>SDA：IIC数据线</strong></p>
+<p>此外：</p>
+<p><strong>VIN：电源</strong></p>
+<p><strong>GND：接地</strong></p>
+<p><strong>XShut：设备唤醒引脚</strong></p>
+<blockquote>
+<p>PS：XShut的接线方法决定了设备的测量模式，引用手册中的说法如下：</p>
+<p>There are two options available for device power up/boot.</p>
+<p>Option 1: </p>
+<p>**XSHUT pin connected and controlled from host.**This option helps to optimize power consumption as the VL53L0X can be completely powered off when not used, and then woken up through host GPIO (using XSHUT pin).</p>
+<p>HW Standby mode is defined as the period when AVDD is present and XSHUT is low.  </p>
+<p>Option 2: </p>
+<p><strong>XSHUT pin not controlled by host, and tied to AVDD through pull-up resistor.</strong></p>
+<p>In case XSHUT pin is not controlled, the power up sequence is presented in Figure 11. In this case, the device is going automatically in SW STANDBY after FW BOOT, without entering HW STANDBY.  </p>
+</blockquote>
+<p><strong>GPIO1：中断输出</strong></p>
+<blockquote>
+<p>PS：GPIO1为中断输出，在手册中可以看出，当采用中断测量模式的时候，每次当设备准备就绪进行新的测量时，中断引脚就会进行输出来触发主机的中断，手册中说法如下：</p>
+<p>Interrupt mode: An interrupt pin (GPIO1) sends an interrupt to the host when a new measurement is available.  </p>
+</blockquote>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>对于该模块，不得不提的事情就是官方为其写了一个API库可以方便我们的应用层开发，而我们的任务就是进行该库的移植。</p>
+<p>本来这个库的最大难点就在于移植，但是在网上我找到了有人做过了HAL库的移植版本，因此我们自己就不再做HAL移植了。但是为了方便自己以后在其他的平台上进行开发，我还是会对比已经移植完的函数库进行一次移植，这段内容就放在后面了。</p>
+<p>我们首先来说API函数库：</p>
+<h3 id="测量数据结构体"><a href="#测量数据结构体" class="headerlink" title="测量数据结构体"></a>测量数据结构体</h3><p>结构体源码如下，各个变量的含义均在库函数中有所提及：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">uint32_t</span> TimeStamp;		<span class="comment">/*!&lt; 32-bit time stamp. */</span></span><br><span class="line">	<span class="keyword">uint32_t</span> MeasurementTimeUsec;</span><br><span class="line">		<span class="comment">/*!&lt; Give the Measurement time needed by the device to do the</span></span><br><span class="line"><span class="comment">		 * measurement.*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint16_t</span> RangeMilliMeter;	<span class="comment">/*!&lt; range distance in millimeter. */</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint16_t</span> RangeDMaxMilliMeter;</span><br><span class="line">		<span class="comment">/*!&lt; Tells what is the maximum detection distance of the device</span></span><br><span class="line"><span class="comment">		 * in current setup and environment conditions (Filled when</span></span><br><span class="line"><span class="comment">		 *	applicable) */</span></span><br><span class="line"></span><br><span class="line">	FixPoint1616_t SignalRateRtnMegaCps;</span><br><span class="line">		<span class="comment">/*!&lt; Return signal rate (MCPS)\n these is a 16.16 fix point</span></span><br><span class="line"><span class="comment">		 *	value, which is effectively a measure of target</span></span><br><span class="line"><span class="comment">		 *	 reflectance.*/</span></span><br><span class="line">	FixPoint1616_t AmbientRateRtnMegaCps;</span><br><span class="line">		<span class="comment">/*!&lt; Return ambient rate (MCPS)\n these is a 16.16 fix point</span></span><br><span class="line"><span class="comment">		 *	value, which is effectively a measure of the ambien</span></span><br><span class="line"><span class="comment">		 *	t light.*/</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint16_t</span> EffectiveSpadRtnCount;</span><br><span class="line">		<span class="comment">/*!&lt; Return the effective SPAD count for the return signal.</span></span><br><span class="line"><span class="comment">		 *	To obtain Real value it should be divided by 256 */</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint8_t</span> ZoneId;</span><br><span class="line">		<span class="comment">/*!&lt; Denotes which zone and range scheduler stage the range</span></span><br><span class="line"><span class="comment">		 *	data relates to. */</span></span><br><span class="line">	<span class="keyword">uint8_t</span> RangeFractionalPart;</span><br><span class="line">		<span class="comment">/*!&lt; Fractional part of range distance. Final value is a</span></span><br><span class="line"><span class="comment">		 *	FixPoint168 value. */</span></span><br><span class="line">	<span class="keyword">uint8_t</span> RangeStatus;</span><br><span class="line">		<span class="comment">/*!&lt; Range Status for the current measurement. This is device</span></span><br><span class="line"><span class="comment">		 *	dependent. Value = 0 means value is valid.</span></span><br><span class="line"><span class="comment">		 *	See \ref RangeStatusPage */</span></span><br><span class="line">&#125; VL53L0X_RangingMeasurementData_t;</span><br></pre></td></tr></table></figure>
+
+<p>在使用之前应该定义一个用于测量数据存储的结构体变量以供后续函数使用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VL53L0X_RangingMeasurementData_t RangingData;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>其中RangeMilliMeter为我们期望的测量距离值，单位：mm</p>
+</blockquote>
+<h3 id="设备结构体"><a href="#设备结构体" class="headerlink" title="设备结构体"></a>设备结构体</h3><p>设备结构体是API函数库和所用平台之间连接的纽带<del>（反正手册是这么说的）</del>，结构体源码如下，变量含义已经在源码中给出：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    VL53L0X_DevData_t Data;               <span class="comment">/*!&lt; embed ST Ewok Dev  data as &quot;Data&quot;*/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*!&lt; user specific field */</span></span><br><span class="line"></span><br><span class="line">    I2C_HandleTypeDef *I2cHandle;</span><br><span class="line">    <span class="keyword">uint8_t</span>   I2cDevAddr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span>    DevLetter;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span>     Id;</span><br><span class="line">    <span class="keyword">int</span>     Present;</span><br><span class="line">    <span class="keyword">int</span> 	Enabled;</span><br><span class="line">    <span class="keyword">int</span>		Ready;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">uint8_t</span>   comms_type;</span><br><span class="line">    <span class="keyword">uint16_t</span>  comms_speed_khz;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> LeakyRange;</span><br><span class="line">    <span class="keyword">int</span> LeakyFirst;</span><br><span class="line">    <span class="keyword">uint8_t</span> RangeStatus;</span><br><span class="line">    <span class="keyword">uint8_t</span> PreviousRangeStatus;</span><br><span class="line">    FixPoint1616_t SignalRateRtnMegaCps;</span><br><span class="line">    <span class="keyword">uint16_t</span> EffectiveSpadRtnCount;</span><br><span class="line">    <span class="keyword">uint32_t</span> StartTime;</span><br><span class="line"></span><br><span class="line">&#125; VL53L0X_Dev_t;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在使用之前，我们需要定义一个设备结构体变量以供后续函数使用，同时要在定义时将I2C句柄（&amp;hi2c1）以及I2C设备地址（0x52）赋值:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">VL53L0X_Dev_t Dev = &#123;</span><br><span class="line">        .I2cHandle=&amp;hi2c1,</span><br><span class="line">        .I2cDevAddr=<span class="number">0x52</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>PS:众所周知，HAL库使用的是8位地址，因此手册中的7位地址需要左移一位才能被正确读取，但是为什么0x52没有左移呢？</p>
+<p><img src="/../../images/image-20210722112409582.png" alt="image-20210722112409582"></p>
+<p>因为显然它在手册中使用的就是8位地址格式（最后一位为读写位）。</p>
+</blockquote>
+<h3 id="重命名的变量"><a href="#重命名的变量" class="headerlink" title="重命名的变量"></a>重命名的变量</h3><p>API中大部分函数返回值均为VL53L0X_Error类型，这个类型其实是对于有符号字符型的重命名：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int8_t</span> VL53L0X_Error;</span><br></pre></td></tr></table></figure>
+
+<p>为了保证类型的一致性，所以在调试看返回值的时候可以同样用这个类型来定义变量来存储返回的错误信息：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VL53L0X_Error re = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="API常用函数"><a href="#API常用函数" class="headerlink" title="API常用函数"></a>API常用函数</h3><h4 id="设备初始化阶段"><a href="#设备初始化阶段" class="headerlink" title="设备初始化阶段"></a>设备初始化阶段</h4><p>API函数库里面的应用函数很全，但是我们其实也只会用到其中的很小一部分，下面根据调用顺序一一列举：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Wait for device booted after chip enable (hardware standby)</span></span><br><span class="line"><span class="comment"> * This function can be run only when VL53L0X_State is VL53L0X_STATE_POWERDOWN.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function is not Implemented</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev      Device Handle</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NOT_IMPLEMENTED Not implemented</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_WaitDeviceBooted</span><span class="params">(VL53L0X_DEV Dev)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>等待设备启动</p>
+</blockquote>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @brief One time device initialization</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * To be called once and only once after device is brought out of reset</span></span><br><span class="line"><span class="comment"> * (Chip enable) and booted see @a VL53L0X_WaitDeviceBooted()</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @par Function Description</span></span><br><span class="line"><span class="comment"> * When not used after a fresh device &quot;power up&quot; or reset, it may return</span></span><br><span class="line"><span class="comment"> * @a #VL53L0X_ERROR_CALIBRATION_WARNING meaning wrong calibration data</span></span><br><span class="line"><span class="comment"> * may have been fetched from device that can result in ranging offset error\n</span></span><br><span class="line"><span class="comment"> * If application cannot execute device reset or need to run VL53L0X_DataInit</span></span><br><span class="line"><span class="comment"> * multiple time then it  must ensure proper offset calibration saving and</span></span><br><span class="line"><span class="comment"> * restore on its own by using @a VL53L0X_GetOffsetCalibrationData() on first</span></span><br><span class="line"><span class="comment"> * power up and then @a VL53L0X_SetOffsetCalibrationData() in all subsequent init</span></span><br><span class="line"><span class="comment"> * This function will change the VL53L0X_State from VL53L0X_STATE_POWERDOWN to</span></span><br><span class="line"><span class="comment"> * VL53L0X_STATE_WAIT_STATICINIT.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev                   Device Handle</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE     Success</span></span><br><span class="line"><span class="comment"> * @return  &quot;Other error code&quot;    See ::VL53L0X_Error</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_DataInit</span><span class="params">(VL53L0X_DEV Dev)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>设备初始化函数</p>
+<p>注意：只能被调用一次！</p>
+</blockquote>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Do basic device init (and eventually patch loading)</span></span><br><span class="line"><span class="comment"> * This function will change the VL53L0X_State from</span></span><br><span class="line"><span class="comment"> * VL53L0X_STATE_WAIT_STATICINIT to VL53L0X_STATE_IDLE.</span></span><br><span class="line"><span class="comment"> * In this stage all default setting will be applied.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev                   Device Handle</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE     Success</span></span><br><span class="line"><span class="comment"> * @return  &quot;Other error code&quot;    See ::VL53L0X_Error</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_StaticInit</span><span class="params">(VL53L0X_DEV Dev)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>进行基础设备初始化</p>
+</blockquote>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Perform Reference Calibration</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @details Perform a reference calibration of the Device.</span></span><br><span class="line"><span class="comment"> * This function should be run from time to time before doing</span></span><br><span class="line"><span class="comment"> * a ranging measurement.</span></span><br><span class="line"><span class="comment"> * This function will launch a special ranging measurement, so</span></span><br><span class="line"><span class="comment"> * if interrupt are enable an interrupt will be done.</span></span><br><span class="line"><span class="comment"> * This function will clear the interrupt generated automatically.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @warning This function is a blocking function</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev                  Device Handle</span></span><br><span class="line"><span class="comment"> * @param   pVhvSettings         Pointer to vhv settings parameter.</span></span><br><span class="line"><span class="comment"> * @param   pPhaseCal            Pointer to PhaseCal parameter.</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE    Success</span></span><br><span class="line"><span class="comment"> * @return  &quot;Other error code&quot;   See ::VL53L0X_Error</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_PerformRefCalibration</span><span class="params">(VL53L0X_DEV Dev,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">uint8_t</span> *pVhvSettings, <span class="keyword">uint8_t</span> *pPhaseCal)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>对设备执行校准</p>
+</blockquote>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Set Reference Calibration Parameters</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @par Function Description</span></span><br><span class="line"><span class="comment"> * Set Reference Calibration Parameters.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev                            Device Handle</span></span><br><span class="line"><span class="comment"> * @param   VhvSettings                    Parameter for VHV</span></span><br><span class="line"><span class="comment"> * @param   PhaseCal                       Parameter for PhaseCal</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE              Success</span></span><br><span class="line"><span class="comment"> * @return  &quot;Other error code&quot;             See ::VL53L0X_Error</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_SetRefCalibration</span><span class="params">(VL53L0X_DEV Dev,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">uint8_t</span> VhvSettings, <span class="keyword">uint8_t</span> PhaseCal)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>对校准中获得的参数进行设置以完成设备的校准</p>
+</blockquote>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Performs Reference Spad Management</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @par Function Description</span></span><br><span class="line"><span class="comment"> * The reference SPAD initialization procedure determines the minimum amount</span></span><br><span class="line"><span class="comment"> * of reference spads to be enables to achieve a target reference signal rate</span></span><br><span class="line"><span class="comment"> * and should be performed once during initialization.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function change the device mode to</span></span><br><span class="line"><span class="comment"> * VL53L0X_DEVICEMODE_SINGLE_RANGING</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev                          Device Handle</span></span><br><span class="line"><span class="comment"> * @param   refSpadCount                 Reports ref Spad Count</span></span><br><span class="line"><span class="comment"> * @param   isApertureSpads              Reports if spads are of type</span></span><br><span class="line"><span class="comment"> *                                       aperture or non-aperture.</span></span><br><span class="line"><span class="comment"> *                                       1:=aperture, 0:=Non-Aperture</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE            Success</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_REF_SPAD_INIT   Error in the Ref Spad procedure.</span></span><br><span class="line"><span class="comment"> * @return  &quot;Other error code&quot;           See ::VL53L0X_Error</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_PerformRefSpadManagement</span><span class="params">(VL53L0X_DEV Dev,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="keyword">uint32_t</span> *refSpadCount, <span class="keyword">uint8_t</span> *isApertureSpads)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief  Set a new device mode</span></span><br><span class="line"><span class="comment"> * @par Function Description</span></span><br><span class="line"><span class="comment"> * Set device to a new mode (ranging, histogram ...)</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function doesn&#x27;t Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev                   Device Handle</span></span><br><span class="line"><span class="comment"> * @param   DeviceMode            New device mode to apply</span></span><br><span class="line"><span class="comment"> *                                Valid values are:</span></span><br><span class="line"><span class="comment"> *                                VL53L0X_DEVICEMODE_SINGLE_RANGING</span></span><br><span class="line"><span class="comment"> *                                VL53L0X_DEVICEMODE_CONTINUOUS_RANGING</span></span><br><span class="line"><span class="comment"> *                                VL53L0X_DEVICEMODE_CONTINUOUS_TIMED_RANGING</span></span><br><span class="line"><span class="comment"> *                                VL53L0X_DEVICEMODE_SINGLE_HISTOGRAM</span></span><br><span class="line"><span class="comment"> *                                VL53L0X_HISTOGRAMMODE_REFERENCE_ONLY</span></span><br><span class="line"><span class="comment"> *                                VL53L0X_HISTOGRAMMODE_RETURN_ONLY</span></span><br><span class="line"><span class="comment"> *                                VL53L0X_HISTOGRAMMODE_BOTH</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE               Success</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_MODE_NOT_SUPPORTED This error occurs when DeviceMode is</span></span><br><span class="line"><span class="comment"> *                                          not in the supported list</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_SetDeviceMode</span><span class="params">(VL53L0X_DEV Dev,</span></span></span><br><span class="line"><span class="params"><span class="function">	VL53L0X_DeviceModes DeviceMode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>设定设备工作模式</p>
+</blockquote>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Start device measurement</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @details Started measurement will depend on device parameters set through</span></span><br><span class="line"><span class="comment"> * @a VL53L0X_SetParameters()</span></span><br><span class="line"><span class="comment"> * This is a non-blocking function.</span></span><br><span class="line"><span class="comment"> * This function will change the VL53L0X_State from VL53L0X_STATE_IDLE to</span></span><br><span class="line"><span class="comment"> * VL53L0X_STATE_RUNNING.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * @param   Dev                  Device Handle</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE                  Success</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_MODE_NOT_SUPPORTED    This error occurs when</span></span><br><span class="line"><span class="comment"> * DeviceMode programmed with @a VL53L0X_SetDeviceMode is not in the supported</span></span><br><span class="line"><span class="comment"> * list:</span></span><br><span class="line"><span class="comment"> *                                   Supported mode are:</span></span><br><span class="line"><span class="comment"> *                                   VL53L0X_DEVICEMODE_SINGLE_RANGING,</span></span><br><span class="line"><span class="comment"> *                                   VL53L0X_DEVICEMODE_CONTINUOUS_RANGING,</span></span><br><span class="line"><span class="comment"> *                                   VL53L0X_DEVICEMODE_CONTINUOUS_TIMED_RANGING</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_TIME_OUT    Time out on start measurement</span></span><br><span class="line"><span class="comment"> * @return  &quot;Other error code&quot;   See ::VL53L0X_Error</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_StartMeasurement</span><span class="params">(VL53L0X_DEV Dev)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>开始执行测量</p>
+</blockquote>
+<hr>
+<h4 id="测量阶段"><a href="#测量阶段" class="headerlink" title="测量阶段"></a>测量阶段</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief Retrieve the measurements from device for a given setup</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @par Function Description</span></span><br><span class="line"><span class="comment"> * Get data from last successful Ranging measurement</span></span><br><span class="line"><span class="comment"> * @warning USER should take care about  @a VL53L0X_GetNumberOfROIZones()</span></span><br><span class="line"><span class="comment"> * before get data.</span></span><br><span class="line"><span class="comment"> * PAL will fill a NumberOfROIZones times the corresponding data</span></span><br><span class="line"><span class="comment"> * structure used in the measurement function.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @note This function Access to the device</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param   Dev                      Device Handle</span></span><br><span class="line"><span class="comment"> * @param   pRangingMeasurementData  Pointer to the data structure to fill up.</span></span><br><span class="line"><span class="comment"> * @return  VL53L0X_ERROR_NONE        Success</span></span><br><span class="line"><span class="comment"> * @return  &quot;Other error code&quot;       See ::VL53L0X_Error</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">VL53L0X_API VL53L0X_Error <span class="title">VL53L0X_GetRangingMeasurementData</span><span class="params">(VL53L0X_DEV Dev,</span></span></span><br><span class="line"><span class="params"><span class="function">	VL53L0X_RangingMeasurementData_t *pRangingMeasurementData)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>获取测量值</p>
+</blockquote>
+<h4 id="模块工作流程"><a href="#模块工作流程" class="headerlink" title="模块工作流程"></a>模块工作流程</h4><p>在数据手册中其实结合API函数库给出了模块推荐的工作流程，如下：</p>
+<p>首先是初始化流程：</p>
+<p><img src="/images/%E6%BF%80%E5%85%89%E6%B5%8B%E8%B7%9D%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B-1626938862721.png" alt="激光测距初始化流程"></p>
+<p>接下来是测量流程：</p>
+<p><img src="/images/%E6%BF%80%E5%85%89%E6%B5%8B%E8%B7%9D%E6%B5%8B%E9%87%8F%E6%B5%81%E7%A8%8B-1626938867288.png" alt="激光测距测量流程"></p>
+<p>API使用举例（main.c）：</p>
+<p><strong>环境：STM32F401CCU6+CubeMX+HAL</strong></p>
+<p>在100Hz定时器中进行测量，并将测量标志位置一，然后在主循环中将获得的测量数据使用串口打印出来。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN Header */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment">  * @file           : main.c</span></span><br><span class="line"><span class="comment">  * @brief          : Main program body</span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment">  * @attention</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * &lt;h2&gt;&lt;center&gt;&amp;copy; Copyright (c) 2021 STMicroelectronics.</span></span><br><span class="line"><span class="comment">  * All rights reserved.&lt;/center&gt;&lt;/h2&gt;</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * This software component is licensed by ST under BSD 3-Clause license,</span></span><br><span class="line"><span class="comment">  * the &quot;License&quot;; You may not use this file except in compliance with the</span></span><br><span class="line"><span class="comment">  * License. You may obtain a copy of the License at:</span></span><br><span class="line"><span class="comment">  *                        opensource.org/licenses/BSD-3-Clause</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="comment">/* USER CODE END Header */</span></span><br><span class="line"><span class="comment">/* Includes ------------------------------------------------------------------*/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;main.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;i2c.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;tim.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;usart.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;gpio.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private includes ----------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN Includes */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;stdarg.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;stdio.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vl53l0x_api.h&quot;</span></span></span><br><span class="line"><span class="comment">/* USER CODE END Includes */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private typedef -----------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PTD */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE END PTD */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private define ------------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PD */</span></span><br><span class="line"><span class="comment">/* USER CODE END PD */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private macro -------------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PM */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> log UART_printf</span></span><br><span class="line"><span class="comment">/* USER CODE END PM */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private variables ---------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PV */</span></span><br><span class="line">VL53L0X_RangingMeasurementData_t RangingData;</span><br><span class="line">VL53L0X_Dev_t Dev = &#123;</span><br><span class="line">        .I2cHandle=&amp;hi2c1,</span><br><span class="line">        .I2cDevAddr=<span class="number">0x52</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">uint8_t</span> TofDataRead;</span><br><span class="line"><span class="comment">/* USER CODE END PV */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private function prototypes -----------------------------------------------*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SystemClock_Config</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PFP */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">UART_printf</span><span class="params">(UART_HandleTypeDef *huart, <span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>;</span><br><span class="line"></span><br><span class="line">VL53L0X_Error re = <span class="number">0</span>;</span><br><span class="line"><span class="comment">/* USER CODE END PFP */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private user code ---------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief  The application entry point.</span></span><br><span class="line"><span class="comment">  * @retval int</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* USER CODE BEGIN 1 */</span></span><br><span class="line">    <span class="keyword">uint32_t</span> refSpadCount;</span><br><span class="line">    <span class="keyword">uint8_t</span> isApertureSpads;</span><br><span class="line">    <span class="keyword">uint8_t</span> VhvSettings;</span><br><span class="line">    <span class="keyword">uint8_t</span> PhaseCal;</span><br><span class="line">    <span class="comment">/* USER CODE END 1 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* MCU Configuration--------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Reset of all peripherals, Initializes the Flash interface and the Systick. */</span></span><br><span class="line">    HAL_Init();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN Init */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE END Init */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Configure the system clock */</span></span><br><span class="line">    SystemClock_Config();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN SysInit */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE END SysInit */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line">    MX_GPIO_Init();</span><br><span class="line">    MX_I2C1_Init();</span><br><span class="line">    MX_TIM3_Init();</span><br><span class="line">    MX_USART1_UART_Init();</span><br><span class="line">    <span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); <span class="comment">// Disable XSHUT</span></span><br><span class="line">    HAL_Delay(<span class="number">20</span>);</span><br><span class="line">    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); <span class="comment">// Enable XSHUT</span></span><br><span class="line">    HAL_Delay(<span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">    HAL_NVIC_DisableIRQ(TIM3_IRQn);</span><br><span class="line"></span><br><span class="line">    re = VL53L0X_WaitDeviceBooted(&amp;Dev);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n&quot;</span>, re);</span><br><span class="line">    re = VL53L0X_DataInit(&amp;Dev);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n&quot;</span>, re);</span><br><span class="line">    re = VL53L0X_StaticInit(&amp;Dev);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n&quot;</span>, re);</span><br><span class="line">    re = VL53L0X_PerformRefCalibration(&amp;Dev, &amp;VhvSettings, &amp;PhaseCal);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n&quot;</span>, re);</span><br><span class="line">    re = VL53L0X_SetRefCalibration(&amp;Dev, VhvSettings, PhaseCal);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n&quot;</span>, re);</span><br><span class="line">    re = VL53L0X_PerformRefSpadManagement(&amp;Dev, &amp;refSpadCount, &amp;isApertureSpads);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n&quot;</span>, re);</span><br><span class="line">    re = VL53L0X_SetDeviceMode(&amp;Dev, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n&quot;</span>, re);</span><br><span class="line">    re = VL53L0X_StartMeasurement(&amp;Dev);</span><br><span class="line">    <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;%d\n\n&quot;</span>, re);</span><br><span class="line"></span><br><span class="line">    HAL_NVIC_EnableIRQ(TIM3_IRQn);</span><br><span class="line">    <span class="comment">/* USER CODE END 2 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Infinite loop */</span></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line">    HAL_TIM_Base_Start_IT(&amp;htim3);</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (TofDataRead == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="built_in">log</span>(&amp;huart1, <span class="string">&quot;Measured distance: %i\n\r&quot;</span>, RangingData.RangeMilliMeter);</span><br><span class="line">            TofDataRead = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* USER CODE END 3 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief System Clock Configuration</span></span><br><span class="line"><span class="comment">  * @retval None</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SystemClock_Config</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    RCC_OscInitTypeDef RCC_OscInitStruct = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    RCC_ClkInitTypeDef RCC_ClkInitStruct = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Configure the main internal regulator output voltage</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    __HAL_RCC_PWR_CLK_ENABLE();</span><br><span class="line">    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);</span><br><span class="line">    <span class="comment">/** Initializes the RCC Oscillators according to the specified parameters</span></span><br><span class="line"><span class="comment">    * in the RCC_OscInitTypeDef structure.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;</span><br><span class="line">    RCC_OscInitStruct.HSEState = RCC_HSE_ON;</span><br><span class="line">    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;</span><br><span class="line">    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;</span><br><span class="line">    RCC_OscInitStruct.PLL.PLLM = <span class="number">25</span>;</span><br><span class="line">    RCC_OscInitStruct.PLL.PLLN = <span class="number">168</span>;</span><br><span class="line">    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;</span><br><span class="line">    RCC_OscInitStruct.PLL.PLLQ = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">if</span> (HAL_RCC_OscConfig(&amp;RCC_OscInitStruct) != HAL_OK) &#123;</span><br><span class="line">        Error_Handler();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/** Initializes the CPU, AHB and APB buses clocks</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK</span><br><span class="line">                                  | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;</span><br><span class="line">    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;</span><br><span class="line">    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;</span><br><span class="line">    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;</span><br><span class="line">    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (HAL_RCC_ClockConfig(&amp;RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) &#123;</span><br><span class="line">        Error_Handler();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 4 */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (htim3.Instance == TIM3) &#123;</span><br><span class="line">        VL53L0X_GetRangingMeasurementData(&amp;Dev, &amp;RangingData);</span><br><span class="line"><span class="comment">//        VL53L0X_ClearInterruptMask(&amp;Dev, VL53L0X_REG_SYSTEM_INTERRUPT_GPIO_NEW_SAMPLE_READY);</span></span><br><span class="line">        TofDataRead = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">UART_printf</span><span class="params">(UART_HandleTypeDef *huart, <span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span> </span>&#123;</span><br><span class="line">    va_list ap;</span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> length;</span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">128</span>];</span><br><span class="line"></span><br><span class="line">    length = vsnprintf(buffer, <span class="number">128</span>, fmt, ap);</span><br><span class="line"></span><br><span class="line">    HAL_UART_Transmit(huart, (<span class="keyword">uint8_t</span> *) buffer, length, HAL_MAX_DELAY);</span><br><span class="line"></span><br><span class="line">    va_end(ap);</span><br><span class="line">    <span class="keyword">return</span> length;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 4 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief  This function is executed in case of error occurrence.</span></span><br><span class="line"><span class="comment">  * @retval None</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Error_Handler</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* USER CODE BEGIN Error_Handler_Debug */</span></span><br><span class="line">    <span class="comment">/* User can add his own implementation to report the HAL error return state */</span></span><br><span class="line">    __disable_irq();</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* USER CODE END Error_Handler_Debug */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span>  USE_FULL_ASSERT</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief  Reports the name of the source file and the source line number</span></span><br><span class="line"><span class="comment">  *         where the assert_param error has occurred.</span></span><br><span class="line"><span class="comment">  * @param  file: pointer to the source file name</span></span><br><span class="line"><span class="comment">  * @param  line: assert_param error line source number</span></span><br><span class="line"><span class="comment">  * @retval None</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">assert_failed</span><span class="params">(<span class="keyword">uint8_t</span> *file, <span class="keyword">uint32_t</span> line)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 6 */</span></span><br><span class="line">  <span class="comment">/* User can add his own implementation to report the file name and line number,</span></span><br><span class="line"><span class="comment">     ex: printf(&quot;Wrong parameters value: file %s on line %d\r\n&quot;, file, line) */</span></span><br><span class="line">  <span class="comment">/* USER CODE END 6 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* USE_FULL_ASSERT */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><blockquote>
+<ul>
+<li>设备初始化的时候不要开中断！！！</li>
+<li>注意XShut的连接方式，如果和主设备连接了，则需要在测量之前进行唤醒操作。</li>
+</ul>
+</blockquote>
+<h2 id="关于API的移植"><a href="#关于API的移植" class="headerlink" title="关于API的移植"></a>关于API的移植</h2><p>挖坑，以后填……</p>
+
+    </div>
+
+    
+    
+    
+    
+      <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;">-------------EOF-------------</div>
+    
+</div>
+      </div>
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ZheWana
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://zhewana.cn/2021/54da72d34b59/" title="VL53L0X模块笔记">http://zhewana.cn/2021/54da72d34b59/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VL53L0X/" rel="tag"># VL53L0X</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/5291dda0b599/" rel="prev" title="记我与机械键盘的一次斗争">
+      <i class="fa fa-chevron-left"></i> 记我与机械键盘的一次斗争
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">模块介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3%E5%8F%8A%E5%BC%95%E8%84%9A%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text">通信接口及引脚定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">3.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E9%87%8F%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">3.1.</span> <span class="nav-text">测量数据结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">3.2.</span> <span class="nav-text">设备结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%91%BD%E5%90%8D%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">3.3.</span> <span class="nav-text">重命名的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">3.4.</span> <span class="nav-text">API常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E5%88%9D%E5%A7%8B%E5%8C%96%E9%98%B6%E6%AE%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">设备初始化阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E9%87%8F%E9%98%B6%E6%AE%B5"><span class="nav-number">3.4.2.</span> <span class="nav-text">测量阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">3.4.3.</span> <span class="nav-text">模块工作流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EAPI%E7%9A%84%E7%A7%BB%E6%A4%8D"><span class="nav-number">5.</span> <span class="nav-text">关于API的移植</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ZheWana"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">ZheWana</p>
+  <div class="site-description" itemprop="description">我们选择死亡还是努力活着呢？</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=1312560006&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;1312560006&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2021-05 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZheWana</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共29.7k字</span>
+</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='255,255,255' opacity='0.8' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '4fMpcW3bliAwhjPEBWTKEJWj-MdYXbMMI',
+      appKey     : 'MYYtUrRje94VyfnadYjkrqnT',
+      placeholder: "请尽情吐槽\\(￣︶￣*\\))",
+      avatar     : 'robohash',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"/>
+<script src="/live2d-widget/autoload.js"></script>
+
+
+</body>
+</html>
