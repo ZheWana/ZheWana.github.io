@@ -198,6 +198,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://zhewana.cn/2021/255becb857b2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="ZheWana">
+      <meta itemprop="description" content="我们选择死亡还是努力活着呢？">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZheWana">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/255becb857b2/" class="post-title-link" itemprop="url">逐飞常用库函数列举</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-04-10T00:00:00+08:00">2021-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-30 12:16:19" itemprop="dateModified" datetime="2021-07-30T12:16:19+08:00">2021-07-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8D%95%E7%89%87%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">单片机</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8D%95%E7%89%87%E6%9C%BA/infineon/" itemprop="url" rel="index"><span itemprop="name">infineon</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8D%95%E7%89%87%E6%9C%BA/infineon/%E5%87%BD%E6%95%B0%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">函数库</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/255becb857b2/" class="post-meta-item leancloud_visitors" data-flag-title="逐飞常用库函数列举" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="常用用户函数列举"><a href="#常用用户函数列举" class="headerlink" title="常用用户函数列举"></a>常用用户函数列举</h2><p>学习英飞凌TC-264单片机时采用了逐飞的开源库，现将常用库函数总结如下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/255becb857b2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://zhewana.cn/2021/9fca8038048c/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -654,7 +754,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -821,6 +921,35 @@ NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
   }, window.Valine);
 });
 </script>
+
+<!-- Qmsg -->
+<script>
+var title2="msg=W4J1e's blog又有新评论啦~！\n"
+var SCKEY_Qmsg="https://qmsg.zendee.cn/send/你的key"
+var ValineButton=document.getElementsByClassName("vsubmit vbtn")[0];
+function send_valine_Qmsg(){
+  var pagename=document.title;
+  var wz=pagename.indexOf('|');
+  var res=pagename.substring(0,wz);
+  var pageurl=document.URL;
+  var ptime=new Date();
+  var vnick=document.getElementsByClassName("vnick vinput")[0].value;
+  var vmail=document.getElementsByClassName("vmail vinput")[0].value;
+  var vlink=document.getElementsByClassName("vlink vinput")[0].value;
+  var veditor=document.getElementsByClassName("veditor vinput")[0].value;
+  var data="昵称："+vnick+"\n邮箱："+vmail+"\n网站地址："+vlink+"\n当前页面："+pagename+"\n评论内容："+veditor+"\n跳转链接："+pageurl+"\n评论时间"+ptime.toLocaleString();
+  var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+  httpRequest.open('POST',SCKEY_Qmsg, true); //第二步：打开连接
+  httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+  httpRequest.send(title2+data);//发送请求 
+};
+
+   document.body.addEventListener('click', function(e) {
+   if(e.target.className.indexOf('vsubmit') === -1) {
+     return;
+   }
+   send_valine_Qmsg();
+})
 
 
 <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
