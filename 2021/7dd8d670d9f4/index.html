@@ -22,22 +22,22 @@
     var CONFIG = {"hostname":"zhewana.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"似乎没有你想要的东西呢: ${query}","hits_stats":"找到${hits}条结果（用时${time}ms）"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言本文为假期即将结束时开始做的并且可能会做很久的小无人机项目的记录。">
+  <meta name="description" content="前段时间做了一个信号源的项目，为了使整机看起来更有现代感，我们为其加上了屏幕显示模块，并且在项目中试着使用了LVGL来编写一些简单的GUI。 时间会吞噬人对于技术的记忆，因此现在正是回顾移植过程的好时机。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ZWFly项目记录">
-<meta property="og:url" content="http://zhewana.cn/2021/21928eec9c6c/">
+<meta property="og:title" content="浅谈LVGL学习、移植与使用">
+<meta property="og:url" content="http://zhewana.cn/2021/7dd8d670d9f4/">
 <meta property="og:site_name" content="ZheWana">
-<meta property="og:description" content="前言本文为假期即将结束时开始做的并且可能会做很久的小无人机项目的记录。">
+<meta property="og:description" content="前段时间做了一个信号源的项目，为了使整机看起来更有现代感，我们为其加上了屏幕显示模块，并且在项目中试着使用了LVGL来编写一些简单的GUI。 时间会吞噬人对于技术的记忆，因此现在正是回顾移植过程的好时机。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhewana.cn/images/ZWFly%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/%E6%99%BA%E8%83%BD%E8%BD%A6-1629183245865.jpg">
-<meta property="article:published_time" content="2021-08-26T09:14:26.000Z">
-<meta property="article:modified_time" content="2021-09-28T11:42:19.748Z">
+<meta property="og:image" content="http://zhewana.cn/images/%E6%B5%85%E8%B0%88lvgl%E7%A7%BB%E6%A4%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20211018151907429.png">
+<meta property="article:published_time" content="2021-10-18T02:58:39.000Z">
+<meta property="article:modified_time" content="2021-10-18T08:05:23.027Z">
 <meta property="article:author" content="ZheWana">
-<meta property="article:tag" content="项目记录">
+<meta property="article:tag" content="嵌入式GUI">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://zhewana.cn/images/ZWFly%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/%E6%99%BA%E8%83%BD%E8%BD%A6-1629183245865.jpg">
+<meta name="twitter:image" content="http://zhewana.cn/images/%E6%B5%85%E8%B0%88lvgl%E7%A7%BB%E6%A4%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20211018151907429.png">
 
-<link rel="canonical" href="http://zhewana.cn/2021/21928eec9c6c/">
+<link rel="canonical" href="http://zhewana.cn/2021/7dd8d670d9f4/">
 
 
 <script id="page-configurations">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>ZWFly项目记录 | ZheWana</title>
+  <title>浅谈LVGL学习、移植与使用 | ZheWana</title>
   
 
 
@@ -209,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://zhewana.cn/2021/21928eec9c6c/">
+    <link itemprop="mainEntityOfPage" href="http://zhewana.cn/2021/7dd8d670d9f4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -222,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ZWFly项目记录
+          浅谈LVGL学习、移植与使用
         </h1>
 
         <div class="post-meta">
@@ -232,32 +232,22 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-08-26 17:14:26" itemprop="dateCreated datePublished" datetime="2021-08-26T17:14:26+08:00">2021-08-26</time>
+              <time title="创建时间：2021-10-18 10:58:39 / 修改时间：16:05:23" itemprop="dateCreated datePublished" datetime="2021-10-18T10:58:39+08:00">2021-10-18</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-28 19:42:19" itemprop="dateModified" datetime="2021-09-28T19:42:19+08:00">2021-09-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">项目记录</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/ZWFly/" itemprop="url" rel="index"><span itemprop="name">ZWFly</span></a>
+                  <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FGUI/" itemprop="url" rel="index"><span itemprop="name">嵌入式GUI</span></a>
                 </span>
             </span>
 
           
-            <span id="/2021/21928eec9c6c/" class="post-meta-item leancloud_visitors" data-flag-title="ZWFly项目记录" title="阅读次数">
+            <span id="/2021/7dd8d670d9f4/" class="post-meta-item leancloud_visitors" data-flag-title="浅谈LVGL学习、移植与使用" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -279,8 +269,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/21928eec9c6c/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/21928eec9c6c/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/7dd8d670d9f4/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/7dd8d670d9f4/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -295,51 +285,62 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文为假期即将结束时开始做的并且可能会做很久的小无人机项目的记录。</p>
+        <p>前段时间做了一个信号源的项目，为了使整机看起来更有现代感，我们为其加上了屏幕显示模块，并且在项目中试着使用了LVGL来编写一些简单的GUI。</p>
+<p>时间会吞噬人对于技术的记忆，因此现在正是回顾移植过程的好时机。</p>
 <span id="more"></span>
 
-<h2 id="一切的开始"><a href="#一切的开始" class="headerlink" title="一切的开始"></a>一切的开始</h2><p>假期快结束了，这个假期挺无聊的，遂给自己想了一个小项目做来玩玩。虽然对于现在的我来说难度是有些稍大的，但是没关系，一边学习一边进步嘛。</p>
-<p>自己给项目想了个名字：ZWFly</p>
-<p>原因很简单，看很多开源飞控都叫某某fly，所以就这么叫了（当然我做出来的东西效果肯定不能和开源飞控比较），不过这个名字至少寄托了我希望自己做出堪比开源飞控无人机的小心思。</p>
-<h2 id="20210730硬件准备"><a href="#20210730硬件准备" class="headerlink" title="20210730硬件准备"></a>20210730硬件准备</h2><p>笔者在朋友的帮助下，入手了一个无人机机架，机架本体自带四个820的空心杯电机，价格很便宜，质量也很满意：</p>
-<p><img src="/images/ZWFly%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/%E6%99%BA%E8%83%BD%E8%BD%A6-1629183245865.jpg" alt="1631265626208"></p>
-<blockquote>
-<p>由于本段并非与项目实时撰写，所以其实无人机架上面并不应该有控制板</p>
-</blockquote>
-<h2 id="20210731PCB绘制"><a href="#20210731PCB绘制" class="headerlink" title="20210731PCB绘制"></a>20210731PCB绘制</h2><ul>
-<li>单片机选型为STM32F401CCU6</li>
-<li>空心杯为MOS直驱</li>
-<li>姿态传感器为MPU6050（DMP驱动）</li>
-<li>高度传感器使用US-100或VL53L0（未定）</li>
-</ul>
-<p>明确以上后便开始了原理图的绘制工作：</p>
-<p>首先是主控和电源部分，接着是驱动电路和检测电路。</p>
-<p>经过考虑并没有加上充电电路。</p>
-<p>接着完成了初版PCB的绘制。</p>
-<blockquote>
-<p>原理图已经经过后续修改，故该版本原理图和PCB均无</p>
-</blockquote>
-<h2 id="20210801软件代码"><a href="#20210801软件代码" class="headerlink" title="20210801软件代码"></a>20210801软件代码</h2><p>首先笔者想实现的功能很简单：</p>
+<h2 id="万恶之源"><a href="#万恶之源" class="headerlink" title="万恶之源"></a>万恶之源</h2><p>俗话说的好：<strong>羊毛出在羊身上。</strong></p>
+<p>笔者在这里也想说一句：<strong>移植出在文档上。</strong></p>
+<p>既然库作者编写了开源库，并且希望该开源库被大家广泛地采用，就一定会：</p>
 <ul>
-<li>无人机采用X姿态进行飞行</li>
-<li>无人机能够实现平稳起飞以及平稳落地</li>
-<li>无人机能够实现定高悬停</li>
-<li>无人机能够实现遥控操作</li>
+<li>将库接口写得简单</li>
+<li>为移植创作一份完善的移植文档</li>
 </ul>
-<p>为了实现对应功能，软件的大体构想如下：</p>
-<ul>
-<li>利用定时器中断来实现对数据的采集和处理</li>
-<li>姿态控制采用串级PID实现对于角速度和角度的串级控制</li>
-<li>高度控制采用串级PID实现对于Z轴加速度和高度的串级控制</li>
-<li>利用无线串口进行单片机间的数据通信</li>
-</ul>
-<h3 id="一些小问题"><a href="#一些小问题" class="headerlink" title="一些小问题"></a>一些小问题</h3><p>笔者在写软件的过程中不可避免的再一次遇到了IIC的Busy锁死问题，为了保证无人机运行过程中的稳定性，笔者尝试着解决了这个问题。</p>
-<p>首先这个问题在官方的勘误手册中是有所提及的，并且给出了解决方法，我们需要做的仅仅是根据官方给出的解决方法写出代码。</p>
-<p>官方给出的解决方法也非常简单粗暴：</p>
-<p><strong>将IIC外设关闭后用GPIO接管其控制权，当确保GPIO输出正常后再将IIC外设重新打开</strong></p>
-<p>代码当然也很简单粗暴：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Init GPIO </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">My_IICBusyErrorGPIOInit</span><span class="params">(GPIO_TypeDef *GPIOx, <span class="keyword">uint16_t</span> GPIO_Pin)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    GPIO_InitTypeDef GPIO_InitStruct = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*Configure GPIO pin Output Level */</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*Configure GPIO pin : PB8 */</span></span><br><span class="line">    GPIO_InitStruct.Pin = GPIO_Pin;</span><br><span class="line">    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;</span><br><span class="line">    GPIO_InitStruct.Pull = GPIO_NOPULL;</span><br><span class="line">    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;</span><br><span class="line">    HAL_GPIO_Init(GPIOx, &amp;GPIO_InitStruct);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//Handle busy error</span></span><br><span class="line"><span class="comment">//IIC Pin:</span></span><br><span class="line"><span class="comment">//		SCL:PB6 </span></span><br><span class="line"><span class="comment">//		SDA:PB7</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HAL_IIC_BusyErrorHandler</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//Disable the I2C peripheral</span></span><br><span class="line">    HAL_I2C_DeInit(&amp;hi2c1);</span><br><span class="line">    <span class="comment">//Configure the SCL and SDA I/Os as General Purpose Output Open-Drain</span></span><br><span class="line">    My_IICBusyErrorGPIOInit(GPIOB, GPIO_PIN_6 | GPIO_PIN_7);</span><br><span class="line">    <span class="comment">//Check SCL and SDA High level in GPIOx_IDR.</span></span><br><span class="line">    <span class="keyword">if</span> ((HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == <span class="number">0</span>)</span><br><span class="line">        || (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7 == <span class="number">0</span>))) &#123;</span><br><span class="line">        UART_printf(&amp;huart1, <span class="string">&quot;Checking SCL and SDA in high level ERROR!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Configure the SDA I/O low level</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_RESET);</span><br><span class="line">    <span class="comment">//Check SDA Low level in GPIOx_IDR.</span></span><br><span class="line">    <span class="keyword">if</span> (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7)) &#123;</span><br><span class="line">        UART_printf(&amp;huart1, <span class="string">&quot;Checking SDA in low level ERROR!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Configure the SCL I/O low level</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);</span><br><span class="line">    <span class="comment">//Check SCL Low level in GPIOx_IDR.</span></span><br><span class="line">    <span class="keyword">if</span> (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6)) &#123;</span><br><span class="line">        UART_printf(&amp;huart1, <span class="string">&quot;Checking SCL in low level ERROR!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Configure the SCL I/O high level</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);</span><br><span class="line">    <span class="comment">//Check SCL high level in GPIOx_IDR.</span></span><br><span class="line">    <span class="keyword">if</span> (!HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6)) &#123;</span><br><span class="line">        UART_printf(&amp;huart1, <span class="string">&quot;Checking SCL in high level ERROR!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Configure the SDA I/O high level</span></span><br><span class="line">    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_SET);</span><br><span class="line">    <span class="comment">//Check SDA Low level in GPIOx_IDR.</span></span><br><span class="line">    <span class="keyword">if</span> (!HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7)) &#123;</span><br><span class="line">        UART_printf(&amp;huart1, <span class="string">&quot;Checking SDA in high level ERROR!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6 | GPIO_PIN_7);</span><br><span class="line">    MX_I2C1_Init();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p>因此，在一直开源库的时候最右参考意义的应该是该库的文档。</p>
+<p>我们先去LVGL的<a target="_blank" rel="noopener" href="https://github.com/lvgl/lvgl">仓库</a>看看：</p>
+<blockquote>
+<p>值得一提的是lvgl的仓库分支结构：</p>
+<p>Master分支用于存放当前的测试内容（即Beta版本代码）</p>
+<p>而所有的稳定版本代码都会以release/版本号的方式建立一个新的分支来发布</p>
+</blockquote>
+<p>我们来到v8版本的release分支，查看README文档，可以发现作者给出了建议的学习路线：</p>
+<p><img src="/images/%E6%B5%85%E8%B0%88lvgl%E7%A7%BB%E6%A4%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20211018151907429.png" alt="image-20211018151907429"></p>
+<p>我们按照官方推荐的方式来学习库的使用。</p>
+<h2 id="一些无关紧要的操作"><a href="#一些无关紧要的操作" class="headerlink" title="一些无关紧要的操作"></a>一些无关紧要的操作</h2><p><del>其实也不是无关紧要</del></p>
+<p>首先进入官方的<a target="_blank" rel="noopener" href="https://lvgl.io/demos">在线Demo</a>来把玩一下用lvgl写出来的UI，感受一下那份流畅与跃动的感觉在你的鼠标之间旋转跳跃，再幻想一下你的嵌入式设备的屏幕上出现了一模一样的UI，你的内心瞬间被成就感填满……</p>
+<p>好吧，其实这一步没什么用。</p>
+<p>把玩过之后点进<a target="_blank" rel="noopener" href="https://docs.lvgl.io/latest/en/html/intro/index.html#">Introduction</a>中了解一下lvgl的关键特点、硬件需求、许可证以及仓库的结构等等。</p>
+<p>好吧，其实这一步也没什么用。</p>
+<p>一顿操作之后，直到完成第五步，你都没有让lvgl与你的开发平台产生任何的联系。唯一的作用就是：</p>
+<p><strong>你对lvgl更加了解了</strong></p>
+<p>没错，这就是库作者希望的结果，当然也是笔者希望的结果。</p>
+<blockquote>
+<p><del>其实笔者真正希望的结果是读者自行看懂PortGuide，然后直接快进到文档结束</del></p>
+</blockquote>
+<h2 id="库文件的移植"><a href="#库文件的移植" class="headerlink" title="库文件的移植"></a>库文件的移植</h2><blockquote>
+<p>一些说明：</p>
+<ol>
+<li><p>笔者在之前的工程中使用的lvgl版本为v7，为了能让自己更实际的体会到库文件的移植过程，特选择v8.0版本进行移植。</p>
+</li>
+<li><p>移植并使用lvgl的前提：</p>
+<p>读者已经拥有一个能够使用的彩屏/单色屏的屏幕驱动，并且至少可以实现在屏幕的固定座标上进行画点操作。</p>
+</li>
+<li><p>整个移植过程均参考官方的<a target="_blank" rel="noopener" href="https://docs.lvgl.io/latest/en/html/porting/index.html">PortingGuide</a>（下称移植手册），如有疑问请参照移植手册原文，仍有问题请与库作者沟通。<del>（笔者不背锅）</del></p>
+</li>
+</ol>
+</blockquote>
+<h3 id="新建工程"><a href="#新建工程" class="headerlink" title="新建工程"></a>新建工程</h3><p>如题，使用的开发环境为：</p>
+<p><strong>STM32CubeMX+Clion</strong></p>
+<p>MCU型号为：</p>
+<p><strong>STM32H750VBT6</strong></p>
+<p>工程创建与屏幕驱动移植过程略。</p>
+<h3 id="移植"><a href="#移植" class="headerlink" title="移植"></a>移植</h3><p>首先将<a target="_blank" rel="noopener" href="https://github.com/lvgl/lvgl/tree/release/v8.0">release/v8.0</a>的仓库Clone到本地。</p>
+<p>按照移植手册的说法：</p>
+<blockquote>
+<p>The graphics library is the <strong>lvgl</strong> directory which should be copied into your project.</p>
+</blockquote>
+<p>得知应该将lvgl文件夹拷贝到工程目录下，但是在克隆来的分支中并没有名为lvgl的文件夹<del>，于是笔者移植失败，并骂一句什么**垃圾作者。</del></p>
+<p>继续耐着性子读下去，发现工程中应该有一个配置文件名为：<code>lv_conf_template.h</code>并且所在路径为：</p>
 
     </div>
 
@@ -364,7 +365,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://zhewana.cn/2021/21928eec9c6c/" title="ZWFly项目记录">http://zhewana.cn/2021/21928eec9c6c/</a>
+    <a href="http://zhewana.cn/2021/7dd8d670d9f4/" title="浅谈LVGL学习、移植与使用">http://zhewana.cn/2021/7dd8d670d9f4/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -375,7 +376,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/" rel="tag"># 项目记录</a>
+              <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FGUI/" rel="tag"># 嵌入式GUI</a>
           </div>
 
         
@@ -384,13 +385,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/8e232aea5e5b/" rel="prev" title="HAL库基本函数（下）">
-      <i class="fa fa-chevron-left"></i> HAL库基本函数（下）
+    <a href="/2021/64b5a1ee4851/" rel="prev" title="控制器？单片机？内核？外设？蛤？">
+      <i class="fa fa-chevron-left"></i> 控制器？单片机？内核？外设？蛤？
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/64b5a1ee4851/" rel="next" title="控制器？单片机？内核？外设？蛤？">
-      控制器？单片机？内核？外设？蛤？ <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -450,7 +448,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%88%87%E7%9A%84%E5%BC%80%E5%A7%8B"><span class="nav-number">2.</span> <span class="nav-text">一切的开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20210730%E7%A1%AC%E4%BB%B6%E5%87%86%E5%A4%87"><span class="nav-number">3.</span> <span class="nav-text">20210730硬件准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20210731PCB%E7%BB%98%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">20210731PCB绘制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20210801%E8%BD%AF%E4%BB%B6%E4%BB%A3%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">20210801软件代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="nav-number">5.1.</span> <span class="nav-text">一些小问题</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%87%E6%81%B6%E4%B9%8B%E6%BA%90"><span class="nav-number">1.</span> <span class="nav-text">万恶之源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%97%A0%E5%85%B3%E7%B4%A7%E8%A6%81%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">一些无关紧要的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.</span> <span class="nav-text">库文件的移植</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E5%B7%A5%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">新建工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.2.</span> <span class="nav-text">移植</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

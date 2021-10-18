@@ -1685,4 +1685,71 @@
         <tag>智能车</tag>
       </tags>
   </entry>
+  <entry>
+    <title>浅谈LVGL学习、移植与使用</title>
+    <url>/2021/7dd8d670d9f4/</url>
+    <content><![CDATA[<p>前段时间做了一个信号源的项目，为了使整机看起来更有现代感，我们为其加上了屏幕显示模块，并且在项目中试着使用了LVGL来编写一些简单的GUI。</p>
+<p>时间会吞噬人对于技术的记忆，因此现在正是回顾移植过程的好时机。</p>
+<span id="more"></span>
+
+<h2 id="万恶之源"><a href="#万恶之源" class="headerlink" title="万恶之源"></a>万恶之源</h2><p>俗话说的好：<strong>羊毛出在羊身上。</strong></p>
+<p>笔者在这里也想说一句：<strong>移植出在文档上。</strong></p>
+<p>既然库作者编写了开源库，并且希望该开源库被大家广泛地采用，就一定会：</p>
+<ul>
+<li>将库接口写得简单</li>
+<li>为移植创作一份完善的移植文档</li>
+</ul>
+<p>因此，在一直开源库的时候最右参考意义的应该是该库的文档。</p>
+<p>我们先去LVGL的<a href="https://github.com/lvgl/lvgl">仓库</a>看看：</p>
+<blockquote>
+<p>值得一提的是lvgl的仓库分支结构：</p>
+<p>Master分支用于存放当前的测试内容（即Beta版本代码）</p>
+<p>而所有的稳定版本代码都会以release/版本号的方式建立一个新的分支来发布</p>
+</blockquote>
+<p>我们来到v8版本的release分支，查看README文档，可以发现作者给出了建议的学习路线：</p>
+<p><img src="/images/%E6%B5%85%E8%B0%88lvgl%E7%A7%BB%E6%A4%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20211018151907429.png" alt="image-20211018151907429"></p>
+<p>我们按照官方推荐的方式来学习库的使用。</p>
+<h2 id="一些无关紧要的操作"><a href="#一些无关紧要的操作" class="headerlink" title="一些无关紧要的操作"></a>一些无关紧要的操作</h2><p><del>其实也不是无关紧要</del></p>
+<p>首先进入官方的<a href="https://lvgl.io/demos">在线Demo</a>来把玩一下用lvgl写出来的UI，感受一下那份流畅与跃动的感觉在你的鼠标之间旋转跳跃，再幻想一下你的嵌入式设备的屏幕上出现了一模一样的UI，你的内心瞬间被成就感填满……</p>
+<p>好吧，其实这一步没什么用。</p>
+<p>把玩过之后点进<a href="https://docs.lvgl.io/latest/en/html/intro/index.html#">Introduction</a>中了解一下lvgl的关键特点、硬件需求、许可证以及仓库的结构等等。</p>
+<p>好吧，其实这一步也没什么用。</p>
+<p>一顿操作之后，直到完成第五步，你都没有让lvgl与你的开发平台产生任何的联系。唯一的作用就是：</p>
+<p><strong>你对lvgl更加了解了</strong></p>
+<p>没错，这就是库作者希望的结果，当然也是笔者希望的结果。</p>
+<blockquote>
+<p><del>其实笔者真正希望的结果是读者自行看懂PortGuide，然后直接快进到文档结束</del></p>
+</blockquote>
+<h2 id="库文件的移植"><a href="#库文件的移植" class="headerlink" title="库文件的移植"></a>库文件的移植</h2><blockquote>
+<p>一些说明：</p>
+<ol>
+<li><p>笔者在之前的工程中使用的lvgl版本为v7，为了能让自己更实际的体会到库文件的移植过程，特选择v8.0版本进行移植。</p>
+</li>
+<li><p>移植并使用lvgl的前提：</p>
+<p>读者已经拥有一个能够使用的彩屏/单色屏的屏幕驱动，并且至少可以实现在屏幕的固定座标上进行画点操作。</p>
+</li>
+<li><p>整个移植过程均参考官方的<a href="https://docs.lvgl.io/latest/en/html/porting/index.html">PortingGuide</a>（下称移植手册），如有疑问请参照移植手册原文，仍有问题请与库作者沟通。<del>（笔者不背锅）</del></p>
+</li>
+</ol>
+</blockquote>
+<h3 id="新建工程"><a href="#新建工程" class="headerlink" title="新建工程"></a>新建工程</h3><p>如题，使用的开发环境为：</p>
+<p><strong>STM32CubeMX+Clion</strong></p>
+<p>MCU型号为：</p>
+<p><strong>STM32H750VBT6</strong></p>
+<p>工程创建与屏幕驱动移植过程略。</p>
+<h3 id="移植"><a href="#移植" class="headerlink" title="移植"></a>移植</h3><p>首先将<a href="https://github.com/lvgl/lvgl/tree/release/v8.0">release/v8.0</a>的仓库Clone到本地。</p>
+<p>按照移植手册的说法：</p>
+<blockquote>
+<p>The graphics library is the <strong>lvgl</strong> directory which should be copied into your project.</p>
+</blockquote>
+<p>得知应该将lvgl文件夹拷贝到工程目录下，但是在克隆来的分支中并没有名为lvgl的文件夹<del>，于是笔者移植失败，并骂一句什么**垃圾作者。</del></p>
+<p>继续耐着性子读下去，发现工程中应该有一个配置文件名为：<code>lv_conf_template.h</code>并且所在路径为：</p>
+]]></content>
+      <categories>
+        <category>嵌入式GUI</category>
+      </categories>
+      <tags>
+        <tag>嵌入式GUI</tag>
+      </tags>
+  </entry>
 </search>
