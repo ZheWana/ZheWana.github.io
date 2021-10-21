@@ -30,8 +30,9 @@
 <meta property="og:description" content="前段时间做了一个信号源的项目，为了使整机看起来更有现代感，我们为其加上了屏幕显示模块，并且在项目中试着使用了LVGL来编写一些简单的GUI。 时间会吞噬人对于技术的记忆，因此现在正是回顾移植过程的好时机。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://zhewana.cn/images/%E6%B5%85%E8%B0%88lvgl%E7%A7%BB%E6%A4%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20211018151907429.png">
+<meta property="og:image" content="http://zhewana.cn/images/%E6%B5%85%E8%B0%88lvgl%E7%A7%BB%E6%A4%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20211019143944148.png">
 <meta property="article:published_time" content="2021-10-18T02:58:39.000Z">
-<meta property="article:modified_time" content="2021-10-18T08:05:23.027Z">
+<meta property="article:modified_time" content="2021-10-21T14:08:17.351Z">
 <meta property="article:author" content="ZheWana">
 <meta property="article:tag" content="嵌入式GUI">
 <meta name="twitter:card" content="summary">
@@ -232,10 +233,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-10-18 10:58:39 / 修改时间：16:05:23" itemprop="dateCreated datePublished" datetime="2021-10-18T10:58:39+08:00">2021-10-18</time>
+              <time title="创建时间：2021-10-18 10:58:39" itemprop="dateCreated datePublished" datetime="2021-10-18T10:58:39+08:00">2021-10-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 22:08:17" itemprop="dateModified" datetime="2021-10-21T22:08:17+08:00">2021-10-21</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -334,13 +341,116 @@
 <p>MCU型号为：</p>
 <p><strong>STM32H750VBT6</strong></p>
 <p>工程创建与屏幕驱动移植过程略。</p>
-<h3 id="移植"><a href="#移植" class="headerlink" title="移植"></a>移植</h3><p>首先将<a target="_blank" rel="noopener" href="https://github.com/lvgl/lvgl/tree/release/v8.0">release/v8.0</a>的仓库Clone到本地。</p>
+<hr>
+<h3 id="本体移植"><a href="#本体移植" class="headerlink" title="本体移植"></a>本体移植</h3><p>首先将<a target="_blank" rel="noopener" href="https://github.com/lvgl/lvgl/tree/release/v8.0">release/v8.0</a>的仓库Clone到本地。</p>
 <p>按照移植手册的说法：</p>
 <blockquote>
 <p>The graphics library is the <strong>lvgl</strong> directory which should be copied into your project.</p>
 </blockquote>
 <p>得知应该将lvgl文件夹拷贝到工程目录下，但是在克隆来的分支中并没有名为lvgl的文件夹<del>，于是笔者移植失败，并骂一句什么**垃圾作者。</del></p>
-<p>继续耐着性子读下去，发现工程中应该有一个配置文件名为：<code>lv_conf_template.h</code>并且所在路径为：</p>
+<p>事实上名为src的文件夹很明显就是源代码目录，故在使用的工程中新建lvgl目录用于存放库文件，并<strong>将src目录直接复制到lvgl目录下</strong>。</p>
+<p>继续耐着性子读下去，发现工程中应该有一个配置文件名为：<code>lv_conf_template.h</code>并且有如下的说明：</p>
+<blockquote>
+<p>Copy <strong>lvgl/lv_conf_template.h</strong> next to the <em>lvgl</em> directory and rename it to <em>lv_conf.h</em>.</p>
+</blockquote>
+<p>故将<code>lv_conf_template.h</code>复制到lvgl目录中并更名为<code>lv_conf.h</code>。</p>
+<p>顺便将<code>#if 0</code>改为<code>#if 1</code>来使能文件的内容。</p>
+<blockquote>
+<p>lvgl的每个接口库文件和配置库文件都有<code>#if 0</code>开关，使用时需要注意。</p>
+</blockquote>
+<p>接着将lvgl.h复制到lvgl目录下，该头文件包含了所有相关的lvgl所需要的头文件，因此写程序时只需要包含lvgl.h即可。</p>
+<hr>
+<h3 id="接口移植"><a href="#接口移植" class="headerlink" title="接口移植"></a>接口移植</h3><p>接口的移植主要分为两部分：</p>
+<p><strong>屏幕显示接口</strong>和<strong>输入设备接口</strong>。</p>
+<p>其中屏幕显示是不可忽略的部分，而输入设备则可以根据自己需求来更改不同的设备。</p>
+<p>接口文件都在Clone下来的目录下的example中的porting目录下：</p>
+<p><img src="/images/%E6%B5%85%E8%B0%88lvgl%E7%A7%BB%E6%A4%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20211019143944148.png" alt="image-20211019143944148"></p>
+<p>分别为<strong>屏幕显示接口</strong>、<strong>文件系统接口</strong>和<strong>输入设备接口</strong>。</p>
+<h4 id="屏幕显示接口"><a href="#屏幕显示接口" class="headerlink" title="屏幕显示接口"></a>屏幕显示接口</h4><p>将<code>lv_port_disp_template.c</code>和<code>lv_port_disp_template.h</code>复制到lvgl目录下，与src文件夹同级，然后将两个文件名字中的template删除，并打开<code>#if 0</code>开关。</p>
+<p>顺便将接口源文件中的头文件包含改为正确的名字：</p>
+<p><code>#include &quot;lv_port_disp.h&quot;</code></p>
+<p>接着将该两个文件添加到工程当中（以Cmake为例）：</p>
+<p>仅需更改模板文件中的两个语句后重新生成Cmake即可。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;includes&#125;</span> </span><br><span class="line">					ST7735/Inc<span class="comment">#此处为ST7735屏幕驱动所需的包含路径</span></span><br><span class="line">                    lvgl/src/core</span><br><span class="line">                    lvgl/src/draw</span><br><span class="line">                    lvgl/src/extra</span><br><span class="line">                    lvgl/src/font</span><br><span class="line">                    lvgl/src/gpu</span><br><span class="line">                    lvgl/src/hal</span><br><span class="line">                    lvgl/src/misc</span><br><span class="line">                    lvgl/src/widgets</span><br><span class="line">                    lvgl</span><br><span class="line">                    )</span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE SOURCES <span class="variable">$&#123;sources&#125;</span> <span class="string">&quot;ST7735/*.*&quot;</span> <span class="string">&quot;lvgl/*.*&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>将文件纳入工程后，很明显接口头文件开头的包含路径与我们不一致，故将包含路径稍作修改：<code>#include &quot;lvgl.h&quot;</code></p>
+<p>修改后文件的移植工作就完成了，接下来我们对代码进行一些修改。</p>
+<h5 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h5><p>首先打开<code>lv_conf.h</code>：</p>
+<p>按照自己的硬件条件对下面的内容进行必要的修改。</p>
+<ul>
+<li><p>修改屏幕颜色深度宏：<code>LV_COLOR_DEPTH</code></p>
+</li>
+<li><p><strong>（非必要）</strong>修改RGB565颜色高低位交换宏：<code>LV_COLOR_16_SWAP</code></p>
+</li>
+<li><p><del>v7版本的库还需要更改一下屏幕分辨率</del></p>
+</li>
+</ul>
+<blockquote>
+<p>该文件中设置项较多，因此在使用的过程中可以按照需求对宏进行修改，每条宏都有对应的注释进行解释。</p>
+</blockquote>
+<h5 id="显示接口文件修改"><a href="#显示接口文件修改" class="headerlink" title="显示接口文件修改"></a>显示接口文件修改</h5><p>首先需要在接口头文件中定义两个与屏幕分辨率有关的宏：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*********************</span></span><br><span class="line"><span class="comment"> *      DEFINES</span></span><br><span class="line"><span class="comment"> *********************/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MY_DISP_HOR_RES 80	<span class="comment">//屏幕高度</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MY_DISP_VER_RES 160 <span class="comment">//屏幕宽度</span></span></span><br></pre></td></tr></table></figure>
+
+<p>顺便将下面的代码中的分辨率设置改为我们定义的宏以方便以后的使用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Set the resolution of the display*/</span></span><br><span class="line">disp_drv.hor_res = MY_DISP_HOR_RES;</span><br><span class="line">disp_drv.ver_res = MY_DISP_VER_RES;</span><br></pre></td></tr></table></figure>
+
+<p>接下来必须要修改的内容是对于缓冲区的修改：</p>
+<p>lvgl中提供了三种缓冲区的使用方式：</p>
+<p>单部分缓冲区、双部分缓冲区和双全屏缓冲区</p>
+<p>此处使用单部分缓冲区，直接将接口源文件中的另两个示例代码注释掉即可：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">/* Example for 1) */</span></span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">lv_disp_draw_buf_t</span> draw_buf_dsc_1;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">lv_color_t</span> buf_1[MY_DISP_HOR_RES * <span class="number">10</span>];<span class="comment">/*A buffer for 10 rows*/</span></span><br><span class="line">	lv_disp_draw_buf_init(&amp;draw_buf_dsc_1, buf_1, <span class="literal">NULL</span>, MY_DISP_HOR_RES * <span class="number">10</span>);   <span class="comment">/*Initialize the display buffer*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//    /* Example for 2) */</span></span><br><span class="line"><span class="comment">//    static lv_disp_draw_buf_t draw_buf_dsc_2;</span></span><br><span class="line"><span class="comment">//    static lv_color_t buf_2_1[MY_DISP_HOR_RES * 10];/*A buffer for 10 rows*/</span></span><br><span class="line"><span class="comment">//    static lv_color_t buf_2_2[MY_DISP_HOR_RES * 10];/*An other buffer for 10 rows*/</span></span><br><span class="line"><span class="comment">//    lv_disp_draw_buf_init(&amp;draw_buf_dsc_2, buf_2_1, buf_2_2, MY_DISP_HOR_RES * 10);   /*Initialize the display buffer*/</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    /* Example for 3) also set disp_drv.full_refresh = 1 below*/</span></span><br><span class="line"><span class="comment">//    static lv_disp_draw_buf_t draw_buf_dsc_3;</span></span><br><span class="line"><span class="comment">//    static lv_color_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*A screen sized buffer*/</span></span><br><span class="line"><span class="comment">//    static lv_color_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*An other screen sized buffer*/</span></span><br><span class="line"><span class="comment">//    lv_disp_draw_buf_init(&amp;draw_buf_dsc_3, buf_3_1, buf_3_2, MY_DISP_VER_RES * LV_VER_RES_MAX);   /*Initialize the display buffer*/</span></span><br></pre></td></tr></table></figure>
+
+<p>更改完之后来修改屏幕刷新函数。</p>
+<p>最简单的修改方式可以使用逐点刷新：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">disp_flush</span><span class="params">(<span class="keyword">lv_disp_drv_t</span> *disp_drv, <span class="keyword">const</span> <span class="keyword">lv_area_t</span> *area, <span class="keyword">lv_color_t</span> *color_p)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int32_t</span> x;</span><br><span class="line">    <span class="keyword">int32_t</span> y;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (y = area-&gt;y1; y &lt;= area-&gt;y2; y++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (x = area-&gt;x1; x &lt;= area-&gt;x2; x++) &#123;</span><br><span class="line">            ST7735_DrawPixel(x, y, color_p-&gt;full);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    lv_disp_flush_ready(disp_drv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也可采用逐帧刷新的方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">disp_flush</span><span class="params">(<span class="keyword">lv_disp_drv_t</span> *disp_drv, <span class="keyword">const</span> <span class="keyword">lv_area_t</span> *area, <span class="keyword">lv_color_t</span> *color_p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int32_t</span> width = area-&gt;x2 - area-&gt;x1;</span><br><span class="line">    <span class="keyword">int32_t</span> height = area-&gt;y2 - area-&gt;y1;</span><br><span class="line">    </span><br><span class="line">    ST7735_DrawImage(area-&gt;x1, area-&gt;y1, width, height, (<span class="keyword">uint16_t</span> *) color_p);</span><br><span class="line">    </span><br><span class="line">    lv_disp_flush_ready(disp_drv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>关于屏幕刷新率值得一提的主要原因有两方面：</p>
+<ul>
+<li>逐点刷新效率过低</li>
+<li>单缓冲区刷新对MCU资源占用很严重</li>
+</ul>
+<p>针对这两点有几种方式来提高刷新率：</p>
+<ul>
+<li>采用逐帧刷新</li>
+<li>增加缓冲区大小或者个数</li>
+<li>采用片上GPU或者DMA2D对帧率进行优化</li>
+</ul>
+<p>但是奈何工程中用片出于成本考虑往往没有片上GPU，SRAM大小也不足以负载更多的缓冲区，因此建议采用逐帧刷新的方式。</p>
+</blockquote>
+<p>做完以上的修改之后记得将<code>lv_port_disp_init</code>函数的声明添加到接口头文件中</p>
+<blockquote>
+<p>（这个锅从v7一直延续到v8，不知是官方有意为之还是如何</p>
+</blockquote>
+<h5 id="让lvgl的心脏跳动起来"><a href="#让lvgl的心脏跳动起来" class="headerlink" title="让lvgl的心脏跳动起来"></a>让lvgl的心脏跳动起来</h5><blockquote>
+<p>这部分的内容对应移植手册中的<a target="_blank" rel="noopener" href="https://docs.lvgl.io/8.0/porting/project.html#initialization">Initialization</a>部分</p>
+</blockquote>
+<p>要想让屏幕亮起来首先要让库里面的代码正常工作，OS中有一个属于自己的心跳，而lvgl也有属于自己的心跳：<code>lv_tick_inc(x)</code></p>
+<p>我们需要以一个大于该函数执行时间的固定时间间隔调用该函数来让lvgl的心脏跳起来，其中x是心跳的周期（单位为ms）。</p>
+<p>最通常的做法应该是开启一个定时器中断，然后在中断回调函数里面调用该函数，不过ST的HAL库为了使用延时而默认开启了systick中断，中断周期刚好为1ms，这大好资源怎么能放着不用呢？</p>
+<p>打开中断服务函数源文件<code>stm32h7xx_it.c</code>；</p>
+<p>添加lvgl包含：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN Includes */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;lvgl.h&quot;</span></span></span><br><span class="line"><span class="comment">/* USER CODE END Includes */</span></span><br></pre></td></tr></table></figure>
+
+<p>在systick终端服务函数中添加心跳：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief This function handles System tick timer.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SysTick_Handler</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* USER CODE BEGIN SysTick_IRQn 0 */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE END SysTick_IRQn 0 */</span></span><br><span class="line">    HAL_IncTick();</span><br><span class="line">    <span class="comment">/* USER CODE BEGIN SysTick_IRQn 1 */</span></span><br><span class="line">    lv_tick_inc(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">/* USER CODE END SysTick_IRQn 1 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来要在循环之前调用<code>lv_init()</code>进行库初始化，接着调用<code>lv_port_disp_init()</code>进行显示接口初始化，并循环调用<code>lv_task_handler()</code>来执行任务即可：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">ST7735_Init();</span><br><span class="line">lv_init();</span><br><span class="line">lv_port_disp_init();</span><br><span class="line"><span class="comment">/* USER CODE END 2 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Infinite loop */</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    lv_task_handler();</span><br><span class="line">    HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_3);<span class="comment">//循环闪灯以确定程序在正常运行</span></span><br><span class="line">    HAL_Delay(<span class="number">500</span>);</span><br><span class="line">    <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 3 */</span></span><br></pre></td></tr></table></figure>
+
+<p>至此，lvgl的屏幕显示接口移植完成。</p>
+<p>由于设备遇到了一些问题，这些问题刚好触及到了一个笔者很感兴趣的领域，故转而鸽掉教程去解决问题，当然结局问题的过程中会撰写一篇过程记录，lvgl待更内容且记录如下。</p>
+<h2 id="待更新内容"><a href="#待更新内容" class="headerlink" title="待更新内容"></a>待更新内容</h2><ul>
+<li>lvgl输入设备接口移植<ul>
+<li>按键接口移植</li>
+<li>编码器接口移植</li>
+</ul>
+</li>
+<li>lvgl v7食用方法（Edgeline）</li>
+</ul>
 
     </div>
 
@@ -448,7 +558,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%87%E6%81%B6%E4%B9%8B%E6%BA%90"><span class="nav-number">1.</span> <span class="nav-text">万恶之源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%97%A0%E5%85%B3%E7%B4%A7%E8%A6%81%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">一些无关紧要的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.</span> <span class="nav-text">库文件的移植</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E5%B7%A5%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">新建工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.2.</span> <span class="nav-text">移植</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%87%E6%81%B6%E4%B9%8B%E6%BA%90"><span class="nav-number">1.</span> <span class="nav-text">万恶之源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%97%A0%E5%85%B3%E7%B4%A7%E8%A6%81%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">一些无关紧要的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E6%96%87%E4%BB%B6%E7%9A%84%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.</span> <span class="nav-text">库文件的移植</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E5%B7%A5%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">新建工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E4%BD%93%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.2.</span> <span class="nav-text">本体移植</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%A7%BB%E6%A4%8D"><span class="nav-number">3.3.</span> <span class="nav-text">接口移植</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E6%98%BE%E7%A4%BA%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.3.1.</span> <span class="nav-text">屏幕显示接口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BF%AE%E6%94%B9"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">配置文件修改</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%8E%A5%E5%8F%A3%E6%96%87%E4%BB%B6%E4%BF%AE%E6%94%B9"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">显示接口文件修改</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%A9lvgl%E7%9A%84%E5%BF%83%E8%84%8F%E8%B7%B3%E5%8A%A8%E8%B5%B7%E6%9D%A5"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">让lvgl的心脏跳动起来</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%85%E6%9B%B4%E6%96%B0%E5%86%85%E5%AE%B9"><span class="nav-number">4.</span> <span class="nav-text">待更新内容</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -520,7 +630,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共33.6k字</span>
+  <span class="post-count">博客全站共35.4k字</span>
 </div>
 
 
