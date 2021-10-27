@@ -25,6 +25,100 @@
       </tags>
   </entry>
   <entry>
+    <title>那些授课中“隐秘的角落”</title>
+    <url>/2021/087e2aa47655/</url>
+    <content><![CDATA[<p>经过了一年的学习之后，当笔者自己要亲手进行授课的时候，发觉到有些东西当初似乎解释的并不明确，特在此解释一下。</p>
+<span id="more"></span>
+
+<h2 id="工程是个什么东东"><a href="#工程是个什么东东" class="headerlink" title="工程是个什么东东"></a>工程是个什么东东</h2><p>无论是使用Keil、CubeMX还是以后可能会涉及的Clion，开始写代码之前总有一步叫做新建工程，那么工程是什么呢？</p>
+<p>抛开又大又空的理论不谈，工程（Project）是什么其实很好理解，就是将你想要做的东西进行一个封装，形成一个易于移植的、与外界耦合度较低的独立个体。用实物举一个简单的小例子：</p>
+<p>你要做一辆小车，那么<code>“小车”</code>就是工程的名字，而工程中用到的组件可能包括<strong>轮子、电机、驱动以及小车的外壳</strong>，这些东西之间有很强的耦合性，他们相互作用共同组成了小车这个工程，而这整个工程与外界的耦合度并不高，所以你的小车可以随处乱跑，无论拿到宿舍还是教学楼都可以正常工作。</p>
+<p>在硬件中是这样，软件中也是这样。</p>
+<p>你新建了一个名为<code>Car</code>的工程，在为其写代码的过程中你可能会用到单片机接口库、电机驱动库等等，他们之间耦合度很高，但是整个工程与你的电脑之间只是一个简单的存储的关系，所以整个工程文件夹可以随意在不同电脑之间迁移并且都可以正常工作。</p>
+<blockquote>
+<p><strong>言外之意：</strong></p>
+<p>当你希望别人在他的电脑上运行或者测试你的工程时，<strong>请将整个工程文件夹打包发给对方</strong>，而不是仅仅将main.c里面的代码复制然后把文本发过去或者仅仅将main.c文件发过去。</p>
+</blockquote>
+<h2 id="CubeMX中某些不起眼的点"><a href="#CubeMX中某些不起眼的点" class="headerlink" title="CubeMX中某些不起眼的点"></a>CubeMX中某些不起眼的点</h2><h3 id="Pinout-amp-Configuration"><a href="#Pinout-amp-Configuration" class="headerlink" title="Pinout &amp; Configuration"></a>Pinout &amp; Configuration</h3><p>当你想得知自己配置的引脚还有没有相同功能的复用引脚时，可以试试按住Ctrl然后拖动已经设置的引脚，拥有相同复用功能的引脚就会闪烁，只要在其上放开即可。</p>
+<h3 id="Clock-Configuration"><a href="#Clock-Configuration" class="headerlink" title="Clock Configuration"></a>Clock Configuration</h3><p>选择完时钟源之后可以直接在某个频率设置中输入频率，按下回车即可由CubeMX为你配置已知的解决方案。</p>
+<h3 id="Project-Manager"><a href="#Project-Manager" class="headerlink" title="Project Manager"></a>Project Manager</h3><p><img src="/images/%E9%82%A3%E4%BA%9B%E6%8E%88%E8%AF%BE%E4%B8%AD%E2%80%9C%E9%9A%90%E7%A7%98%E7%9A%84%E8%A7%92%E8%90%BD%E2%80%9D/image-20211027165955063.png" alt="image-20211027165955063"></p>
+<p>用于设置集成环境工具链，笔者使用Keil故选择MDK-ARM。</p>
+<p><img src="/images/%E9%82%A3%E4%BA%9B%E6%8E%88%E8%AF%BE%E4%B8%AD%E2%80%9C%E9%9A%90%E7%A7%98%E7%9A%84%E8%A7%92%E8%90%BD%E2%80%9D/image-20211027170242510.png" alt="image-20211027170242510"></p>
+<p>用于设置工程代码的最小堆栈大小</p>
+<p><img src="/images/%E9%82%A3%E4%BA%9B%E6%8E%88%E8%AF%BE%E4%B8%AD%E2%80%9C%E9%9A%90%E7%A7%98%E7%9A%84%E8%A7%92%E8%90%BD%E2%80%9D/image-20211027170729456.png" alt="image-20211027170729456"></p>
+<blockquote>
+<ul>
+<li>将所有用到的函数库拷贝到工程文件夹</li>
+<li>仅拷贝必要的库文件</li>
+<li>将必要的库文件添加到工具链的工程配置文件作为参考</li>
+</ul>
+</blockquote>
+<p>学习的过程中建议选择第三个，以便使用过程中参考库函数代码。</p>
+<p><img src="/images/%E9%82%A3%E4%BA%9B%E6%8E%88%E8%AF%BE%E4%B8%AD%E2%80%9C%E9%9A%90%E7%A7%98%E7%9A%84%E8%A7%92%E8%90%BD%E2%80%9D/image-20211027171359513.png" alt="image-20211027171359513"></p>
+<blockquote>
+<ul>
+<li>为每个外设生成一对“.c/.h”文件</li>
+<li>重新生成时备份初始生成的文件</li>
+<li>重新生成时保留用户代码</li>
+<li>删除未重新生成的以前生成的文件</li>
+</ul>
+</blockquote>
+<p>建议勾选图中的三个，有助于规范化工程中的文件结构。</p>
+<h2 id="MDK工具链下的工程文件夹结构"><a href="#MDK工具链下的工程文件夹结构" class="headerlink" title="MDK工具链下的工程文件夹结构"></a>MDK工具链下的工程文件夹结构</h2><p>来看一个典型的工程个文件夹的文件树：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">D:\APPLICATION_DATA\CLION_PROJECTS\EXAMPLE</span><br><span class="line">│  .mxproject				//CubeMX工程配置文件</span><br><span class="line">│  Example.ioc				//CubeMX工程文件（点击打开CubeMX</span><br><span class="line">├─Core						//工程核心代码文件夹</span><br><span class="line">│  ├─Inc						//工程核心代码-头文件夹</span><br><span class="line">│  │      gpio.h				//GPIO头文件</span><br><span class="line">│  │      main.h				//主函数通用头文件</span><br><span class="line">│  │      stm32f4xx_hal_conf.h	//HAL库配置头文件</span><br><span class="line">│  │      stm32f4xx_it.h		//中断头文件</span><br><span class="line">│  └─Src						//工程核心代码-源文件夹</span><br><span class="line">│          gpio.c				//GPIO源文件</span><br><span class="line">│          main.c				//主函数源文件</span><br><span class="line">│          stm32f4xx_hal_msp.c	//msp源文件</span><br><span class="line">│          stm32f4xx_it.c		//中断源文件</span><br><span class="line">│          system_stm32f4xx.c	//系统函数源文件</span><br><span class="line">└─MDK-ARM					//MDK工程文件夹</span><br><span class="line">        Example.uvoptx			//MDK工程配置文件夹</span><br><span class="line">        Example.uvprojx			//MDK工程文件（点击打开Keil</span><br><span class="line">        startup_stm32f401xc.s	//初始化代码</span><br></pre></td></tr></table></figure>
+
+<h2 id="CubeMX模板生成的代码结构"><a href="#CubeMX模板生成的代码结构" class="headerlink" title="CubeMX模板生成的代码结构"></a>CubeMX模板生成的代码结构</h2><blockquote>
+<p>可能没什么必要的<strong>前置小知识：</strong></p>
+<p>C语言中用<code>/*被注释内容*/</code>来表示段注释；</p>
+<p>​              用<code>//被注释的内容</code>来表示行注释。</p>
+</blockquote>
+<p>观察CubeMX生成的代码不难发现其中的注释很大一部分都是一样的，这些注释其实是<strong>十分科学地分配了用户写代码时的代码结构</strong>。</p>
+<p>忽略其中一些无用的部分，我们将大体的框架拿出来看一看：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">！！首先最先强调的一个问题：</span><br><span class="line">！！用户代码应该写在Begin和End之间，即：</span><br><span class="line">！！<span class="comment">/* USER CODE BEGIN xxxx */</span>和<span class="comment">/* USER CODE END xxxx */</span>之间，</span><br><span class="line">！！否则将导致的后果是：你的代码会在下一次重新生成时被删除。</span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN Header */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户头（依照Doxygen的注释形式，在官方信息的基础上添加文件信息）</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END Header */</span></span><br><span class="line"><span class="comment">/* Includes ------------------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private includes ----------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN Includes */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户头文件包含</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END Includes */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private typedef -----------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PTD */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户变量重命名</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END PTD */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private define ------------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PD */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户替换宏定义</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END PD */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private macro -------------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PM */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户宏</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END PM */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private variables ---------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PV */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户变量定义</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END PV */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private function prototypes -----------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PFP */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户函数声明</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END PFP */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private user code ---------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写函数定义等一些不属于以上分类的内容</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 1 */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写一些函数比HAL初始化更底层的函数调用</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END 1 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* MCU Configuration--------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN Init */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户MCU初始换代码</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END Init */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Configure the system clock */</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN SysInit */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写用户系统初始化代码</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END SysInit */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//一般用于书写外设或其他功能初始换代码</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END 2 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写while（系统已经生成）</span></span><br><span class="line"><span class="comment">//书写循环中代码</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//书写循环中代码</span></span><br><span class="line"><span class="comment">//书写与前方循环对应的括号（系统已生成）</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END 3 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 4 */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//常用于书写函数定义</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END 4 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN Error_Handler_Debug */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//用户添加自己的错误处理代码</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END Error_Handler_Debug */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 6 */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//用户添加自己的断言处理代码</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* USER CODE END 6 */</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="关于我用CubeMX快速找到芯片资料那些事"><a href="#关于我用CubeMX快速找到芯片资料那些事" class="headerlink" title="关于我用CubeMX快速找到芯片资料那些事"></a>关于我用CubeMX快速找到芯片资料那些事</h2><p>选过芯片之后可以通过CubeMX来快速获得所选的芯片的各种资料：</p>
+<p><img src="/images/%E9%82%A3%E4%BA%9B%E6%8E%88%E8%AF%BE%E4%B8%AD%E2%80%9C%E9%9A%90%E7%A7%98%E7%9A%84%E8%A7%92%E8%90%BD%E2%80%9D/image-20211027200753561.png" alt="image-20211027200753561"></p>
+<p>资料很全，F401的资料如图：</p>
+<p><img src="/images/%E9%82%A3%E4%BA%9B%E6%8E%88%E8%AF%BE%E4%B8%AD%E2%80%9C%E9%9A%90%E7%A7%98%E7%9A%84%E8%A7%92%E8%90%BD%E2%80%9D/image-20211027200952936.png" alt="image-20211027200952936"></p>
+<h2 id="代码格式"><a href="#代码格式" class="headerlink" title="代码格式"></a>代码格式</h2><p>笔者学习语文的时候就经常听到一句话：<strong>字体是一个人的脸面</strong></p>
+<p>现在笔者在写代码，不得不说，代码的格式甚至也可以上升到程序员脸面的地步。</p>
+<p><strong>什么样的代码格式算是好的呢？</strong></p>
+<p>有一个很有趣的注释：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//A few days ago, only God and I understood my code. </span></span><br><span class="line"><span class="comment">//Now only God understands it.</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>几天前只有上帝和我能看懂我的代码，现在只有上帝懂了。</p>
+</blockquote>
+<p>好的代码不应该是这样的，而应该是傻子都可以理解作者的意图。</p>
+<p>换句话说，代码格式至少应该<strong>清晰明了、整洁统一</strong>，若能<strong>将逻辑结构划分开来</strong>则为更好。</p>
+<p>直观地来感受一下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//一个简单的时间片轮询函数实现</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TaskDicision</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; TaskNum(taskList); i++)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (taskList[i] != <span class="literal">NULL</span>) &#123;</span><br><span class="line">taskList[i]-&gt;taskTimer += ITperiod;</span><br><span class="line"><span class="keyword">if</span> (taskList[i]-&gt;taskTimer &gt;= taskList[i]-&gt;taskTimePiece) </span><br><span class="line">&#123;</span><br><span class="line">	taskList[i]-&gt;taskTimer = <span class="number">0</span>;</span><br><span class="line">		taskList[i]-&gt;taskHandler();</span><br><span class="line">&#125;&#125;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//一个简单的时间片轮询函数实现</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">TaskDicision</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; TaskNum(taskList); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (taskList[i] != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            </span><br><span class="line">            taskList[i]-&gt;taskTimer += ITperiod;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (taskList[i]-&gt;taskTimer &gt;= taskList[i]-&gt;taskTimePiece) &#123;</span><br><span class="line">                taskList[i]-&gt;taskTimer = <span class="number">0</span>;</span><br><span class="line">                taskList[i]-&gt;taskHandler();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>应该不用多说什么，可读性高下立判。</p>
+<p>当然这其实是一个相对较极端的例子，一般的使用中我们很少会用这么多层的括号互相嵌套。但是即使是少层的内容嵌套也需要一个良好的格式，主要是遵循以下几点其实就可以写出漂亮的代码：</p>
+<ul>
+<li>在每层花括号内部进行缩进</li>
+<li>对于<code>for</code>或者<code>if</code>之类的有明显逻辑结构的语句即使并没有用到花括号也最好进行缩进</li>
+<li>在不同的代码功能之间最好以换行来进行分隔</li>
+</ul>
+<h2 id="代码注释"><a href="#代码注释" class="headerlink" title="代码注释"></a>代码注释</h2><p>代码注释一直是一个非常值得探讨的话题。</p>
+<p>不仅仅是由于你的代码是否有注释决定了别人能否读懂你的代码，更是由于能否读懂别人的注释决定了你是否能够读懂别人的代码。</p>
+<p>提到代码注释就不得不提的东西叫做”Doxygen“，它可以根据代码之中的注释来为工程生成一个详尽的文档，而程序员所需要付出的代价很简单：按照Doxygen的注释标准来编写注释。</p>
+<p>就是因为很多开源库都在使用Doxygen（没办法，<del>给的实在是太多了</del>太好用了），以至于Doxygen的注释标准甚至成为了一种几乎公用的良好注释标准。</p>
+<p>其实HAL库中的很多注释都是基于Doxygen的注释标准的，因此了解这种注释标准对大家读懂注释有很大帮助。</p>
+<p>由于全写完篇幅有点长，所以大家可以自己看看<a href="https://www.cnblogs.com/schips/p/12200388.html">这篇文章</a>。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+        <category>内容补充</category>
+      </categories>
+      <tags>
+        <tag>杂谈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ExternalFlash缝合记</title>
     <url>/2021/93640b71849b/</url>
     <content><![CDATA[<p>在撰写<a href="https://zhewana.cn/2021/7dd8d670d9f4/">浅谈LVGL学习、移植与使用</a>的过程中发现STM32H750VBT6的FLASH仅有128k大小，做了简单的lvgl移植之后Flash竟然被写爆了，因此不得不将写到一半的教程停手，转而解决这个问题，特此记录。</p>
