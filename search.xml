@@ -25,6 +25,142 @@
       </tags>
   </entry>
   <entry>
+    <title>“一些关于电赛的小碎碎念”</title>
+    <url>/2021/726e7273fa90/</url>
+    <content><![CDATA[<p>电赛啦！电赛啦！虽然是迟到的电赛，但是我还是对它非常期待的，毕竟可以见证一下这一年来我自己的努力成果了。难得的机会，写点废话吧，也算是作为电赛的总结了。</p>
+<span id="more"></span>
+
+<h2 id="暑假阳光下训练的傻孩子们"><a href="#暑假阳光下训练的傻孩子们" class="headerlink" title="暑假阳光下训练的傻孩子们"></a>暑假阳光下训练<del>的傻孩子们</del></h2><p>电赛的训练最早是暑假就开始了，为了参加集训我甚至一个暑假没有回家。<del>食堂真是太难吃了</del></p>
+<p>但是令人没想到的是今年学校对于自控队伍的训练约等于没有，所以在训练期间我们一直在做一些往年的题目来提高技术水平。</p>
+<p>这期间不得不提的就是：还好我们试着做了<strong>板球控制系统</strong>。在做这道题目的时候我们发现树莓派处理图像有很大的时延，并不满足板球控制系统的要求，因此迫使我们学习了OpenMV。而OpenMV在正式的电赛中也确实发挥了很大的作用。</p>
+<p>除了OpenMV之外还有点小收获就是控制器：</p>
+<p>我们采用了TM4作为主控，用以防止电赛自控题目出现限制单片机的情况。为了使用方便，我在使用过程中对一些外设功能进行了二次封装，虽然写的代码很屎，但是还是很好用的，已经开源在了我的GitHub中的<a href="https://github.com/Zhewana/TM4C123G_UserInterface">TM4C123G_UserInterface</a>仓库中，代码中含有详尽的注释，无论是别人使用还是我自己后面再看都有很大帮助。</p>
+<p>就在当时所谓的电赛前两天，我们整个队伍<strong>搬家</strong>到了比赛的教室，结果熟悉了一天环境后得知了电赛推迟的消息：</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/1636725764552.jpg" alt="电赛延期通知"></p>
+<p>就这样，<strong>在暑假阳光下训练的傻孩子们被电赛放了鸽子。</strong></p>
+<p>不过虽然大部分同学都回家了，我们队伍仍然没有回家。不是因为想留下训练，实在是因为再没有比暑假更适合做自己的项目的时间了，因此我们三个人分别开始玩起了自己的东西：sjj的平衡车、yqy的独轮车还有我自己的无人机（虽然至今未完成），项目进度我写在了<a href="https://zhewana.cn/2021/21928eec9c6c/">这篇文章</a>里面，现在开学应该是龟速更新，只能等到寒假的时候才能接着玩自己的项目了（叹气</p>
+<h2 id="对第二次延期习以为常的傻孩子们"><a href="#对第二次延期习以为常的傻孩子们" class="headerlink" title="对第二次延期习以为常的傻孩子们"></a>对第二次延期习以为常<del>的傻孩子们</del></h2><p>有了第一次延后的经验，大家开始对于电赛延期习以为常了，也就是在这样的心情下，我们对于得到的电赛延期消息其实十分平静，然后继续做手中没做完的项目。</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/IMG_20211112_222312.jpg" alt="电赛延期"></p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/Cache_-608aa07ee7805407..jpg" alt="电赛安排"></p>
+<h2 id="带着平静心情打电赛的傻孩子们"><a href="#带着平静心情打电赛的傻孩子们" class="headerlink" title="带着平静心情打电赛的傻孩子们"></a>带着平静心情打电赛<del>的傻孩子们</del></h2><p>日子一点一点地过，我们当时对于电赛的执着其实已经被磨得不能更平了。</p>
+<p>从一开始的见到材料清单<strong>疯狂猜题</strong>，比赛前一晚<strong>睡不着觉</strong>，到后来的见到比赛赛题<strong>内心毫无波动</strong>，平静的开始进行分工，相信无论是队友还是我自己，我们都有了很大的提升。</p>
+<p>电赛开始，看到赛题我们几乎毫不犹豫地选择了F题：<a href="https://www.nuedc-training.com.cn/index/news/details/new_id/259">智能送药小车</a>。</p>
+<blockquote>
+<p>题目太长就不放图了，可以点进超链接去看。</p>
+<p>另：单片机工程上传到了蓝奏云，需要自取吧：</p>
+<p><a href="https://wwe.lanzoui.com/iBR4owffy3e">https://wwe.lanzoui.com/iBR4owffy3e</a><br>密码:ae4w</p>
+</blockquote>
+<p>写这段内容的时候我们已经完成了电赛的测评，结果还算满意。下面的内容大概是对这四天三夜的一些回顾、吐槽还有反思（都是废话）：</p>
+<h3 id="第一天-昼"><a href="#第一天-昼" class="headerlink" title="第一天 - 昼"></a>第一天 - 昼</h3><p>拿到赛题，秒选F题，我立刻开始新建工程担任了单片机程序的撰写任务。</p>
+<p>与此同时，yqy负责硬件开始搭建两辆小车，sjj负责视觉开始撰写代码。</p>
+<p>此时的方案选择是：</p>
+<p>硬件：<strong>四轮小车</strong></p>
+<p>单片机平台：<strong>STM32</strong></p>
+<p>视觉：<strong>OpenMV</strong></p>
+<blockquote>
+<p>小惊喜：其实我自己有一辆小车不过两个队友一直不知道，电赛了想着拿来作为备用小车，可谁知道最后竟然刚好要用两辆小车，我们三人直接狂喜。</p>
+</blockquote>
+<p>单片机平台选择是我们最熟悉的STM32，在工程中使用了一些我自己平时写的库：</p>
+<p>调试信息输出库：<a href="https://github.com/Zhewana/DebugLogger">DebugLogger</a></p>
+<p>时间片轮询框架：<a href="https://github.com/Zhewana/TimePiece">TimePiece</a></p>
+<p>其中时间片轮询框架在电赛后我自行进行了一些功能上的完善，上传的是完善后的版本，这部分后面再说。</p>
+<p>在队友搭车的同时，我将电机、舵机的底层驱动以及速度环、转向环PID调节算法全部撰写完毕，刚好这时队友将第一辆车搭完了，开始简单的软硬件联调+调节速度环PID。</p>
+<p>接着和视觉队友沟通了一下两边的通信协议，完成了通讯协议的解析程序；</p>
+<p>为了将OpenMV装上车子，yqy专门3D建模量身定做了一个支架；</p>
+<p>接着sjj完成了红线循迹程序，于是开始将OpenMV装到车上开始进行初步联调。</p>
+<p>大概一天就这么结束了。</p>
+<h3 id="第一天-夜"><a href="#第一天-夜" class="headerlink" title="第一天 - 夜"></a>第一天 - 夜</h3><blockquote>
+<p>有关晚上的内容大概仅限于对睡觉环境的吐槽吧…</p>
+</blockquote>
+<p>第一题天在活室睡觉，我打开了活动室内的一张折叠床（据说是某学长留下的）打算美美的睡一觉：</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/1636727634880.jpg" alt="折叠床"></p>
+<p>我在早上两点美美的入睡了，但是却收到了反噬：有一只蚊子在我身边飞来飞去（/(ㄒoㄒ)/~~</p>
+<p>以为会做个美梦，但是这次睡觉经历我见到人就会这样吐槽：<strong>就像睡在楼梯上面一样</strong></p>
+<p><img src="data:image/jpeg;base64,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" alt="生气"></p>
+<p>四点钟我醒了一次，是被冻醒的，然后翻了个身接着睡，早上六点就实在忍不住，起来了。</p>
+<p>这绝对是我主动起床<strong>最早</strong>的一次了。</p>
+<p>就这样，第二天开始了。</p>
+<h3 id="第二天-昼"><a href="#第二天-昼" class="headerlink" title="第二天 - 昼"></a>第二天 - 昼</h3><blockquote>
+<p>后面几天的内容其实并没有什么好说的，基本都是软硬件在联调，然后发现各种各样的问题并且解决各种各样的问题</p>
+</blockquote>
+<p>依照之前的四轮小车的方案，我们大概做了第一个要求，此时就发现四轮车在行进的时候还要进行<strong>倒车</strong>和<strong>复杂的路线规划</strong>，这样整个系统的<strong>稳定性会直线降低</strong>，同时时间上也会有很大程度的浪费。</p>
+<p>虽然但是我们仍在努力克服这些问题。联调的时候顺便确定了一些视觉任务的细节，比如：对十字的识别、对于T形路口的识别以及对于赛道终点（虚线）的识别。</p>
+<p>同时还有一个遗留问题一直在困扰着我们：<strong>如何检测200g药品被放上了车子，</strong>暂时还没有明确的方案。</p>
+<p>刚好有同一个实验室的同学和我们同时想到了两轮加万向轮的方案，于是我们立即更换方案：</p>
+<p>yqy开始更改整辆车的硬件，sjj继续写视觉代码，我则将原来代码中用不到的底层驱动删除并且将PID算法稍作修改以适应双驱动车的循迹。</p>
+<p>最终大概搭出了一辆简单的三轮小车（图片下方正面向前方的）：</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/Cache_1b0a1f5b2da315d0..jpg" alt="简单的三轮小车"></p>
+<p>这个时候其实已经大概下午了，视觉那边遇到了数字识别的难点，于是我们三个人一起研究了很久，一天大概也就这样结束。</p>
+<p>对了，必须要说的是谢谢指导教师送我们的披萨，真的很好吃！</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/OIP-C.wHJO60ojTAdwUX6DsoEJjAAAAAw=136&h=180&c=7&r=0&o=5&dpr=1.1&pid=1.7" alt="Image result for 小豆泥表情包"></p>
+<h3 id="第二天-夜"><a href="#第二天-夜" class="headerlink" title="第二天 - 夜"></a>第二天 - 夜</h3><p>调车到大概四五点钟，我和队友都回去睡觉了。</p>
+<p>有了第一天的教训，我绝对坚决拒绝再睡在那张床上面。我天真地以为趴在桌子上应该能获得比在床上更好的睡眠效果，但是事实是我完全错了：</p>
+<p>穿着厚厚的马夹，戴着帽子，我睡了一小时就醒了，醒来的时候肚子里面鼓鼓的，感觉全是气体……</p>
+<p>睡眠不足的虚弱感不断冲击着大脑，整个脑子浑浑噩噩的，整个人大概处于一个<strong>行尸走肉</strong>的状态：</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/OIP-C.4uTgIsr3qsQ96bpioLFTTQAAAAw=129&h=177&c=7&r=0&o=5&dpr=1.1&pid=1.7" alt="行尸走肉"></p>
+<p>站起来到外面走了一圈，看到了我未曾看到过的南邮日出。内心没有狂喜，没有紧张，<strong>不如说是什么都没有</strong>。转身回到活动室，队友们还在睡觉，听着大家的呼吸声，我意识到我才睡了一小时多应该再睡会，于是趴在桌子上闭上了眼，一会之后仍无法入睡，于是再次起身到走廊走了一圈……</p>
+<p>上面的过程被我像一块单片机一样执行了记不清多少次（我知道这种比喻很奇怪），我不知道自己在干什么，只是走的次数多了整个人就会变得更清醒一点。直到再晚些sjj醒过来了，大概我的神智才恢复了一些，没过多久yqy也醒了于是我们商量了下决定去吃早饭。</p>
+<p>吃早饭的路上我提出下午想回宿舍好好的睡一觉，因为我意识到我个人的消耗已经太大了，队友也同意了。</p>
+<p>不过吃完饭之后（也可能是生物钟到了），我整个人开始变得精神起来。</p>
+<p>就这样，第三天开始了。</p>
+<h3 id="第三天-昼"><a href="#第三天-昼" class="headerlink" title="第三天 - 昼"></a>第三天 - 昼</h3><p>到了这时候，已经能够为车子实装上数字识别了，并且开始真正意义上的软硬件全面联调。</p>
+<p>判断药品有了一个很好的方案：<strong>使用装满螺丝的大试管作为药品，</strong>并且由yqy为其量身建模一个试管架，<strong>在试管架下面放上微动开关</strong>，即可通过开关的闭合与否来判断是否有药品放入（这应该是电赛期间我们的一个<strong>高光设计</strong>了）；</p>
+<p>送药的过程中发现一些小问题：有些本应转弯的地方被循迹算法影响导致没法表现出我们想要的转弯效果，于是在程序的状态机结构中添加了循迹算法的屏蔽框架；</p>
+<p>后续的测试中发现仅仅屏蔽循迹算法然后阻塞延时是不够的，因此又添加了一点简单的非阻塞延时代码；</p>
+<p>视觉方面则是发现了一些会相互之间误识别的元素，并对他们做了一些处理。</p>
+<p>虽然说着不多，但是中间过程非常艰辛，仅仅发现上述问题就花了很长时间，毕竟问题表现出来的现象往往是无原因的不正常，我们只能在一堆代码中一点一点找问题出在了哪里。</p>
+<p>大脑转着转着，一天就这样结束了。</p>
+<h3 id="第三天-夜"><a href="#第三天-夜" class="headerlink" title="第三天 - 夜"></a>第三天 - 夜</h3><p>白天的时候听了yqy推荐，我发现了一个良好的睡觉地方：<strong>一张黑色的大椅子</strong></p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/1636727634871.jpg" alt="一张黑色的大椅子"></p>
+<p>只要整个人躺在上面然后把jio伸出去再找一张矮一些的椅子来垫jio就可以了。</p>
+<p>最后一天肯定是要冲刺一下的嘛，所以一直肝到了早上。</p>
+<p>早上五点钟，我尝试了一下之前说的方法，不得不说这种方法睡得比前两天都要舒服，不过到了早上六点我还是准时醒了过来（作息规律了属于是），整个人还是一种浑浑噩噩的状态，但是比前一天的行尸走肉应该好多了（大概</p>
+<p>依然是等队友醒过来然后出去吃了早饭，接着开始了这最后一天。</p>
+<h3 id="第四天-昼"><a href="#第四天-昼" class="headerlink" title="第四天 - 昼"></a>第四天 - 昼</h3><p>最后一天了，整体的功能已经成型了，不过还有一些小细节需要完善。</p>
+<p>大概是视觉上<strong>提高了T字路段的识别率</strong>，机械结构上进一步做了一些优化，单片机程序上对一些特殊情况做了一点处理。</p>
+<p>解决完这些之后，我们开始搭起第二辆车。开始第二辆车调试的时候其实大概已经下午了，不过好在发挥题目对第二辆车子的要求不是很高，因此我只是在第一辆车的状态机上面稍微改改就获得了第二辆车的代码。</p>
+<p>晚上八—-点~（请自行脑部大姨的声线</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/TY%7DRDL@4P50SJ_DUYVX%25_O.jpg" alt="成品"></p>
+<p><strong>收工！</strong></p>
+<h3 id="吐槽题目"><a href="#吐槽题目" class="headerlink" title="吐槽题目"></a>吐槽题目</h3><p>对于F题甚至是对于整个今年的电赛题目，我相信肯定会有很多人想要吐槽一些什么。我只做了F题，对于其他题目也不好信口开河，就来吐槽一下F题的槽点吧：</p>
+<ol>
+<li>图像在整个题目中起着决定性作用</li>
+<li>题目的区分点在单片机上</li>
+</ol>
+<p>单纯的看这两点其实都不是一个良好的槽点，但是这两点同时出现就成为了最大的槽点：</p>
+<p><strong>明明图像在整个题目中起着决定性作用但是题目的区分点却在单片机上</strong>，与此同时单片机的内容又十分简单，并没有什么区分度。</p>
+<p>这就直接导致了绝大部分参赛队伍只有两种结果：要么<strong>全部做完</strong>，要么<strong>一个题目都做不了</strong>。</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/OIP-C.8fWpleql9uKQPVatjwUxiQAAAAw=158&h=142&c=7&r=0&o=5&dpr=1.1&pid=1.7" alt="气"></p>
+<h3 id="单片机程序"><a href="#单片机程序" class="headerlink" title="单片机程序"></a>单片机程序</h3><p>懒得再开一篇博客来讲这东西了（主要是还有一堆东西还没写完，所以就顺手一起写了），所以就在这里大概讲一下参赛作品的单片机程序框架吧（写的挺屎的，欢迎大佬提出宝贵建议）</p>
+<p><img src="/images/%E2%80%9C%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E7%94%B5%E8%B5%9B%E7%9A%84%E5%B0%8F%E7%A2%8E%E7%A2%8E%E5%BF%B5%E2%80%9D/OIP-C.vmjIAHN3zzklE-GiCMQ3GAHaHaw=180&h=180&c=7&r=0&o=5&dpr=1.1&pid=1.7" alt="好奇"></p>
+<p>首先需要的功能显而易见：<strong>点灯</strong>、<strong>按键检测</strong>、<strong>电机驱动</strong>、<strong>串口通信</strong>还有<strong>编码器使用</strong>。</p>
+<p>为了使程序更有条理使用了一些常见的代码框架（或者说程序设计方式？）：<strong>状态机</strong>、<strong>时间片轮询</strong>还有<strong>数据流处理</strong>（我也不知道是不是这么叫</p>
+<p>首先显而易见的是主循环里面一直在跑小车的状态机，然后在一个1kHz的定时器中断回调函数中部署了时间片轮询架构以对其进行时分复用，实现一种类似OS的效果。</p>
+<p>在时间片轮询框架中执行了4个任务：</p>
+<ul>
+<li>PID控制（10ms</li>
+<li>状态检测（2ms</li>
+<li>日志输出（10ms</li>
+<li>非阻塞延时的计时（2ms</li>
+</ul>
+<p>PID控制是需要有实时性保证的，这点用过的大家都知道。</p>
+<p>与OpenMV的通信是用串口接收中断来做的，中断里面放入了使用流处理方式的协议解析程序，每次运行完解析程序都会对所需的变量进行赋值，状态检测任务其实就是实时检测这些变量以便获得当前的路况信息，方便状态机进行跳转。</p>
+<p>日志输出任务看名字其实就很容易理解了，就是在调试的时候把一些需要输出的数据进行输出，当然<strong>最后realease版本的时候是要删除的</strong>。</p>
+<p>非阻塞延时计时任务仅对一部分有非阻塞延时需求的代码服务，为其提供计时功能，以便能够实现非阻塞延时。</p>
+<blockquote>
+<p>也正是电赛期间发现了对于非阻塞延时和任务屏蔽的硬性需求，我才在自己的时间片轮询框架中添加了单任务和多任务的非阻塞延时功能以及任务屏蔽的功能。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+        <category>废话</category>
+      </categories>
+      <tags>
+        <tag>生活</tag>
+        <tag>杂谈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>那些授课中“隐秘的角落”</title>
     <url>/2021/087e2aa47655/</url>
     <content><![CDATA[<p>经过了一年的学习之后，当笔者自己要亲手进行授课的时候，发觉到有些东西当初似乎解释的并不明确，特在此解释一下。</p>
