@@ -25,6 +25,360 @@
       </tags>
   </entry>
   <entry>
+    <title>The GNU Linker部分译文</title>
+    <url>/2021/c906435d6fa7/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在学习链接脚本，一方面是为了填外部FLASH的坑，另一方面是想自己搞一搞IAR到Clion的开发环境移植，故参考《The GNU Linker》将与链接脚本相关的部分借助翻译工具进行了简单的翻译。</p>
+<h2 id="3-链接脚本"><a href="#3-链接脚本" class="headerlink" title="3 链接脚本"></a>3 链接脚本</h2><p>每个链接都由<strong>链接脚本（linker script）</strong>控制。此脚本是用链接器命令语言编写的。</p>
+<p>链接器脚本的主要目的是描述如何将输入文件中的<strong>段（sections）</strong>映射到输出文件，并<strong>控制输出文件的内存布局</strong>。大多数链接器脚本只做这些。但是，必要时，链接器脚本还可以使用下面描述的命令指示链接器执行许多其他操作。</p>
+<p>链接器始终使用链接器脚本。如果您自己没有提供，链接器将使用编译到链接器可执行文件中的默认脚本。可以使用<code>--verbose</code>命令行选项显示默认链接器脚本。某些命令行选项（如<code>-r</code>或<code>-N</code>）将影响默认链接器脚本。</p>
+<p>您可以使用<code>-T</code>命令行选项来提供自己的链接器脚本。执行此操作时，<strong>您提供的链接器脚本将替换默认链接器脚本</strong>。</p>
+<p>您还可以通过将链接器脚本<strong>命名为链接器的输入文件</strong>来隐式使用链接器脚本，就像它们是要链接的文件一样。</p>
+<h3 id="3-1-基本链接脚本概念"><a href="#3-1-基本链接脚本概念" class="headerlink" title="3.1 基本链接脚本概念"></a>3.1 基本链接脚本概念</h3><p>为了描述链接器脚本语言，我们需要定义一些基本概念和词汇表。</p>
+<p>链接器将多个输入文件合并到单个输出文件中。输出文件和每个输入文件都采用称为对象文件格式的特殊数据格式。每个文件称为<strong>对象文件</strong>（object file）。输出文件通常称为可执行文件，但出于我们的目的，我们也将其称为对象文件。每个对象文件都有一个段列表。我们有时将输入文件中的一个段称为<strong>输入段</strong>（input section）；类似地，输出文件中的段也是<strong>输出段</strong>（output section）。</p>
+<p>对象文件中的每个段都有一个<strong>名称</strong>和<strong>大小</strong>。大多数段还具有相关的数据块，称为<strong>段内容</strong>（section contents）。一个段可以标记为<strong>loadable</strong>，这意味着在运行输出文件时应将内容加载到存储器中。没有内容的段可能是可分配的（allocatable），这意味着内存中的区域应放在一边，但是没有任何内容应该加载（在某些情况下，该存储器必须归零）。既不可加载也不可分配的段通常包含某种调试信息。</p>
+<p>每个可加载或分配的输出段都有两个地址。第一个是<strong>VMA（virtual memory address）</strong>，这是运行输出文件时段将具有的地址。第二个是<strong>LMA（load memory address）</strong>，该段将会从此地址被加载出来。在大多数情况下，两个地址将是相同的。它们可能不同的示例是将数据部分加载到ROM中后在程序启动时复制到RAM中（此技术通常用于初始化ROM中的全局变量）。在这种情况下，ROM地址将是LMA，RAM地址将是VMA。</p>
+<p>通过使用带有<code>-h</code>选项的objdump程序，可以查看对象文件中的部分。每个对象文件还有一个符号列表，称为<strong>符号表</strong>（symbol table）。符号可以是已定义的，也可以是未定义的。每个符号都有一个名称，每个已经定义的符号都有一个地址，还有其他信息。如果您将一个 c 或 c + + 程序编译成一个对象文件，您将获得每个<strong>已经定义的函数</strong>以及<strong>全局或静态变量</strong>的<strong>已定义的符号</strong>。输入文件中引用的每个未定义的函数或全局变量都将成为未定义的符号。</p>
+<p>您可以使用nm程序或使用带有<code>-t</code>选项的objdump程序查看对象文件中的符号。</p>
+<h3 id="3-2-链接脚本格式"><a href="#3-2-链接脚本格式" class="headerlink" title="3.2 链接脚本格式"></a>3.2 链接脚本格式</h3><p>链接脚本是<strong>文本文件</strong>。</p>
+<p>将链接器脚本作为一系列命令编写。每个命令要么是一个关键字（可能后跟参数），要么是一个符号赋值。可以使用分号分隔命令。<strong>空格通常被忽略。</strong></p>
+<p>通常可以直接输入文件名或格式名等字符串。如果文件名包含一个字符，例如符合分隔文件名的逗号，则可以将文件名放在双引号中。无法在文件名中使用双引号字符。</p>
+<p>您可以在链接器脚本中包含注释，就像在C中一样，由<code>/*</code>和<code>*/</code>分隔。与C语言一样，注释在语法上等同于空格。</p>
+<h3 id="3-3简单链接器脚本示例"><a href="#3-3简单链接器脚本示例" class="headerlink" title="3.3简单链接器脚本示例"></a>3.3简单链接器脚本示例</h3><p>许多链接器脚本相当简单。</p>
+<p>最简单的链接器脚本只有一个命令：<strong>SECTIONS</strong>。您可以使用<strong>SECTIONS</strong>命令来描述输出文件的内存布局。</p>
+<p><strong>SECTIONS</strong>命令是一个强大的命令。这里我们将描述它的一个简单用法。假设您的程序只包含代码、初始化数据和未初始化数据。它们将分别位于<code>.text</code>、<code>.data</code>和<code>.bss</code>部分。让我们进一步假设这些是在输入文件中出现的唯一部分。</p>
+<p>对于本例，假设代码应该加载到地址0x10000，数据应该从地址0x8000000开始。下面是一个链接器脚本，它将执行以下操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS </span><br><span class="line">&#123;</span><br><span class="line">	. = 0x10000; </span><br><span class="line">	.text : &#123; *(.text) &#125; </span><br><span class="line">	. = 0x8000000; </span><br><span class="line">	.data : &#123; *(.data) &#125; </span><br><span class="line">	.bss : &#123; *(.bss) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将<strong>SECTIONS</strong>命令作为关键字<strong>SECTIONS</strong>编写，然后是一系列符号赋值和用大括号括起来的输出段说明。</p>
+<p>上例的“SECTIONS”命令内的第一行<strong>设置特殊符号“.”的值</strong>，该符号是<strong>位置计数器</strong>。如果未以其他方式指定输出段的地址（其他方式将在后面介绍），则将根据位置计数器的当前值设置地址。然后，<strong>位置计数器按输出部分的大小递增</strong>。在<strong>SECTIONS</strong>命令的开头，位置计数器的值为’0’。</p>
+<p>第二行定义了一个输出段<code>.text</code>。冒号是必需的语法，目前可能会被忽略。在输出段名称后的大括号内，列出应放置在此输出段中的输入段的名称。<code>*</code>是与任何文件名匹配的通配符。表达式<code>*（.text）</code>表示所有输入文件中的所有<code>.text</code>输入段。</p>
+<p>由于定义输出段<code>.text</code>时位置计数器为“0x10000”，因此链接器会将输出文件中<code>.text</code>段的地址设置为“0x10000”。</p>
+<p>其余的行定义输出文件中的<code>.data</code>和<code>.bss</code>段。链接器将<code>.data</code>输出段放置在地址“0x8000000”处。链接器放置<code>.data</code>输出段后，位置计数器的值将为“0x8000000”加上<code>.data</code>输出段的大小。其效果是链接器将把<code>.bss</code>输出段放在内存中<code>.data</code>输出段之后。</p>
+<p>链接器将通过必要时增加位置计数器的方式确保每个输出段具有所需的对齐方式。在此示例中，<code>.text</code>和<code>.data</code>段的指定地址可能会满足任何对齐约束，但链接器可能必须在<code>.data</code>和<code>.bss</code>段之间创建一个小间隙。</p>
+<p>就这样！这是一个简单而完整的链接器脚本。</p>
+<h3 id="3-4简单链接器脚本命令"><a href="#3-4简单链接器脚本命令" class="headerlink" title="3.4简单链接器脚本命令"></a>3.4简单链接器脚本命令</h3><p>在本段中，我们将介绍简单的链接器脚本命令。</p>
+<h4 id="3-4-1设置入口点"><a href="#3-4-1设置入口点" class="headerlink" title="3.4.1设置入口点"></a>3.4.1设置入口点</h4><p>在程序中执行的第一条指令称为入口点。您可以使用ENTRY链接脚本命令设置入口点。参数是一个符号名：</p>
+<p><code>ENTRY(symbol)</code></p>
+<p>有几种方法可以设置入口点。链接器将通过按顺序尝试以下每个方法并在其中一个成功时停止来设置入口点：</p>
+<ul>
+<li>‘-e’输入命令行选项；</li>
+<li>链接器脚本中的ENTRY（symbol）命令；</li>
+<li>符号<code>start</code>的值（如果已定义的话）；</li>
+<li>“.text”段第一个字节的地址（如果存在的话）；</li>
+<li>地址0。</li>
+</ul>
+<h4 id="3-4-2处理文件的命令"><a href="#3-4-2处理文件的命令" class="headerlink" title="3.4.2处理文件的命令"></a>3.4.2处理文件的命令</h4><p>几个处理文件的链接器脚本命令。</p>
+<ul>
+<li><p><strong>INCLUDE filename</strong></p>
+<p>在此处<strong>包含</strong>链接器脚本的文件名。将在当前目录以及使用’-L’选项指定的任何目录中搜索该文件。您可以嵌套调用以INCLUDE多达10个级别的深度。</p>
+<p>您可以将INCLUDE指令放在<strong>顶层</strong>，在<strong>MEMORY</strong>或分<strong>SECTIONS</strong>命令中，或放在<strong>输出段描述</strong>中。</p>
+</li>
+<li><p><strong>INPUT(file, file, …)</strong> </p>
+<p><strong>INPUT(file file …)</strong></p>
+<p>INPUT命令指示链接器在链接中包含已命名文件，就像它们是在命令行中命名的一样。</p>
+<p>例如，如果您希望在每次链接时包含’subr.o’，但又不想麻烦将其放在每个链接命令行上，那么您可以在链接器脚本中添加’INPUT（subr.o）’。</p>
+<p>事实上，如果愿意，可以在链接器脚本中列出所有输入文件，然后只使用“-T”选项调用链接器。</p>
+<p>如果配置了sysroot前缀，并且文件名以“/”字符开头，并且正在处理的脚本位于sysroot前缀内，则将在sysroot前缀中查找文件名。否则，链接器将尝试打开当前目录中的文件。如果未找到，链接器将通过存档库搜索路径进行搜索。</p>
+<p>如果使用“INPUT（-lfile）”，ld将把名称转换为libfile.a，就像命令行参数’-l’一样。</p>
+<p>在隐式链接器脚本中使用INPUT命令时，文件将包含在链接器脚本文件包含点处的链接中。这可能会影响存档搜索。</p>
+</li>
+<li><p><strong>GROUP(file, file, …)</strong> </p>
+<p><strong>GROUP(file file …)</strong></p>
+<p>GROUP命令与INPUT类似，只是命名的文件都应该是<strong>归档文件</strong>，并且重复搜索它们，直到没有创建新的未定义引用为止。</p>
+</li>
+<li><p><strong>AS_NEEDED(file, file, …)</strong> </p>
+<p><strong>AS_NEEDED(file file …)</strong></p>
+<p>此构造只能出现在其他文件名中的<strong>INPUT</strong>或<strong>GROUP</strong>命令中。列出的文件将被处理，就像它们直接出现在<strong>INPUT</strong>或<strong>GROUP</strong>命令中一样，ELF共享库除外，只有在实际需要时才会添加。此构造实质上为其中列出的所有文件启用了“–as needed”选项，并根据需要恢复以前的<code>‘--as-needed’</code>和<code>‘--no-as-needed’</code>设置。</p>
+</li>
+<li><p><strong>OUTPUT(filename)</strong></p>
+<p>输出命令命名输出文件。在链接器脚本中使用输出（文件名）与在命令行中使用“-o文件名”完全相同。如果两者都使用，则命令行选项优先。</p>
+<p>您可以使用OUTPUT命令为输出文件定义默认名称，而不是通常的默认名称“a.out”。</p>
+</li>
+<li><p><strong>SEARCH_DIR(path)</strong></p>
+<p>SEARCH_DIR命令将path添加到ld查找归档库的路径列表中。使用SEARCH_DIR（path）与在命令行上使用’-L path’完全相同。如果两者都使用，则链接器将搜索两条路径。首先搜索使用命令行选项指定的路径。</p>
+</li>
+<li><p><strong>STARTUP(filename)</strong></p>
+<p>STARTUP命令与INPUT命令类似，只是filename将成为要链接的第一个输入文件，就好像它是在命令行上首先指定的一样。在使用入口点始终是第一个文件开头的系统时，这可能很有用。</p>
+</li>
+</ul>
+<hr>
+<p>…</p>
+<hr>
+<h4 id="3-4-4为内存区域分配别名"><a href="#3-4-4为内存区域分配别名" class="headerlink" title="3.4.4为内存区域分配别名"></a>3.4.4为内存区域分配别名</h4><p>别名可以添加到使用<strong>MEMORY</strong>命令创建的现有内存区域中。每个名称最多对应一个内存区域。</p>
+<p>​    <code>REGION_ALIAS(alias, region)</code></p>
+<p><strong>REGION_ALIAS</strong>函数为内存区域<em>region</em>创建别名。这允许将输出段灵活地映射到内存区域。下面是一个例子。</p>
+<p>假设我们有一个应用于各种内存存储设备的嵌入式系统。所有这些都具有通用，易失性存储器RAM，允许代码执行或数据存储。有些可能具有允许代码执行和只读数据访问的只读的非易失性存储器ROM。最后一个变体是一个只读的非易失性存储器ROM2，具有只读数据访问，没有代码执行能力。我们有四个输出段：</p>
+<ul>
+<li>.text         程序代码;</li>
+<li>.rodata    只读已初始化数据;</li>
+<li>.data        读写已初始化数据;</li>
+<li>.bss          读写零初始化数据;</li>
+</ul>
+<p>目标是提供一个链接器命令文件，其中包含定义输出部分的系统独立部分和将输出部分映射到系统上可用内存区域的系统依赖部分。我们的嵌入式系统具有三种不同的内存设置A、B和C：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Section</th>
+<th align="center">Variant A</th>
+<th align="center">Variant B</th>
+<th align="center">Variant C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">.text</td>
+<td align="center">RAM</td>
+<td align="center">ROM</td>
+<td align="center">ROM</td>
+</tr>
+<tr>
+<td align="center">.rodata</td>
+<td align="center">RAM</td>
+<td align="center">ROM</td>
+<td align="center">ROM2</td>
+</tr>
+<tr>
+<td align="center">.data</td>
+<td align="center">RAM</td>
+<td align="center">RAM/ROM</td>
+<td align="center">RAM/ROM2</td>
+</tr>
+<tr>
+<td align="center">.bss</td>
+<td align="center">RAM</td>
+<td align="center">RAM</td>
+<td align="center">RAM</td>
+</tr>
+</tbody></table>
+<p>符号RAM/ROM或RAM/ROM2表示该部分分别加载到区域ROM或ROM2中。请注意三种变体中<code>.data</code>段的加载地址均位于<code>.rodata</code>段之后。</p>
+<p>下面是处理输出段的基本链接器脚本。它包含了描述内存布局的系统依赖文件<strong>linkcmds.memory</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">INCLUDE linkcmds.memory</span><br><span class="line"></span><br><span class="line">SECTIONS &#123;</span><br><span class="line">    .text : &#123;</span><br><span class="line">            *(.text)</span><br><span class="line">        &#125; &gt; REGION_TEXT </span><br><span class="line">    .rodata : &#123;</span><br><span class="line">            *(.rodata) </span><br><span class="line">            rodata_end = .; </span><br><span class="line">        &#125; &gt; REGION_RODATA</span><br><span class="line">    .data : AT (rodata_end) &#123;</span><br><span class="line">            data_start = .; </span><br><span class="line">            *(.data)</span><br><span class="line">        &#125; &gt; REGION_DATA </span><br><span class="line">    data_size = SIZEOF(.data); </span><br><span class="line">    data_load_start = LOADADDR(.data); </span><br><span class="line">    .bss : &#123;</span><br><span class="line">            *(.bss) </span><br><span class="line">        &#125; &gt; REGION_BSS </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们需要三个不同的linkcmds.memory文件来定义内存区域和别名名称。以下是针对分别三种变体A、B和C的不同的<strong>linkcmds.memory</strong>的内容：</p>
+<ul>
+<li><p><strong>A</strong>    这种方式中所有东西全部进入到RAM中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY &#123;</span><br><span class="line">    RAM : ORIGIN = 0, LENGTH = 4M </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">REGION_ALIAS(&quot;REGION_TEXT&quot;, RAM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_RODATA&quot;, RAM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_DATA&quot;, RAM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_BSS&quot;, RAM);</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>B</strong>    程序代码和只读数据进入ROM。读写数据进入RAM。初始化数据的镜像加载到ROM中，并将在系统启动期间复制到RAM中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY &#123;</span><br><span class="line">    ROM : ORIGIN = 0, LENGTH = 3M </span><br><span class="line">    RAM : ORIGIN = 0x10000000, LENGTH = 1M</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">REGION_ALIAS(&quot;REGION_TEXT&quot;, ROM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_RODATA&quot;, ROM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_DATA&quot;, RAM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_BSS&quot;, RAM);</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>C</strong>    程序代码进入ROM。只读数据进入ROM 2。读写数据进入RAM。初始化数据的映像加载到ROM 2中，并在系统启动期间复制到RAM中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY &#123;</span><br><span class="line">    ROM : ORIGIN = 0, LENGTH = 2M </span><br><span class="line">    ROM2 : ORIGIN = 0x10000000, LENGTH = 1M </span><br><span class="line">    RAM : ORIGIN = 0x20000000, LENGTH = 1M</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">REGION_ALIAS(&quot;REGION_TEXT&quot;, ROM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_RODATA&quot;, ROM2); </span><br><span class="line">REGION_ALIAS(&quot;REGION_DATA&quot;, RAM); </span><br><span class="line">REGION_ALIAS(&quot;REGION_BSS&quot;, RAM);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>如果需要，可以编写公共系统初始化例程以将来自ROM或ROM2的.data部分复制到RAM中：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> data_start []; </span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> data_size []; </span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> data_load_start [];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">copy_data</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (data_start != data_load_start) &#123;</span><br><span class="line">        <span class="built_in">memcpy</span>(data_start, data_load_start, (<span class="keyword">size_t</span>) data_size); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>…</p>
+<hr>
+<h3 id="3-6段命令"><a href="#3-6段命令" class="headerlink" title="3.6段命令"></a>3.6段命令</h3><p><strong>SECTIONS</strong>命令告诉链接器如何将输入段映射到输出段，以及如何将输出段放置在内存中。</p>
+<p>“SECTIONS”命令的格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">	sections-command </span><br><span class="line">	sections-command </span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每个区段命令可以是以下命令之一：</p>
+<ul>
+<li>一个ENTRY命令</li>
+<li>符号赋值</li>
+<li>输出部分描述</li>
+<li>覆盖描述</li>
+</ul>
+<p>为了方便在这些命令中使用位置计数器，允许在SECTIONS命令中指定ENTRY命令和符号。这还可以使链接器脚本更容易理解，因为您可以在输出文件布局中有意义的位置使用这些命令。</p>
+<p>输出部分描述和覆盖描述如下所述。</p>
+<p>如果在链接器脚本中不使用<strong>SECTIONS</strong>命令，链接器将按照在输入文件中首先遇到的顺序，将每个输入段放入具有相同名称的输出段中。例如，如果第一个文件中存在所有输入段，则输出文件中段的顺序将与第一个输入文件中的顺序匹配。第一部分将位于地址0处。</p>
+<h4 id="3-6-1输出段说明"><a href="#3-6-1输出段说明" class="headerlink" title="3.6.1输出段说明"></a>3.6.1输出段说明</h4><p>输出段的完整描述如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">section [address] [(type)] : </span><br><span class="line">    [AT(lma)] </span><br><span class="line">    [ALIGN(section_align)] </span><br><span class="line">    [SUBALIGN(subsection_align)] </span><br><span class="line">    [constraint] &#123;</span><br><span class="line">        output-section-command </span><br><span class="line">        output-section-command </span><br><span class="line">        ...</span><br><span class="line">    &#125; [&gt;region] [AT&gt;lma_region] [:phdr :phdr ...][=fillexp]</span><br></pre></td></tr></table></figure>
+
+<p>大多数输出段不使用大多数可选的段属性。</p>
+<p>段周围的空格是<strong>必要的</strong>，以便段名称明确无误。冒号和大括号也是必需的。换行符和其他空白是可选的。</p>
+<p>每个 output-section-command 可以是以下命令之一:</p>
+<ul>
+<li>一个符号赋值</li>
+<li>输入部分描述</li>
+<li>直接包含的数据值</li>
+<li>一个特殊的输出段关键字</li>
+</ul>
+<h4 id="3-6-2输出段名称"><a href="#3-6-2输出段名称" class="headerlink" title="3.6.2输出段名称"></a>3.6.2输出段名称</h4><p>输出段的名称为段。段必须满足<strong>输出格式</strong>的约束。在仅支持有限数量段的格式中，例如a.out，名称必须是该格式所支持的名称之一（例如，a.out仅允许<code>.text</code>、<code>.data</code>或<code>.bss</code>）。如果输出格式支持任意数量的段，但带有数字而不是名称（与Oasys的情况相同），则应将名称作为带引号的数字字符串提供。段名可以由任何字符序列组成，但包含任何异常字符（如逗号）的名称必须加引号。</p>
+<p>输出段名称“/DISCARD/”是特殊的；</p>
+<h4 id="3-6-3输出段地址"><a href="#3-6-3输出段地址" class="headerlink" title="3.6.3输出段地址"></a>3.6.3输出段地址</h4><p>该地址是<strong>输出部分的VMA</strong>（虚拟内存地址）的表达式。如果不提供地址，链接器将根据<strong>region</strong>（如果存在）或位置计数器的当前值设置地址。</p>
+<p>如果您提供<strong>address</strong>，则输出段的地址将精确设置为该地址。如果既不提供<strong>address</strong>也不提供<strong>region</strong>，则输出段的地址将设置为与输出段的对齐要求对齐的<strong>位置计数器的当前值</strong>。输出段的对齐要求是输出段中包含的任何输入段中最严格的对齐。</p>
+<p>例如：</p>
+<p><code>.text . : &#123; *(.text) &#125;</code></p>
+<p>以及</p>
+<p><code>.text : &#123; *(.text) &#125;</code></p>
+<p>两者有微妙的不同。第一个将“.text”的输出段设置为位置计数器的当前值。第二个将其设置为与“.text”的输入段最严格对齐的位置计数器的当前值。</p>
+<p>address可以是任意表达式；例如，如果要在0x10字段边界上对齐段，使段地址的最低四位为零，则可以执行以下操作：</p>
+<p><code>.text ALIGN(0x10) : &#123; *(.text) &#125;</code></p>
+<p>这是正确的，因为<strong>ALIGN</strong>将当前位置计数器向上对齐到指定的值。</p>
+<p>指定段的<strong>address</strong>将更改位置计数器的值，前提是该段为非空。（忽略空段）。</p>
+<h4 id="3-6-4输入段描述"><a href="#3-6-4输入段描述" class="headerlink" title="3.6.4输入段描述"></a>3.6.4输入段描述</h4><p>最常见的输出段命令是<strong>输入段描述</strong>。</p>
+<p>输入段描述是最基本的链接器脚本操作。您使用输出段告诉链接器如何在内存中布局程序。您可以使用输入段描述来告诉链接器如何将输入文件映射到内存布局中。</p>
+<h5 id="3-6-4-1输入段基础知识"><a href="#3-6-4-1输入段基础知识" class="headerlink" title="3.6.4.1输入段基础知识"></a>3.6.4.1输入段基础知识</h5><p>输入段描述由<strong>文件名</strong>（可选）和括号中的<strong>段名列表</strong>组成。</p>
+<p>文件名和段名可能是通配符模式，我们将在下面进一步描述。</p>
+<p>最常见的输入段描述是在输出段中包含具有特定名称的所有输入段。例如，要包含所有输入<code>.text</code>部分，您可以写：</p>
+<p><code>*(.text)</code></p>
+<p>此处的<code>*</code>是与任何文件名匹配的通配符。要排除与文件名通配符匹配的文件列表，可以使用<strong>EXCLUDE_FILE</strong>匹配除排除文件列表中指定的文件之外的所有文件。例如：</p>
+<p><code>*(EXCLUDE_FILE (*crtend.o *otherfile.o) .ctors)</code></p>
+<p>将导致除“crtend.o”以及”otherfile.o”之外的所有文件中的<code>.ctors</code>段被包含在内。</p>
+<p>有两种方法可以包含多个部分：</p>
+<p><code>*(.text .rdata)</code> </p>
+<p><code>*(.text) *(.rdata)</code></p>
+<p>这两者之间的区别在于输入段<code>.text</code>和<code>.rdata</code>将出现在输出段中的顺序。在第一个示例中，它们将混合在一起，出现的顺序与它们被链接器找到的顺序相同。在第二个例子中，所有的<code>.text</code>输入段将首先出现，然后是全部<code>.rdata</code>的输入段。</p>
+<p>您可以<strong>指定文件名以包含特定文件中的段</strong>。如果您的一个或多个文件包含需要位于内存中特定位置的特殊数据，则可以执行此操作。例如：</p>
+<p><code>data.o(.data)</code></p>
+<p>您还可以在归档文件中指定文件，方法是编写与归档文件匹配的模式、冒号，然后编写与文件匹配的模式，<strong>冒号周围没有空格</strong>。</p>
+<p>‘archive:file’</p>
+<p>​    匹配存档中的文件</p>
+<p>‘archive:’ </p>
+<p>​    匹配整个档案<br>‘:file’ </p>
+<p>​    匹配文件，但不匹配存档中的那个文件</p>
+<p>‘archive’和‘file’中的一个或两个都可以包含shell通配符。在基于DOS的文件系统中，链接器将假定一个后跟冒号的字母是驱动器说明符，因此<code>c:myfile.o</code>是一个简单的文件规范，而不是位于名为“c”的存档中的<code>myfile.o</code>。<code>archive:file</code>的文件规范也可以在<strong>排除文件列表（EXCLUDE_FILE）</strong>中使用，但可能不会出现在其他链接脚本的上下文中。例如，不能通过在<strong>INPUT</strong>命令中使用“archive:file”从存档中提取文件。</p>
+<p>如果您使用的文件名没有段列表，则输入文件中的所有段都将包含在输出段中。这是不常见的行为，但有时可能有用。例如：</p>
+<p><code>data.o</code></p>
+<p>当您使用的文件名不是“archive:file”说明符且不包含任何通配符时，链接器将首先查看您是否还在链接器命令行或<strong>INPUT</strong>命令中指定了文件名。如果没有，链接器将尝试将该文件作为输入文件打开，就像它出现在命令行上一样。请注意，这与<strong>INPUT</strong>命令不同，因为链接器不会在存档搜索路径中搜索文件。</p>
+<h5 id="3-6-4-2输入段通配符模式"><a href="#3-6-4-2输入段通配符模式" class="headerlink" title="3.6.4.2输入段通配符模式"></a>3.6.4.2输入段通配符模式</h5><p>在输入段描述中，文件名、段名或两者同时可以是通配符模式。</p>
+<p>在许多示例中看到的<code>*</code>文件名是文件名的<strong>简单通配符模式</strong>。通配符模式与unixshell使用的模式类似。</p>
+<p><code>*</code>    匹配任意数量的字符</p>
+<p><code>?</code>    匹配任何<strong>单个</strong>字符</p>
+<p><code>[chars]</code>    匹配任何字符的单个实例；<code>-</code>字符可用于指定字符范围，如<code>[a-z]</code>中的字符，以匹配任何小写字母</p>
+<p><code>\</code>    引用其后的字符</p>
+<p>当文件名与通配符匹配时，通配符将不与<strong>用于在Unix上分隔目录名</strong>的<code>/</code>字符匹配。由单个<code>*</code>字符组成的模式是一个例外；它将始终匹配任何文件名，无论它是否包含<code>/</code>。在段名称中，通配符将与<code>/</code>字符匹配。</p>
+<p>文件名通配符模式仅匹配在命令行或INPUT命令中显式指定的文件。链接器不会搜索目录以展开通配符。</p>
+<p>如果文件名与多个通配符模式匹配，或者如果文件名显式显示并且也与通配符模式匹配，则链接器将使用链接器脚本中的第一个匹配项。例如，输入段描述的这个序列可能是错误的，因为<code>data.o</code>规则将不被使用：</p>
+<p><code>.data : &#123; *(.data) &#125;</code></p>
+<p><code>.data1 : &#123; data.o(.data) &#125;</code></p>
+<p>通常，链接器将按照链接期间查找到的顺序放置与通配符匹配的文件和段。您可以使用<strong>SORT_BY_NAME</strong>关键字来更改此设置，该关键字出现在括号中通配符模式之前（例如，<code>SORT_by_NAME(.text*)</code>）。使用SORT_BY_NAME关键字时，链接器将按名称升序对文件或段进行排序，然后再将其放入输出文件中。</p>
+<p><strong>SORT_BY_ALIGNMENT</strong>与<strong>SORT_BY_NAME</strong>非常相似。不同之处在于，<strong>SORT_BY_ALIGNMENT</strong>将按对齐方式将段按升序排序，然后再将其放入输出文件中。<strong>SORT</strong>是<strong>SORT_BY_NAME</strong>的别名。</p>
+<p>当链接器脚本中存在嵌套的段排序命令时，段排序命令最多可以有<strong>1级嵌套</strong>。</p>
+<ol>
+<li><code>SORT_BY_NAME(SORT_BY_ALIGNMENT(通配符段模式))</code>。它将首先按名称对输入段进行排序，如果两个段具有相同的名称，则继续按对齐方式进行排序。</li>
+<li><code>SORT_BY_ALIGNMENT(SORT_BY_NAME(通配符段模式))</code>。它将首先按对齐方式对输入部分进行排序，如果两个部分具有相同的对齐方式，则按名称对输入部分进行排序。</li>
+<li><code>SORT_BY_NAME(SORT_BY_NAME(通配符段模式))</code>与<code>SORT_BY_NAME(通配符段模式)</code>处理相同。</li>
+<li><code>SORT_BY_ALIGNMENT(SORT_BY_ALIGNMENT(通配符段模式))</code>与<code>SORT_BY_ALIGNMENT(通配符段模式)</code>处理相同。</li>
+<li>所有其他嵌套段排序命令无效。</li>
+</ol>
+<p>当同时使用命令行段排序选项和链接器脚本段排序命令时，<strong>段排序命令始终优先于命令行选项</strong>。</p>
+<p>如果链接器脚本中的段排序命令未嵌套，则命令行选项将使段排序命令被视为嵌套排序命令。</p>
+<ol>
+<li>使用“–sort-sections alignment”以及<code>SORT_BY_NAME(通配符段模式)</code>等同于<code>SORT_BY_NAME(SORT_BY_ALIGNMENT(通配符段模式))</code>。</li>
+<li>使用“–sort-sections name”的<code>SORT_BY_ALIGNMENT(通配符段模式)</code>等同于<code>SORT_BY_ALIGNMENT(SORT_BY_NAME(通配符段模式))</code>。</li>
+</ol>
+<p>如果链接器脚本中的段排序命令是嵌套的，则<strong>将忽略命令行选项</strong>。</p>
+<p>如果您对输入段的去向感到困惑，请使用“-M”链接器选项生成映射文件。映射文件精确地显示了如何将输入段映射到输出段。</p>
+<p>此示例显示了如何使用通配符模式对文件进行分区。这个链接器</p>
+<p>脚本指示链接器将所有输入文件中的<code>.text</code>段放置到<code>.text</code>中，并且将所有输入文件中的<code>.bss</code>段放入<code>.bss</code>。链接器将所有以<strong>大写字符开头</strong>的文件中的<code>.data</code>段放入<code>.DATA</code>；然后将剩余文件中的<code>.data</code>段放入到<code>.data</code>中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123; </span><br><span class="line">    .text : &#123; *(.text) &#125; </span><br><span class="line">    .DATA : &#123; [A-Z]*(.data) &#125; </span><br><span class="line">    .data : &#123; *(.data) &#125; </span><br><span class="line">    .bss : &#123; *(.bss) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-6-4-3公共符号的输入部分"><a href="#3-6-4-3公共符号的输入部分" class="headerlink" title="3.6.4.3公共符号的输入部分"></a>3.6.4.3公共符号的输入部分</h5><p>公共符号需要特殊的符号，因为在许多对象文件格式中，公共符号没有特定的输入部分。链接器将公共符号视为位于名为‘<strong>COMMON</strong>’的输入段中。</p>
+<blockquote>
+<p><strong>What are COMMON symbols?</strong></p>
+<p>Common symbols are a feature that allow a programmer to ‘define’ several variables of the same name in different source files.  This is in contrast with the more popular way of doing, where you define a variable once in a source file, and reference it everywhere else in other source files, using extern.  When common symbols are used, the linker will merge all symbols of the same name into a single memory location, the size of which is the largest type of the individual common symbol definitions.  For example, if fileA.c defines an uninitialized 32-bit integer myint, and fileB.c defines an 8-bit char myint, then in the final executable, references to myint from both files will point to the same memory location (common location), and the linker will reserve 32 bits for that location.</p>
+<p>引自<strong>Arun</strong>的文章：</p>
+<p><a href="https://binarydodo.wordpress.com/2016/05/09/investigating-linking-with-common-symbols-in-elf/">Investigating linking with COMMON symbols in ELF</a></p>
+</blockquote>
+<p>您可以将文件名与“<strong>COMMON</strong>”段一起使用，就像使用任何其他输入部分一样。可以使用该特性将特定输入文件中的公共符号放置在一个分区中，而将其他输入文件中的公共符号放置在另一个分区中。</p>
+<p><strong>在大多数情况下，输入文件中的常用符号将放在输出文件中的<code>.bss</code>段中</strong>。例如：</p>
+<p><code>.bss &#123; *(.bss) *(COMMON) &#125;</code></p>
+<p>某些对象文件格式具有多种类型的公共符号。例如，MIPS ELF对象文件格式区分标准公共符号和小型公共符号。在这种情况下，链接器将为其他类型的公共符号使用不同的特殊段名。在MIPS ELF的情况下，链接器对标准公共符号使用<code>COMMON</code>并用<code>.scommon</code>表示小型通用符号。这允许您将不同类型的公共符号映射到不同位置的内存中。</p>
+<p>您有时会在旧的链接器脚本中看到<code>[COMMON]</code>。这种符号现在被认为是过时的。它相当于<code>*(COMMON)</code>。</p>
+<h5 id="3-6-4-4输入段和垃圾收集"><a href="#3-6-4-4输入段和垃圾收集" class="headerlink" title="3.6.4.4输入段和垃圾收集"></a>3.6.4.4输入段和垃圾收集</h5><p>当使用链接时垃圾回收<code>(&#39;--gc-sections&#39;)</code>时，标记不应删除的段通常很有用。这是通过使用KEEP（）包围输入段的通配符项来实现的，如：</p>
+<p><code>KEEP(*(.init))</code></p>
+<p><code>KEEP(SORT_BY_NAME(*)(.ctors))</code></p>
+<h5 id="3-6-4-5输入段示例"><a href="#3-6-4-5输入段示例" class="headerlink" title="3.6.4.5输入段示例"></a>3.6.4.5输入段示例</h5><p>下面的示例是一个完整的链接器脚本。它告诉链接器读取文件“all.o”中的所有段并将其放置在输出段<code>outputa</code>的开头，该段从位置“0x10000”开始。文件”foo.o”中的整个**输入段<code>.input1</code><strong>放在</strong>输出段<code>outputa</code><strong>中的上述段之后。”foo.o”文件的整个</strong>输入段<code>.input2</code><strong>放到</strong>输出段<code>outputb</code><strong>中，”foo1.o”文件的整个</strong>输入段<code>.input1</code>**紧随其后。其余所有文件中的输入段<code>.input1</code>和<code>.input2</code>均被写入输出段<code>outputc</code>中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123; </span><br><span class="line">    outputa 0x10000 : </span><br><span class="line">    	&#123;</span><br><span class="line">        all.o </span><br><span class="line">        foo.o (.input1) </span><br><span class="line">    	&#125;</span><br><span class="line">    outputb : </span><br><span class="line">    	&#123;</span><br><span class="line">        foo.o (.input2) </span><br><span class="line">        foo1.o (.input1) </span><br><span class="line">    	&#125;</span><br><span class="line">    outputc : </span><br><span class="line">    	&#123;</span><br><span class="line">        *(.input1) </span><br><span class="line">        *(.input2) </span><br><span class="line">    	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>…</p>
+<hr>
+<h4 id="3-6-8输出段属性"><a href="#3-6-8输出段属性" class="headerlink" title="3.6.8输出段属性"></a>3.6.8输出段属性</h4><p>我们在上面展示了输出段的完整描述如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">section [address] [(type)] : </span><br><span class="line">    [AT(lma)] </span><br><span class="line">    [ALIGN(section_align)] </span><br><span class="line">    [SUBALIGN(subsection_align)] </span><br><span class="line">    [constraint] &#123;</span><br><span class="line">        output-section-command </span><br><span class="line">        output-section-command </span><br><span class="line">        ...</span><br><span class="line">	&#125; [&gt;region] [AT&gt;lma_region] [:phdr :phdr ...] [=fillexp]</span><br></pre></td></tr></table></figure>
+
+<p>我们已经描述了section、address和output section命令。在本节中，我们将描述其余的段属性。</p>
+<h5 id="3-6-8-1输出段类型"><a href="#3-6-8-1输出段类型" class="headerlink" title="3.6.8.1输出段类型"></a>3.6.8.1输出段类型</h5><p>每个输出段可以有一个类型。类型是括号中的关键字。定义了以下类型：</p>
+<p><strong>NOLOAD</strong>    该段应标记为不可加载，以便在程序运行时不会将其加载到内存中。</p>
+<p><strong>DSECT</strong> </p>
+<p><strong>COPY</strong></p>
+<p> <strong>INFO</strong></p>
+<p><strong>OVERLAY</strong>    这些类型名支持向后兼容，很少使用。它们都具有相同的效果：<strong>该段应标记为不可分配</strong>，以便在程序运行时不会为该段分配内存。</p>
+<p>链接器通常根据映射到输出段的输入段设置输出段的属性。可以通过使用段类型来替代此选项。例如，在下面的脚本示例中，<code>ROM</code>段位于内存位置“0”处，在程序运行时不需要加载。<code>ROM</code>段的内容将像往常一样出现在链接器输出文件中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123; </span><br><span class="line">	ROM 0 (NOLOAD) : &#123; ... &#125; </span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-6-8-2输出段LMA"><a href="#3-6-8-2输出段LMA" class="headerlink" title="3.6.8.2输出段LMA"></a>3.6.8.2输出段LMA</h5><p>每个段都有一个<strong>虚拟地址</strong>（VMA）和一个<strong>加载地址</strong>（LMA）；输出段描述中可能出现的地址表达式设置了虚拟地址。</p>
+<p>AT关键字后面的表达式lma指定段的<strong>加载地址</strong>。</p>
+<p>或者，使用<code>AT&gt;lma_region</code>表达式，您可以为节的加载地址指定内存区域。请注意，如果该节尚未分配VMA，则链接器也将使用<em>lma_region</em>作为VMA区域。</p>
+<p>如果既未为可分配节指定AT又未指定AT&gt;，则链接器将设置LMA，以便该节的VMA和LMA之间的差异与同一区域中的前一输出段相同。如果没有前面的输出段或该段不可分配，则链接器将LMA设置为等于VMA。</p>
+<p>此功能旨在<strong>使ROM镜像的构建变得简单</strong>。例如，下面的链接器脚本创建了三个输出段：一个名为<code>.text</code>，从0x1000开始，一个称为<code>.mdata</code>，<strong>它被加载在<code>.text</code>段的末尾，即使其VMA为0x2000</strong>，还有一个<code>.bss</code>段用于在地址0x3000处保存未初始化的数据。符号_data用值0x2000定义，表示位置计数器保存的是VMA值，而不是LMA值。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">.text 0x1000 : </span><br><span class="line">	&#123; *(.text) _etext = . ; &#125; </span><br><span class="line">.mdata 0x2000 : </span><br><span class="line">    AT ( ADDR (.text) + SIZEOF (.text) ) </span><br><span class="line">    &#123; _data = . ; *(.data); _edata = . ; &#125;</span><br><span class="line">.bss 0x3000 : </span><br><span class="line">	&#123; _bstart = . ; *(.bss) *(COMMON) ; _bend = . ;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与使用此链接器脚本生成的程序一起使用的运行时初始化代码将包括以下内容，以将初始化数据从ROM镜像复制到其运行时地址。<strong>请注意，此代码如何利用链接器脚本定义的符号。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">extern char _etext, _data, _edata, _bstart, _bend; </span><br><span class="line">char *src = &amp;_etext; </span><br><span class="line">char *dst = &amp;_data;</span><br><span class="line"></span><br><span class="line">/* ROM has data at end of text; copy it. */ </span><br><span class="line">while (dst &lt; &amp;_edata) &#123; </span><br><span class="line">	*dst++ = *src++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* Zero bss */ </span><br><span class="line">for (dst = &amp;_bstart; dst&lt; &amp;_bend; dst++) </span><br><span class="line">	*dst = 0;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-6-8-3强制输出对齐"><a href="#3-6-8-3强制输出对齐" class="headerlink" title="3.6.8.3强制输出对齐"></a>3.6.8.3强制输出对齐</h5><p>可以使用<strong>ALIGN</strong>增加输出段的对齐。</p>
+<h5 id="3-6-8-4强制输入对齐"><a href="#3-6-8-4强制输入对齐" class="headerlink" title="3.6.8.4强制输入对齐"></a>3.6.8.4强制输入对齐</h5><p>可以使用<strong>SUBALIGN</strong>在输出段内强制输入段对齐。指定的值将覆盖由输入段（无论大小）给定的任何对齐方式。</p>
+<h5 id="3-6-8-5输出段约束"><a href="#3-6-8-5输出段约束" class="headerlink" title="3.6.8.5输出段约束"></a>3.6.8.5输出段约束</h5><p>通过分别使用关键字<code>ONLY_IF_RO</code>和<code>ONLY_IF_RW</code>，可以指定仅当输出段的所有输入段都是只读的或其所有输入段都是读写的时才应创建输出段。</p>
+<h5 id="3-6-8-6输出段区域"><a href="#3-6-8-6输出段区域" class="headerlink" title="3.6.8.6输出段区域"></a>3.6.8.6输出段区域</h5><p>您可以使用<code>&gt;region</code>将段分配给先前使用<code>MEMORY</code>命令定义的内存区域。</p>
+<p>下面是一个简单的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY &#123; rom : ORIGIN = 0x1000, LENGTH = 0x1000 &#125;</span><br><span class="line">SECTIONS &#123; ROM : &#123; *(.text) &#125; &gt;rom &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-6-8-7输出段物理地址"><a href="#3-6-8-7输出段物理地址" class="headerlink" title="3.6.8.7输出段物理地址"></a>3.6.8.7输出段物理地址</h5><p>可以使用<code>:phdr</code>将段分配给先前定义的程序段。如果一个段被指定给一个或多个段，则所有后续分配的区段也将被指定给这些区段，除非它们使用显式<code>:phdr</code>修饰符。您可以使用<code>:NONE</code>告诉链接器根本不要将该段放入任何程序段中。</p>
+<p>下面是一个简单的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PHDRS &#123; text PT_LOAD ; &#125;</span><br><span class="line">SECTIONS &#123; .text : &#123; *(.text) &#125; :text &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>…</p>
+<hr>
+<h3 id="3-7内存命令"><a href="#3-7内存命令" class="headerlink" title="3.7内存命令"></a>3.7内存命令</h3><p>链接器的默认配置允许分配所有可用内存。您可以使用<strong>MEMORY</strong>命令覆盖该配置。</p>
+<p><strong>MEMORY</strong>命令描述目标中内存块的<strong>位置</strong>和<strong>大小</strong>。您可以使用它来描述链接器可以使用哪些内存区域，以及必须避免哪些内存区域。然后可以将节分配给特定的内存区域。链接器将根据内存区域设置段地址，并警告区域过满。<strong>链接器不会随意移动段以适应可用区域。</strong></p>
+<p>链接器脚本最多可以包含<strong>MEMORY</strong>命令的<strong>一次</strong>使用。但是，您可以根据需要在其中<strong>定义任意多的内存块</strong>。语法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY &#123;</span><br><span class="line">        name [(attr)] : ORIGIN = origin, LENGTH = len </span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>name是链接器脚本中用于引用区域的名称。区域名称<strong>在链接器脚本之外没有任何含义</strong>。区域名称存储在单独的名称空间中，<strong>不会与符号名、文件名或节名冲突</strong>。在<strong>MEMORY</strong>命令中，每个内存区域必须有一个不同的名称。但是，您可以使用第3.4.4节中的内容将后续的别名添加到现有内存区域。</p>
+<p>attr字符串是一个可选的属性列表，用于指定是否为未在链接器脚本中显式映射的输入段使用特定内存区域。如第3.6节所述，如果您没有为某些输入段指定输出段，链接器将创建一个与输入段同名的输出段。如果您定义了区域属性，链接器将使用它们为它创建的输出部分选择内存区域。</p>
+<p>attr字符串只能由以下字符组成：</p>
+<p><code>R</code>    只读段</p>
+<p><code>W</code>    读/写段</p>
+<p><code>X</code>    可执行段</p>
+<p><code>A</code>    可分配段</p>
+<p><code>I</code>    已初始化段</p>
+<p><code>L</code>    与<code>I</code>相同</p>
+<p><code>!</code>    <strong>反转</strong>上述任何属性的意义</p>
+<p>如果未映射的节与除<code>!</code>以外的任何列出的属性匹配，它将被放置在内存区域中。<code>!</code>属性反转此测试，以便仅当未映射的段与所列出的任何属性均不匹配时，才会将其放置在内存区域中。</p>
+<p>origin是<strong>内存区域起始地址的数字表达式</strong>。表达式的计算结果必须为<strong>常量</strong>，并且不能包含任何符号。关键字<strong>ORIGIN</strong>可以缩写为org或o（但不能缩写为ORG）。</p>
+<p>len是<strong>内存区域大小</strong>（以字节为单位）的表达式。与原始表达式一样，该表达式必须仅为数值表达式，且计算结果必须为常量。关键字<strong>LENGTH</strong>可以缩写为len或l。</p>
+<p>在下面的示例中，我们指定有两个内存区域可供分配：一个从“0”开始分配256 KB，另一个从“0x40000000”开始分配4 MB。链接器将把未显式映射到内存区域且为只读或可执行的每个部分放入“rom”内存区域。链接器会将未显式映射到内存区域的其他部分放入“ram”内存区域。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MEMORY &#123;</span><br><span class="line">    rom (rx) : ORIGIN = 0, LENGTH = 256K </span><br><span class="line">    ram (!rx) : org = 0x40000000, l = 4M</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当您定义内存区域后，可以通过使用<code>&gt;region</code>的输出段属性，指示链接器将特定的输出段放入该内存区域。例如，如果您有一个名为<code>mem</code>的内存区域，那么您将在输出段定义中使用<code>&gt;mem</code>。如果没有为输出段指定地址，链接器将把地址设置为内存区域内的下一个可用地址。如果定向到内存区域的组合输出段对于该区域来说太大，则链接器将发出错误消息。</p>
+<p>可以通过<code>ORIGIN(memory)</code>和<code>LENGTH(memory)</code>函数访问表达式中内存的<strong>起点</strong>和<strong>长度</strong>：</p>
+<p><code>_fstack = ORIGIN(ram) + LENGTH(ram) - 4;</code></p>
+<hr>
+<p>…</p>
+<hr>
+<h4 id="3-10-5-位置计数器"><a href="#3-10-5-位置计数器" class="headerlink" title="3.10.5 位置计数器"></a>3.10.5 位置计数器</h4><p>特殊链接器变量<strong>点</strong><code>.</code>始终包含当前输出位置的计数器。由于<code>.</code>始终引用输出段中的位置，故它只能出现在<strong>SECTIONS</strong>命令中的表达式中。<code>.</code>这个符号可以出现在表达式中<strong>允许使用普通符号的任何位置</strong>。</p>
+<p>给<code>.</code>赋值。将导致位置计数器移动。这可用于在输出段中创建孔。<strong>位置计数器不能在输出段内向后移动</strong>，如果这样做会创建具有重叠LMA的区域，<strong>同理，也大概率不能在输出段外向后移动</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">    output : &#123;</span><br><span class="line">        file1(.text) </span><br><span class="line">        . = . + 1000; </span><br><span class="line">        file2(.text) </span><br><span class="line">        . += 1000; </span><br><span class="line">        file3(.text)</span><br><span class="line">    &#125; = 0x12345678; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上述示例中，源于<code>file1</code>文件的<code>.text</code>段会被放置于输出段<code>output</code>的起始位置。紧随其后的是1000字节的间隙。接着是源于<code>file2</code>文件的<code>.text</code>段，再后面是源于<code>file3</code>文件的<code>.text</code>段，二者之间同样有有1000字节的间隙。<code>=0x12345678</code>这种写法指定了要在间隙中写入的数据内容。</p>
+<p>注：**<code>.</code>实际上是指从当前包含对象的起始处开始的字节偏移量<strong>。通常在起始地址为0的</strong>SECTIONS**语句中<code>.</code>可以用作绝对地址。但是如果在段描述中使用，它指的是从该节开始的字节偏移量，而不一定是绝对地址。因此，在这样的脚本中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">    . = 0x100 </span><br><span class="line">    .text: &#123; </span><br><span class="line">        *(.text) </span><br><span class="line">        . = 0x200</span><br><span class="line">    &#125; . = 0x500 </span><br><span class="line">    .data: &#123; </span><br><span class="line">        *(.data) </span><br><span class="line">        . += 0x600</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>.text</code>段将被分配一个<strong>0x100的起始地址</strong>以及<strong>0x200字节的大小</strong>，即使该段中没有足够的数据来填充此区域。（如果数据太多，将产生一个错误，因为这将是一次向后移动的尝试）。<code>.data</code>段将从0x500开始，在**<code>.data</code>中的数据末尾<strong>和</strong><code>.data</code>输出段的结尾**之间将有额外的0x600字节的空间。</p>
+<p>如果链接器需要放置孤立段，则将符号设置为输出段语句外部的位置计数器的值可能会导致意外值。例如，给出如下脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">    start_of_text = . ; </span><br><span class="line">    .text: &#123; *(.text) &#125; </span><br><span class="line">    end_of_text = . ;</span><br><span class="line">    </span><br><span class="line">    start_of_data = . ; </span><br><span class="line">    .data: &#123; *(.data) &#125; </span><br><span class="line">    end_of_data = . ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果链接器需要放置一些输入段，例如：如果脚本中没有提到<code>.rodata</code>，它可能会选择将该段放在<code>.text</code>和<code>.data</code>两个部分之间。您可能认为链接器应该将<code>.rodata</code>放置在上述的脚本中的空白行上，但是空白行对于链接器没有特别的意义。此外，链接器不会将上述符号名称与其所在段相关联。相反，<strong>它假定所有赋值或其他语句都属于前一个输出段</strong>，但给<code>.</code>赋值的特殊情况除外。也就是说，链接器将按照如同下述脚本的方式来放置孤立的<code>.rodata</code>段：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">    start_of_text = . ; </span><br><span class="line">    .text: &#123; *(.text) &#125; </span><br><span class="line">    end_of_text = . ;</span><br><span class="line"></span><br><span class="line">    start_of_data = . ; </span><br><span class="line">    .rodata: &#123; *(.rodata) &#125; </span><br><span class="line">    .data: &#123; *(.data) &#125; </span><br><span class="line">    end_of_data = . ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这并不一定是脚本作者希望start_of_data所具有的值。影响孤立段放置的一种方法是<strong>将位置计数器分配给自身</strong>，因为链接器假定为<code>.</code>赋值是在设置下一个输出段的起始地址，故应与该段分组。所以你可以这样写：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SECTIONS &#123;</span><br><span class="line">    start_of_text = . ; </span><br><span class="line">    .text: &#123; *(.text) &#125; </span><br><span class="line">    end_of_text = . ;</span><br><span class="line">    </span><br><span class="line">    . = . ;</span><br><span class="line">    start_of_data = . ; </span><br><span class="line">    .data: &#123; *(.data) &#125; </span><br><span class="line">    end_of_data = . ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，孤立段<code>.rodata</code>将放置在<em>end_of_text</em>和<em>start_of_data</em>之间。</p>
+]]></content>
+      <categories>
+        <category>单片机</category>
+        <category>开发环境</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>“一些关于电赛的小碎碎念”</title>
     <url>/2021/726e7273fa90/</url>
     <content><![CDATA[<p>电赛啦！电赛啦！虽然是迟到的电赛，但是我还是对它非常期待的，毕竟可以见证一下这一年来我自己的努力成果了。难得的机会，写点废话吧，也算是作为电赛的总结了。</p>
@@ -150,6 +504,16 @@
 <blockquote>
 <p>也正是电赛期间发现了对于非阻塞延时和任务屏蔽的硬性需求，我才在自己的时间片轮询框架中添加了单任务和多任务的非阻塞延时功能以及任务屏蔽的功能。</p>
 </blockquote>
+<h2 id="测评时一句话都不敢乱说的傻孩子们"><a href="#测评时一句话都不敢乱说的傻孩子们" class="headerlink" title="测评时一句话都不敢乱说的傻孩子们"></a>测评时一句话都不敢乱说的<del>傻孩子们</del></h2><p>真的是第一次参加电赛测评，整个人紧张的不行不行的。</p>
+<p>测评前有半小时的时间给我们进行准备和尝试，我和队友商量了一下大概整个流程应该怎么进行，包括但不限于谁发车、谁放置药品、谁录像以及谁取下药品等等。但是真的等到专家接入我们的测评会议室的时候真的是<strong>一切从简</strong>，之前的流程完全抛到脑后，唯一脑子里面还记得的就是把jio离车子远一点。</p>
+<blockquote>
+<p>PS：测评当天我没脑子的穿了一双红色的鞋子，会造成图像的误识别，好在最终并没有什么影响。</p>
+</blockquote>
+<p>测评基础第一题，第一次我们的车子跑的还好，只是有一些出线，测评的专家好心的让我们又测评了一次，至于第二次是什么结果我只记得跑完了，似乎还是有点压线来着。</p>
+<p>测评基础第二题，同样是第一次有点压线，不过第二次跑的很完美，于是专家记录了我们的最好成绩。</p>
+<p>测评基础第三题，两次都冲出赛道了，后面分析了一下觉得可能是因为贴数字的时候把数字贴的鼓起来了，导致摄像头没法看到数字。</p>
+<p>测评发挥第一题，第一次就能够完整的跑下来，不过压线的现象有点严重，第二次两辆车都很完美的完成了题目，看到两辆车停下来的时候真的整个人都松了一口气。</p>
+<p>不得不说上面的测评我们的运气都非常好，因为我们的数字识别其实有那么几个数字会以极高的概率（几乎是100%）被误识别，但是专家在选择数字的时候完全避开了我们的问题数字。所以其实能够到这一步我们就很满足了。</p>
 ]]></content>
       <categories>
         <category>杂谈</category>
