@@ -28,6 +28,8 @@
     <title>The GNU Linker部分译文</title>
     <url>/2021/c906435d6fa7/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在学习链接脚本，一方面是为了填外部FLASH的坑，另一方面是想自己搞一搞IAR到Clion的开发环境移植，故参考《The GNU Linker》将与链接脚本相关的部分借助翻译工具进行了简单的翻译。</p>
+<span id="more"></span>
+
 <h2 id="3-链接脚本"><a href="#3-链接脚本" class="headerlink" title="3 链接脚本"></a>3 链接脚本</h2><p>每个链接都由<strong>链接脚本（linker script）</strong>控制。此脚本是用链接器命令语言编写的。</p>
 <p>链接器脚本的主要目的是描述如何将输入文件中的<strong>段（sections）</strong>映射到输出文件，并<strong>控制输出文件的内存布局</strong>。大多数链接器脚本只做这些。但是，必要时，链接器脚本还可以使用下面描述的命令指示链接器执行许多其他操作。</p>
 <p>链接器始终使用链接器脚本。如果您自己没有提供，链接器将使用编译到链接器可执行文件中的默认脚本。可以使用<code>--verbose</code>命令行选项显示默认链接器脚本。某些命令行选项（如<code>-r</code>或<code>-N</code>）将影响默认链接器脚本。</p>
